@@ -129,9 +129,6 @@ class ElectrodialysisCalc:
         Tcu=(Ts_cp+1)/2
         dC=-(Tcu-tcu)/D*(Ij/F)*(2*h/1000/Sh)
         return dC
-            
-
-
 #%%
 #user example 
 # Constants
