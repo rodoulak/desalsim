@@ -44,7 +44,12 @@ Contributions to the project are welcome! If you'd like to contribute, please fo
 5. Create a new Pull Request.
 
 ## Authors and Acknowledgements
-The software was developed by Rodoula Ktori. Theoretical support was provided by all co-authors. Testing the simulation model for each technology has been performed by the technological experts: Nanofiltration: Dionysia Diamantidou and Niels van Linden, Multi-effect Distillation: Alessandro Trezzi, MF-PFR: Fabrizio Vassallo, Carmelo Morgante, Andrea Cipollina, EDBM: Calogero Cassaro, Andrea Culcasi, EFC: Marcos Rodriguez Pascual.
+The software was developed by Rodoula Ktori. Theoretical support was provided by all co-authors. Testing the simulation model for each technology has been performed by the technological experts: 
+- Nanofiltration: Dionysia Diamantidou and Niels van Linden,
+- Multi-effect Distillation: Alessandro Trezzi,
+- MF-PFR: Fabrizio Vassallo, Carmelo Morgante, Andrea Cipollina,
+- EDBM: Calogero Cassaro, Andrea Culcasi,
+- EFC: Marcos Rodriguez Pascual.
 
 This work was supported by the EU within the WATER MINING (Next generation water-smart management systems: large scale demonstrations for a circular economy and society) - Horizon 2020 research and innovation programme under grant agreement No 869474.
 
