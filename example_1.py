@@ -36,7 +36,6 @@ NaCl_price=0.066 #euro/kg
 MGOH_price=1 #euro/kg
 CaOH_price=0.125 #euro/kg
 
-hours=8
 
 #Molecular weight 
     #molecular weight

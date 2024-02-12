@@ -1,35 +1,132 @@
-#Scenario (water recovery scenario )
+#Scenario 2
 ##treatment train: NF-> MED-> THERMAL CRYST                 
-import nanofiltration_unit_f
-from med_unit_f import med_calc
+from nanofiltration_unit_f import OsmoticPressure
+from nanofiltration_unit_f import molarity
+from nanofiltration_unit_f import NFMass
+from nanofiltration_unit_f import NfEnergy
+
+from med_unit_f import MEDCalculator
+
 from thermal_cryst_f import thermal_calc
 from thermal_cryst_f import conc_cal
 from thermal_cryst_f import calculate_energy
+
 from selected_indicators import indic
+
 import constants
+
 from economic_f import revenue
 from economic_f import econom
+
 import scaleup
 import density_calc
 import numpy as np
 import pandas as pd
+#%%
+#Molecular weight 
+    #molecular weight
+MW_Na=constants.MW_Na
+MW_Cl=constants.MW_cl
+MW_SO4=constants.MW_so4
+MW_K=constants.MW_K
+MW_Ca=constants.MW_Ca
+MW_Mg=constants.MW_Mg
+MW_HCO3=constants.MW_HCO3
+MW_H=1.00784
+MW_OH=17.008
+MW_H2O=MW_H+MW_OH
+MW_values = [MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4]
 
+
+MW_MgOH=58.3197
+MW_CaOH=74.09
+MW_Na2SO4=142.039458
+MW_HCl=36.458
+MW_NaOH=39.997
+MW_NaCl=58.442729
+MW_Na2SO4=142.04  
+MW_Na2SO4_10h20=322.192258                                                                                                   #Molecular weight of sodium sulfate : g/mol
+MW_KCl=74.5513
+
+#constants 
+d_Na2SO4=2.66*1000                                                                                                  #Density of sodium sulfate (25oC) : kg/m^3 (source:???) 
+Cp_Na2SO4=128.2/MW_Na2SO4*1000   
+d_NaCl=2.16*1000                                                                                                    #Density of NaCl (25oC) : kg/m^3 (source:https://pubchem.ncbi.nlm.nih.gov/compound/sodium_chloride#section=Solubility) 
+Cp_NaCl=(50.5*MW_NaCl)*1000    
+d_w=1*1000                                                                                                      #Density of water (25oC) : kg/m^3 (source:Wikipedia) 
+Cp_w=4.1813*1000   
+d_KCl=1.98*1000
+
+
+#input data
+#emissions
+CO2_el=0.275 # kg/kwh
+CO2_st=0#.255 # kg/kwh
+
+#input data
+T=20+273 #Operating temperature (units: K)
+#Feed concentration
+components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
+Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
+z_values = [1, -1, 1, 2, 2, -2]
+c_values = [Ci / 1000 for Ci in Ci_in]
+mg_in = sum(c_values)
+#Feed flow density 
+d_in = density_calc(T-273, mg_in)  # kg/m3
+
+#Feed flowrate
+Qsw = 3000 / 24 * d_in #m3/d
+#%%
+#Calculations
+"""--------Nanofiltration--------"""
+
+Qf_nf = Qsw  # kg/hr
+#Constants
+R=8.314 #gas constant (units: J / mol·K)
+
+#Asuumptions  
+rjr_values = [0.16, 0.29, 0.21, 0.98, 0.95, 0.98] #Ions rejection rates based on membrane characteristics (units: -)
+Wrec = 0.7 # Water recovery based on membrane characteristics (units: -)
+n=0.8 #pump efficiency (units: -)
+dp=2 # pressure drop (units: bar)
+
+# Create molarity objects and calculate meq for each component
+molarity_objects = [molarity(MW, z, Ci) for MW, z, Ci in zip(MW_values, z_values, Ci_in)]
+meq_values = [m.calculate_meq() for m in molarity_objects]
+
+# Function to create NFMass objects for different components
+def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
+    return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
+
+# Create NFMass objects for different components
+nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_nf)
+
+Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
+Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
+Qperm = nfmass_objects[0].Qperm  # kg/hr
+Qconc= nfmass_objects[0].Qconc # kg/hr
+
+# Calculate Osmotic Pressure
+P_osmo_f = OsmoticPressure(c_values, z_values, T).osmotic_pressure_calculation()
+P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
+P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
+
+d_p=density_calc(T-273, sum(Cperm))
+
+#Calculate Energy consumption 
+E_el_nf=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf_nf, d_in,n)
+result=E_el_nf.calculate_energy_consumption()
+for key, value in result.items():
+        print(f"{key}: {value}")
+        
+QHCl_nf=0
+Qantsc_nf=0
 #%%calculation MED 
 #constants 
 #conditions
 T=20+273.15
 d=1018.494
 
-#Molecular weight 
-MW_Na=22.99
-MW_cl=35.453
-MW_so4=32.064+4*15.999
-MW_K=39.102
-MW_Ca=40.08
-MW_Mg=24.31
-MW_HCO3=1.008+12.011+3*15.999
-MW_MgOH=58.3197
-MW_CaOH=74.09
 #assumptions:
 conc_f=8.5
 T_in=40 #(oC)
@@ -59,12 +156,12 @@ elif (T_s>70) and (T_s<=75):
     lh_s=2321
 
 #calculations 
-Qf_med=nanofiltration_unit.Qperm
+Qf_med=Qperm
 #Cin_med=sum([Comp1.Cpermi, Comp2.Cpermi,Comp3.Cpermi, Comp4.Cpermi, Comp5.Cpermi, Comp6.Cpermi])
-Cin_med_t=sum(nanofiltration_unit.Ci_out_p)
-Cin_med=nanofiltration_unit.Ci_out_p
+Cin_med_t=sum(Cperm)
+Cin_med=Cperm
 print("Cin_ med is " + str(Cin_med))
-med_dat=med_calc(Qf_med,Cin_med[0],Cin_med[1],Cin_med[2],Cin_med[3],Cin_med[4],Cin_med[5])
+med_dat=MEDCalculator(Qf_med,Cin_med[0],Cin_med[1],Cin_med[2],Cin_med[3],Cin_med[4],Cin_med[5])
 #med_dat=med_calc(Qf_med, Comp1.Cpermi, Comp2.Cpermi,Comp3.Cpermi, Comp4.Cpermi, Comp5.Cpermi, Comp6.Cpermi)
 med_dat.sal_calc()
 med_dat.temp_calc()
