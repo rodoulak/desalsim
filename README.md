@@ -28,6 +28,8 @@ The simulation results, including salt concentration profiles, ion fluxes, energ
 
 However, simulation models of more than one technology can be combined to simulate and evaluate the performance of a treatment chain (desalination and brine treatment system). In this case, the output flow rates and stream concentrate are the input data for the next technology. 
 
+Additionally, two example files are provided to demonstrate the usage of the simulation suite. These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a comparison file is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
+
 ## Key features 
 - Simulation models for various desalination and brine treatment technologies
 - Analysis of salt concentration profiles, ion fluxes, energy consumption, and chemical usage
