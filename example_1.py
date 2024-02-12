@@ -129,8 +129,9 @@ P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 d_p=density_calc(T-273, sum(Cperm))
 
 #Calculate Energy consumption 
-E_el_nf=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf_nf, d_in,n)
-result=E_el_nf.calculate_energy_consumption()
+nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf_nf, d_in,n)
+result=nf_energy.calculate_energy_consumption()
+E_el_nf = nf_energy.E_el_nf
 for key, value in result.items():
         print(f"{key}: {value}")
         
@@ -209,7 +210,7 @@ print(f"C_out in g is {Cout_mfpfr_g} g/l")
 #Calculate final outlet flow rate
 Qout_2=Qout_2+QHCl #l/h
 d_out_s=density_calc(25,sum(Cout_mfpfr_g))/1000 #kg/m3
-Mout_2=Qout_2*d_out_s #kg/h
+M_mfpfr_out=Qout_2*d_out_s #kg/h
 
 #electicity consumption
 # Create an instance of the inputpar class with the defined parameters
@@ -220,7 +221,7 @@ E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
 print("Electricity energy consumption is "+str(E_el_mfpf)+ " kwh")
 
 #Electricity consumption for filtration unit 
-E_fil=scaleup.scaleup(0.5, 0.3*1000, Mout_2)
+E_fil=scaleup.scaleup(0.5, 0.3*1000, M_mfpfr_out)
 
 #Total electricity consumption, KWh
 E_el_mfpf=E_el_mfpf+E_fil
@@ -437,13 +438,20 @@ d_a=1 #density acid channel (units: kg/l)
 d_s=1 #density salt channel (units: kg/l)
 d_b=1 #density base channel (units: kg/l)
 
+#Feed flow rate L/h
+Q_in_edbm=M_mfpfr_out+Mc
 
 #Feed concentration g/L
-Cin_edbm=Cout_mfpfr_g
-d_in=density_calc(25,sum(Cin_edbm))/1000
+Cin_edbm=sum(Cout_mfpfr_g)*M_mfpfr_out/Q_in_edbm+Sc_o*Mc/Q_in_edbm
+C_in_mix=[]
+for i in range(len(Cconc)):
+    C_in_mix.append(Cout_mfpfr_g[i]*M_mfpfr_out/Q_in_edbm+Sc_out[i]*Mc/Q_in_edbm)
+    
+Cf_tcr_in=C_in_mix #[Na, Cl, K, Mg, Ca, SO4 ]
 
-#Feed flow rate L/h
-Q_in_edbm=Mout_2
+d_in=density_calc(25,Cin_edbm)/1000
+
+
 
 #Calculate water quantity in inflow 
 Mw_in=Q_in_edbm/d_in 
@@ -464,7 +472,7 @@ A=0.4#scaleup.scaleup(19.2, 300, Q_in_edbm)/3
 Cna_s=[]
 
 #Create an instance of the EDBMCalc class with the defined parameters
-edbm_dat=EDBMCalc(Q_in_edbm, Cin_edbm[0], Cin_edbm[1], Cin_edbm[2], Cin_edbm[3], Cin_edbm[4], Cin_edbm[5], 0,  10**(-ph_s), 3.01551E-11, round(N_trip,0), 0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b)), 0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a)))
+edbm_dat=EDBMCalc(Q_in_edbm, C_in_mix[0], C_in_mix[1], C_in_mix[2], C_in_mix[3], C_in_mix[4], C_in_mix[5], 0,  10**(-ph_s), 3.01551E-11, round(N_trip,0), 0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b)), 0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a)))
 
 # Call the necessary methods to calculate values
 edbm_dat.flowrate()
@@ -475,7 +483,7 @@ edbm_dat.salt_channel()
 Cna_s.append(edbm_dat.Ci_s_out[0])
 
 #Loop for the recycling process 
-while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.05):
+while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.2):
     edbm_dat.recycl_below1M()
     edbm_dat.acid_channel()
     edbm_dat.base_channel()
@@ -488,7 +496,7 @@ while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.05):
 # Loop for recycling at higher concentration
 for i in range(1): 
     edbm_dat.recycl_1M()
-    while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.05):
+    while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.2):
         edbm_dat.recycl_below1M()
         edbm_dat.acid_channel()
         edbm_dat.base_channel()
@@ -572,6 +580,7 @@ SEC=(48*I_d*A)/(Q_b_out*(edbm_dat.Ci_b_out[0]-edbm_dat.Ci_b_in[0])*constants.MW_
 print("Total electrical consumption for EDBM is " + str(E_el_Edbm)+ " KW")
 print("sec is "+str(SEC)+"kwh/kg naoh")
 
+
 #%%
 #Concentration of saline solution 
 Q_out_b=Qd+Q_s_out
@@ -654,8 +663,10 @@ else:
 #naoh need solid
 Mnaoh_need=Qnaoh_need*constants.MW_NaOH/1000
 Mhcl_need=Qhcl_need*constants.MW_HCl/1000
-#
 
+#
+sum_el_en=sum(E_el_all)
+sum_th_en=sum(E_th_all)
 #%%
 #Technical 
 #T-1) quantity of water production 
@@ -738,7 +749,7 @@ chem1_conc=[Qantsc_nf,0,Mnaoh_need,0]
 chem1_pr=[0.002,0,constants.naoh_pr_s,0]
 chem2_conc=[0,0,Mhcl_need,0]
 chem2_pr=[0.002,0,constants.hcl_pr_s,0]
-w_conc=[0,0, Qnaoh_need, Q_w_in]
+wat_conc=[0,0, Qnaoh_need, Q_w_in]
 cw_conc=[0,0, 0, 0]
 Mf_basic_sc=[constants.Mf_basic_sc[0],constants.Mf_basic_sc[8], constants.Mf_basic_sc[3], constants.Mf_basic_sc[6]]
 
@@ -748,16 +759,13 @@ for i in range(len(eq_c)):
         eq_c[i]=scaleup.scaleup_eq(eq_c[i],Mf_basic_sc[i],Mf_sce[i],tec_names[i])
         
 for i in range(len(eq_c)):
-    total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i], chem2_conc[i], chem2_pr[i],cw_conc[i], w_conc[i])
+    total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
     total_econom.capex_calc()
     total_econom.opex_calc()
-    CAPEX=CAPEX+total_econom.t_capital_inv
-    OPEX=OPEX+total_econom.opex
+    CAPEX=total_econom.t_capital_inv
+    OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
-    total_econom.carbon_calc() 
-    CO2_c=CO2_c+total_econom.carbon_c
-    OPEX_with_ext=OPEX_with_ext+total_econom.opex
-    capex_list.append(total_econom.t_capital_inv)
+    capex_list.append(total_econom.t_capital_inv) 
     
 #amortisation factor     
 a=(constants.r*(1+constants.r)**constants.lf)/((1+constants.r)**constants.lf-1)
@@ -773,35 +781,12 @@ for i in range(len(prd)):
     print("rev_calc.rev_prd for " + prd_name[i]+" is " + str(rev_calc.rev_prd))
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)
-print("rev 2 is "+str(reve_t))
-#EC-1) Product value -> levelized cost 
-print(""+str()+"")
-#EC-2)impact of externalities on the production cost 
-#EC-2a)production cost with externalities in euro/m3 of seawater 
-Pr_c_ext=OPEX_with_ext/Qw_tot
-print("production cost with externalities is "+str()+" euro/m3 of seawater")
-#EC-2b)production cost without externalities in euro/m3 of seawater
-Pr_c=OPEX/Qw_tot
-print("production cost without externalities is "+str(Pr_c)+" euro/m3 of seawater")
-#EC-3) profitability -> production efficiency in euro/euro 
-prd_eff=(reve_t)/(CAPEX*a+OPEX)
-print("production efficiency is "+str(prd_eff)+"")
+
 Rev=reve_t
 print("revenue is "+str(Rev)+"")
-#EC-4) profitability -> economic margin 
-# Ec_m= (CAPEX*a+OPEX-reve_t)/(abs_Qw*constants.hr/1000)
-# print("economic margin is "+str(Ec_m)+"euro/m3 of water")
-OPEX=OPEX
-CAPEX=CAPEX
-oper_c_t=CAPEX*a+OPEX
-Ec_m= (oper_c_t-reve_t)/(Qw_tot*constants.hr/1000)
-print("economic margin is "+str(Ec_m)+"euro/m3 of water")
-print(""+str()+"")
+
 
 #%%present results
-
-sum_el_en=sum(E_el_all)
-sum_th_en=sum(E_th_all)
 
 sum_table_C={'F1: Seawater': Ci_in,
            'F2: NF permeate':Cperm, 
@@ -838,7 +823,7 @@ sum_table_f={'F1: Seawater': round(Qf_nf,2),
            'F3: NF concentrate': round(Qconc,2),
            'F4: ED diluate': round(  Md,2), 
            'F5: ED to EDBM': round(Mc,2),
-           'F6: MF-PFR out': round(Mout_2,2), 
+           'F6: MF-PFR out': round(M_mfpfr_out,2), 
            'F7: MgOH2': round(M_MgOH2_1,2),
            'F8: CaOH2': round(M_CaOH2,2),
            'F9: EDBM: ACID':round(Q_a_out,2),
@@ -852,52 +837,68 @@ sum_table_f={'F1: Seawater': round(Qf_nf,2),
 sum_table_f=pd.DataFrame(sum_table_f, index=['flow rate'])
 print(sum_table_f)
 
+#sankey diagram 
+import plotly.graph_objects as go
+from plotly.offline import plot
 
-# #sankey diagram 
-# import plotly.graph_objects as go
-# from plotly.offline import plot
+fig = go.Figure(data=[go.Sankey(
+    node = dict(
+      pad = 15,
+      thickness = 20,
+      line = dict(color = "black", width = 0.5),
+      label = ["Seawater", "Water", "NaCl",  "NF", "ED", "MF-PFR", "EDBM", "HCl", "NaOH", "Mg(OH)\u2082", "Ca(OH)\u2082", "Utilities", "Saline solution"],
+      color = "blue"
+    ),
+    link = dict(
+      source = [0,3,3,4,4,5,5,5,6,6,6,11,11], 
+      target = [3,4,5,6,12,6,9,10,7,8,12,5,6],
+      value = [Qsw, Qperm, Qconc,Mc, Md,M_mfpfr_out, M_MgOH2_1,M_CaOH2,Q_a_out, Q_b_out,Q_s_out, QNAOH+QHCl,Q_w_in ]
+  ))])
+color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
+fig.update_traces(node_color = color_for_nodes)
+fig.update_layout(title_text="Sankey diagram for Example ", font_size=15)
+fig.show()
 
+plot(fig)
 
-# fig = go.Figure(data=[go.Sankey(
-#     node = dict(
-#       pad = 15,
-#       thickness = 20,
-#       line = dict(color = "black", width = 0.5),
-#                   #0,       1           2,            3       4      5      6        7      8       9            10
-#       label = ["Seawater ", "Water ", "Mg(OH)\u2082", "HCl", "NaOH", "NF",  "MFPFR", "ED", "EDBM",  "Utilities", "Saline solution"],
-#       color = "blue"
-#     ),
-#     link = dict(
-#       source = [0, 9 , 5, 9,5,6,6,7,7,8,8,8,10,10], 
-#       target = [9, 5, 6, 1,7, 2,8,11,8,3,4,11,6,8],
-#       value = [Qf_nf,   Qperm, M_MgOH2_1, Mout_2, Md, Mc, Q_a_out, Q_b_out, Q_s_out, QNAOH, Q_w_in]
-#   ))])
-# color_for_nodes = ["lightsteelblue","darkcyan","maroon","lightblue","darkslategray", "orange", "orange", "midnightblue", "midnightblue", "midnightblue", "midnightblue", "midnightblue", "midnightblue", "gold"]
-# fig.update_traces(node_color = color_for_nodes)
-# fig.update_layout(title_text="Sankey diagram for Scenario 4: Integrate RO plant with ED ", font_size=15)
-# fig.show()
-# plot(fig)
+fig = go.Figure(data=[go.Sankey(
+    node = dict(
+      pad = 15,
+      thickness = 20,
+      line = dict(color = "black", width = 0.5),
+      label = [ "NF","MF-PFR","ED",  "EDBM", "total"],
+      color = "blue"
+    ),
+    link = dict(
+      source = [4, 4,4,4], 
+      target = [0,1,2,3],
+      value = [E_el_all[0], E_el_all[1], E_el_all[2], E_el_all[3]]
+  ))])
+color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
+fig.update_traces(node_color = color_for_nodes)
+fig.update_layout(title_text="Sankey diagram for Example ", font_size=15)
+fig.show()
 
-
-
+plot(fig)
+#%% Results to excel 
 dfel=pd.DataFrame(E_el_all ,tec_names)
 dfeth=pd.DataFrame(E_th_all, tec_names)
-dfind=(Qw_tot, abs_Qw, rec, Tot_el, Tot_th, emis_t, Q_w_in,  OPEX, CAPEX, Ec_m, Pr_c)
+dfind=(Qw_tot, abs_Qw, rec, Tot_el, Tot_th, emis_t, Q_w_in,  OPEX, CAPEX)
 dfprod=(Qw_tot, M_MgOH2_1, M_CaOH2,  M_b_out, M_a_out)
 
 dfprodn=("Water (kg/hr)",  "Mg(OH)2(kg/hr)", "Ca(OH)2(kg/hr)",  "1M NaOH (kg/hr)","1M HCl(kg/hr)")
 ind=np.array(["Water production", "absolute water production", "water recovery","Total electrical consumption", "Total thermal energy consumption", "Carbon dioxide emission kg co2/year",
-              "Water footprint","OPEX", "CAPEX","economic margin in €/m\u00B3 of water", "Production cost"])
-units=pd.DataFrame(["kg/hr", "kg/hr", "%","KWh", "KWh"," kg co2/year","kg/hr","€/year", "€","€/m\u00B3 of water", "euro/m\u00B3 of seawater"])
+              "Water footprint","OPEX", "CAPEX"])
+units=pd.DataFrame(["kg/hr", "kg/hr", "%","KWh", "KWh"," kg co2/year","kg/hr","€/year", "€"])
 dfind_t=pd.DataFrame(data=dfind, index=ind)
 dfprodn=pd.DataFrame(data=dfprod, index=dfprodn)
-with pd.ExcelWriter('results_ed_scenario.xlsx') as writer:
-    sum_table_f.to_excel(writer,sheet_name="ed_scenario")
-    sum_table_C.to_excel(writer,sheet_name="ed_scenario", startcol=0, startrow=6, header=True)
-    sum_table_d.to_excel(writer,sheet_name="ed_scenario", startcol=0, startrow=2, header=True)
-    dfel.to_excel(writer,sheet_name="ed_scenario", startcol=0, startrow=14, header=True)
-    dfeth.to_excel(writer,sheet_name="ed_scenario", startcol=2, startrow=14, header=True)
-    dfprodn.to_excel(writer,sheet_name="ed_scenario", startcol=0, startrow=23, header=True)
+with pd.ExcelWriter('results_example.xlsx') as writer:
+    sum_table_f.to_excel(writer,sheet_name="example")
+    sum_table_C.to_excel(writer,sheet_name="example", startcol=0, startrow=6, header=True)
+    sum_table_d.to_excel(writer,sheet_name="example", startcol=0, startrow=2, header=True)
+    dfel.to_excel(writer,sheet_name="example", startcol=0, startrow=14, header=True)
+    dfeth.to_excel(writer,sheet_name="example", startcol=2, startrow=14, header=True)
+    dfprodn.to_excel(writer,sheet_name="example", startcol=0, startrow=23, header=True)
     #dfprod.to_excel(writer,sheet_name="water_mining_scenario", startcol=1, startrow=24, header=True)
     dfind_t.to_excel(writer,sheet_name="indicators")
     units.to_excel(writer,sheet_name="indicators",startcol=2, startrow=0, header=True)

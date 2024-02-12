@@ -2,7 +2,7 @@
 
 #Import results 
 import example_1 as sc1
-import example_1 as sc2
+import example_2 as sc2
 
 #import 
 import numpy as np
@@ -17,7 +17,7 @@ hr=300*24 #hours
 
 #%%figures 
 
-X = ['Sce 1', 'Sce 2']
+X = ['Example 1', 'Example 2']
 X_axis = np.arange(len(X))
 
 #Figure 1: Electrical consumption Vs thermal consumption 
@@ -32,13 +32,12 @@ plt.xticks(X_axis, X)
 plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xlabel("Scenarios")
 plt.ylabel("Eenergy consumption (GW)")
-# plt.title("electrical energy vs thermal energy")
 plt.legend()
 plt.savefig('electricVSthermal.png')
 plt.show()
 
 #Figure 2: water production in kg/hr
-Qw = [sc1.abs_Qw, sc2.abs_Qw]
+Qw = [sc1.Qw_tot, sc2.Qw_tot]
 
 Qw_y = [i * hr/1E6 for i in Qw]
 # Qw_y=Qw*constants.hr/1000
@@ -74,11 +73,9 @@ plt.show()
 Rev= [sc1.Rev,  sc2.Rev]
 Rev = [i/1e6 for i in Rev]
 plt.bar(X_axis - 0.4, Rev, 0.4, color="#00516a")  
-plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xticks(X_axis, X)
 plt.xlabel("Scenarios")
 plt.ylabel("Revenues (M€/year)")
-
 plt.savefig('revenues.png')
 plt.show()
 
@@ -86,7 +83,6 @@ plt.show()
 co2_em=[sc1.emis_t, sc2.emis_t]
 co2_em = [i * hr/1e6 for i in co2_em]
 plt.bar(X_axis - 0.4, co2_em, 0.4, color="#00516a")  
-plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xticks(X_axis, X)
 plt.xlabel("Scenarios")
 plt.ylabel("CO\u2082 emissions (KTon/year)")
@@ -97,8 +93,7 @@ plt.show()
 #%%
 #create dataframes 
 ind=np.array(["Water production", "Total electrical consumption (GWh)", "Total thermal energy consumption (GWh)","Carbon dioxide emission (Kton co2/year) ",
-              "OPEX (M€/year)", "CAPEX (M€)", "Resource efficiency (%)", "Production efficiency (%)", "Water footprint (m3/year)", 
-              "Brine production (ton/year)", "levelized cost of water €/m\u00B3"])
+              "OPEX (M€/year)", "CAPEX (M€)"])
 sum_res_1=np.array([Qw_y[1],Eel[1], Eth[1],co2_em[1], OPEX[1], Cap[1]])
 df1=pd.DataFrame(sum_res_1, ind)
 
