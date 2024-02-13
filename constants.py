@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 24 16:10:12 2022
 
-@author: rodoulaktori
-"""
 MW_Na=22.99
 MW_cl=35.453
 MW_so4=32.064+4*15.999

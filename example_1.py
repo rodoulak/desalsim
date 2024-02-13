@@ -619,9 +619,7 @@ class indic:
             self.Water_rr=0
             print("no water production by " + self.tech)
         
-#%%main 
-#%%treatment train: NF-> ED
-                  #->MFPFR->EDBM 
+#%%Sumsummarize results  
 tec1=indic("NF", Qconc, Qf_nf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
 tec1.techn_indi()
 
@@ -673,28 +671,16 @@ sum_th_en=sum(E_th_all)
 Qw_tot=tec1.Qwater+tec2.Qwater+ tec3.Qwater+ tec4.Qwater
 abs_Qw=Qw_tot-Q_w_in
 print("absolute water production is "+str(abs_Qw))
-#print("total water production is " + str(Qw_tot))
-
-#T-2)energy performance
 #T-1b) Water recovery  
 Qsw=Qsw
 rec=Qw_tot/Qsw*100 #%
-#T-2a) specific electrical energy consumption #kwh/kg of desalinated water 
+#T-2)energy performance: specific electrical energy consumption #kwh/kg of desalinated water 
 SEC=sum(E_el_all)/Qw_tot
 print("specific electrical consumption is " +str(SEC)+ " Kwh/kg of desalinated water")
-#2b) share of renewable energy %
-#2cb) Energy consumption 
 Tot_el=sum(E_el_all) #kWh 
 Tot_th=sum(E_th_all) #kWh
-#T-3)efficiency 
-#T-3a) Resource efficiency
-Rr=(Qw_tot+M_MgOH2_1+M_CaOH2+Q_a_out*Ca_out[1]*constants.MW_HCl/1000+Q_b_out*Cb_out[0]*constants.MW_NaOH/1000)/(Qsw+Q_w_in+QNAOH*constants.MW_NaOH/1000)
-print("resource efficiency of the system is "+str(Rr))
-Rr2=(Qw_tot+M_MgOH2_1+M_CaOH2+Q_a_out*1.02+Q_b_out* 1.01 )/(Qsw+Q_w_in+QNAOH*1.04+QHCl*1.0585)
-print("resource efficiency 2 of the system is "+str(Rr2))
-#T-3b) Salt recovery 
-Salt_r=(M_MgOH2_1+M_CaOH2+Q_a_out*constants.MW_cl/1000+Q_b_out*constants.MW_Na/1000)/(Qsw+Q_w_in+QNAOH*constants.MW_NaOH/1000)
-#T-3b)brine production -> kg of brine/ kg of seawater  
+
+#T-3)Brine production -> kg of brine/ kg of seawater  
 Qbrine_f=0
 for i in range(len(tec_names)):
     if tec_names[i]=="EDBM" or tec_names[i]=="ED":
@@ -716,21 +702,7 @@ print("Total specific Carbon dioxide emission "+str(emis_t)+" kg co2")
 #Env-2) Resource utilization -> chemical consumption in kg of chemical/kg of seawater 
 Chem_cons=(sum(Qchem_all))/Qsw #check units and convert ml/l to kg with densities 
 print("Total chemical consumption is "+str(Chem_cons)+" kg of chemical/kg of seawater ")
-#Env-3) The aquatic eco-toxic impact of brine disposal -> ECO-TOXICITY 
-C_brine=Cbrine_out #[ CNa, CCl, CK, CMg, CCa, CSO4, Chco3, CH, COH]
-ETP=0
-CF=4.62e-1
-for i in range(len(C_brine)-2):
-    ETP=ETP+C_brine[i]*CF
-print("The aquatic eco-toxic impact of brine disposal is "+str(ETP)+"")
-#Env-4) Environmental prodection -> minimization of waste in kg of brine/CO2 emissions 
-Min_waste=(Qconc-Qbrine_f)/((sum(E_el_all)*CO2_el)+(sum(E_th_all)*CO2_st))
-print("Emissions from minimization of waste is "+str(Min_waste)+" kg of brine/CO2 emissions ")
-#Env-5) Resource recovery efficiency -> Resource efficiency (%)
-
-print("Resource recovery efficiency is "+str()+" ")
-print(""+str()+"")
-#Env-6) Water footprint/ water use 
+#Env-3) Water footprint/ water use 
 Qw_use=Q_w_in+Qnaoh_need+Qhcl_need
 
 #%%
@@ -770,6 +742,9 @@ for i in range(len(eq_c)):
 #amortisation factor     
 a=(constants.r*(1+constants.r)**constants.lf)/((1+constants.r)**constants.lf-1)
 
+#Calculate annucal operating cost 
+oper_c_t=CAPEX*a+OPEX
+
 reve_t=0
 reve_list=[]
 prd=[Qw_tot, M_MgOH2_1, Qnaoh_s*constants.MW_NaOH/1000, Qhcl_s*constants.MW_HCl/1000 ]  
@@ -784,10 +759,9 @@ for i in range(len(prd)):
 
 Rev=reve_t
 print("revenue is "+str(Rev)+"")
-
-
 #%%present results
-
+#Summary tables 
+    #Table C: Ion concentration 
 sum_table_C={'F1: Seawater': Ci_in,
            'F2: NF permeate':Cperm, 
            'F3: NF concentrate': Cconc,
@@ -803,6 +777,7 @@ sum_table_C={'F1: Seawater': Ci_in,
 sum_table_C=pd.DataFrame(sum_table_C)
 print(sum_table_C)
 
+    #Table D: Density
 sum_table_d={'F1: Seawater': density_calc(25,sum(Ci_in))/1000,
            'F2: NF permeate':density_calc(25,sum(Cperm))/1000, 
            'F3: NF concentrate': density_calc(25,sum(Cconc))/1000,
@@ -818,6 +793,7 @@ sum_table_d={'F1: Seawater': density_calc(25,sum(Ci_in))/1000,
 sum_table_d=pd.DataFrame(sum_table_d, index=['density'])
 print(sum_table_d)
 
+        #Table F: Flow rates  
 sum_table_f={'F1: Seawater': round(Qf_nf,2),
            'F2: NF permeate':round(Qperm,2), 
            'F3: NF concentrate': round(Qconc,2),
@@ -841,6 +817,7 @@ print(sum_table_f)
 import plotly.graph_objects as go
 from plotly.offline import plot
 
+#Figure 1: Sankey diagram for Example: Mass flow rates
 fig = go.Figure(data=[go.Sankey(
     node = dict(
       pad = 15,
@@ -856,11 +833,11 @@ fig = go.Figure(data=[go.Sankey(
   ))])
 color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
 fig.update_traces(node_color = color_for_nodes)
-fig.update_layout(title_text="Sankey diagram for Example ", font_size=15)
+fig.update_layout(title_text="Sankey diagram for Example: Mass flow rates ", font_size=15)
 fig.show()
-
 plot(fig)
 
+#Figure 2: Sankey diagram for Example: Energy contribution
 fig = go.Figure(data=[go.Sankey(
     node = dict(
       pad = 15,
@@ -876,9 +853,8 @@ fig = go.Figure(data=[go.Sankey(
   ))])
 color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
 fig.update_traces(node_color = color_for_nodes)
-fig.update_layout(title_text="Sankey diagram for Example ", font_size=15)
+fig.update_layout(title_text="Sankey diagram for Example: Energy contribution ", font_size=15)
 fig.show()
-
 plot(fig)
 #%% Results to excel 
 dfel=pd.DataFrame(E_el_all ,tec_names)

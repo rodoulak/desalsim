@@ -1,5 +1,3 @@
-#from nanofiltration_unit import molarity
-#from nanofiltration_unit import Osmotic_pressure
 import math
 import constants
 import density_calc

@@ -337,15 +337,11 @@ class indic:
             self.Water_rr=0
             print("no water production by " + self.tech)
         
-#%%main 
-
-#Call units' functions 
-#def __init__(self, tech, Qout, Qin, Qprod_1, prod_1_name, Qprod_2, prod_2_name, E_el, E_th, Cin, Cout, chem1, chem2)       
+#%% Sumsummarize results   
 
 tec1=indic("NF", Qconc, Qf_nf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
 tec1.techn_indi()
 
-#
 tec2=indic("MED", Qout_med, Qf_med, Qprod_med, "water", 0, "none",  E_el_med, E_th_med, Cin_med, Cconc_med, Cchem_med,0)
 tec2.techn_indi()
 
@@ -365,7 +361,7 @@ sum_el_en=sum(E_el_all)
 sum_th_en=sum(E_th_all)
 #%%
 Qsw=Qsw
-#Technical 
+#Technical indicators 
 #T-1) quantity of water production 
 Qw_tot=tec1.Qwater+tec2.Qwater+ tec3.Qwater
 #print("total water production is " + str(Qw_tot))
@@ -457,6 +453,8 @@ for i in range(len(prd)):
 Rev=reve_t
 
 #%%present results
+#Summary tables 
+    #Table C: Ion concentration 
 sum_table_C={'F1: Seawater': Ci_in,
            'F2: NF permeate': Cperm, 
            'F3: NF concentrate': Cconc,
@@ -467,6 +465,8 @@ sum_table_C={'F1: Seawater': Ci_in,
            }
 sum_table_C=pd.DataFrame(sum_table_C)
 print(sum_table_C)
+
+    #Table D: Density
 sum_table_d={'F1: Seawater': density_calc(25,sum(Ci_in))/1000,
            'F2: NF permeate': density_calc(25,sum(Cperm))/1000, 
            'F3: NF concentrate': density_calc(25,sum(Cconc))/1000,
@@ -478,7 +478,7 @@ sum_table_d={'F1: Seawater': density_calc(25,sum(Ci_in))/1000,
 sum_table_d=pd.DataFrame(sum_table_d, index=['density'])
 print(sum_table_d)
 
-
+        #Table F: Flow rates  
 sum_table_f={'F1: Seawater': round(Qsw,2),
            'F2: NF permeate': round(Qperm,2), 
            'F3: NF concentrate': round(Qconc,2),
@@ -497,6 +497,7 @@ print(sum_table_f)
 import plotly.graph_objects as go
 from plotly.offline import plot
 
+#Figure 1: Sankey diagram for Example: Mass flow rates
 fig = go.Figure(data=[go.Sankey(
     node = dict(
       pad = 15,
@@ -512,11 +513,11 @@ fig = go.Figure(data=[go.Sankey(
   ))])
 color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
 fig.update_traces(node_color = color_for_nodes)
-fig.update_layout(title_text="Sankey diagram for Example ", font_size=15)
+fig.update_layout(title_text="Sankey diagram for Example: Mass flow rates ", font_size=15)
 fig.show()
-
 plot(fig)
 
+#Figure 2: Sankey diagram for Example: Energy contribution
 fig = go.Figure(data=[go.Sankey(
     node = dict(
       pad = 15,
@@ -532,13 +533,12 @@ fig = go.Figure(data=[go.Sankey(
   ))])
 color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
 fig.update_traces(node_color = color_for_nodes)
-fig.update_layout(title_text="Sankey diagram for Example ", font_size=15)
+fig.update_layout(title_text="Sankey diagram for Example: Energy contribution ", font_size=15)
 fig.show()
-
 plot(fig)
 
 
-#%%export to excel
+#%% Results to excel 
 dfel=pd.DataFrame(E_el_all ,tec_names)
 dfeth=pd.DataFrame(E_th_all, tec_names)
 dfind=(Qw_tot, abs_Qw, rec, sum_el_en, sum_th_en, emis_t, Q_w_in,  OPEX, CAPEX)

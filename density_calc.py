@@ -1,4 +1,4 @@
-#density 
+#Density calculation based on the stream salinity and temperature
 
 #input: 
  # T- Temperayure in C

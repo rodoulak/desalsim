@@ -40,7 +40,6 @@ plt.show()
 Qw = [sc1.Qw_tot, sc2.Qw_tot]
 
 Qw_y = [i * hr/1E6 for i in Qw]
-# Qw_y=Qw*constants.hr/1000
 plt.bar(X_axis - 0.4, Qw_y, 0.4, color="#00516a")  
 plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 plt.xticks(X_axis, X)
@@ -79,7 +78,7 @@ plt.ylabel("Revenues (M€/year)")
 plt.savefig('revenues.png')
 plt.show()
 
-#Figure 12: CO2 emissions 
+#Figure 6: CO2 emissions 
 co2_em=[sc1.emis_t, sc2.emis_t]
 co2_em = [i * hr/1e6 for i in co2_em]
 plt.bar(X_axis - 0.4, co2_em, 0.4, color="#00516a")  
@@ -90,8 +89,7 @@ plt.savefig('CO2emissions.png')
 plt.show()
 
 
-#%%
-#create dataframes 
+#%% Create dataframes 
 ind=np.array(["Water production", "Total electrical consumption (GWh)", "Total thermal energy consumption (GWh)","Carbon dioxide emission (Kton co2/year) ",
               "OPEX (M€/year)", "CAPEX (M€)"])
 sum_res_1=np.array([Qw_y[1],Eel[1], Eth[1],co2_em[1], OPEX[1], Cap[1]])
@@ -110,7 +108,7 @@ sc1_dfeth=pd.DataFrame(sc1.E_th_all, sc1.tec_names)
 sc2_dfel=pd.DataFrame(sc2.E_el_all , sc2.tec_names)
 sc2_dfeth=pd.DataFrame(sc2.E_th_all, sc2.tec_names)
 
-#%%export to excel
+#%% Export to excel
 with pd.ExcelWriter('results_scenario.xlsx') as writer:
     df1.to_excel(writer,sheet_name="example 1")
     df2.to_excel(writer,sheet_name="example 2")
