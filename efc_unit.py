@@ -9,6 +9,7 @@ aqueous solution of Compound 1 (Na2SO4/Sodium sulfate), that initially includes 
 dp=0.1
 dp_slurry=1
 npump=0.8
+
 #Import the libraries that will be used
 import math
 import pandas as pd
@@ -792,7 +793,6 @@ conc_f_in=conc_f(C_i_in[0],C_i_in[1], C_i_in[2], C_i_in[3], C_i_in[4], C_i_in[5]
 
 dens=1.02
 conc_f_in.calc_f_c()
-
 Cout= Var.C_compound1_mliq #out concentration for na2so4. only na, so4 change 
 Cout_so4= Cout.item()
 Cout_cl=Var.C_compound2
@@ -816,8 +816,8 @@ print("V_compound1 is "+str(V_compound1))
 #operating temperature 
 Treactor=Var.Treactor-273
 print("operating temperature is "+str(*Treactor[0])+"oC")
-#required energy 
 
+#required energy 
 E_el=Qtot/1000*res # KW 
 Q_t=abs(Qtot/1000)
 print("Q_t"+str(Q_t))
@@ -828,8 +828,6 @@ print("E_t"+str(E_t))
 sec_f=E_t/Qf
 sec_eff=E_t/(Mout/1020)
 sec_product=E_t/M_compound1_cr
-# M_compound1_cr=sum(M_compound1_cr_store)/Residence_time#+M_compound1_cr
-# print("M_compound1_cr is "+str(M_compound1_cr))
 w_in_cryst=M_compound1_cr*10*18.01528/MW_Na2SO4_10H2O
 print(w_in_cryst)
 bal=Qf-M_ice*res-Mout*res-M_compound1_cr*res
@@ -842,13 +840,3 @@ M_compound1_cr=M_compound1_cr*res+bal
 M_ice=M_ice*res
 bal=Qf-M_ice -Var.M_liquid_tot.item() -M_compound1_cr
 print("bal is "+str(bal))
-# #vs2 energy
-# Qsens=Qf/3600*4.18*(Var.Treactor-(273+5))
-# print("Q sens is "+str(Qsens)+"KW")
-# Qpre_c=Qf/3600*4.18*(5-20)
-# Qlatent=M_ice/3600*333.55+M_compound1_cr/3600*252
-# Q_t=Qpre_c+Qlatent+E_p+E_fil #abs(Qsens)
-# sec_f=Q_t/Qf
-# print("sec feed is "+str(sec_f))
-# sec_f=Q_t/(Mout/1020)
-# print("sec effluent is "+str(sec_f))
