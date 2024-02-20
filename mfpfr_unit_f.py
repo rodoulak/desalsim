@@ -168,18 +168,18 @@ class HClAddition:
         
         #Calculate the volume of HCl 1M in liters
         QHCl = (self.Qout_2 * OH_initial - self.Qout_2 * OH_final) / (OH_final + HCl_conc)  
-        self.Qout_2 += QHCl
+        self.Qout_f = self.Qout_2+QHCl
 
         # Calculate the outlet concentration of chloride ions
-        C_cl_out = (self.Cout_all_m[1] * self.Qout_2 + QHCl * HCl_conc) / self.Qout_2  # mol/l
+        C_cl_out = (self.Cout_all_m[1] * self.Qout_2 + QHCl * HCl_conc) / self.Qout_f  # mol/l
         self.Cout_all_m[1] = C_cl_out
         C_cl_out = C_cl_out * self.MW_cl  # g/l
         Cout_mfpfr_g[1] = C_cl_out
 
         for i in range(2, 6):
-            Cout_mfpfr_g[i] = Cout_mfpfr_g[i] * self.Qout_2 / self.Qout_2
+            Cout_mfpfr_g[i] = Cout_mfpfr_g[i] * self.Qout_2 / self.Qout_f
 
-        Cout_mfpfr_g[0] = Cout_mfpfr_g[0] * self.Qout_2 / self.Qout_2
+        Cout_mfpfr_g[0] = Cout_mfpfr_g[0] * self.Qout_2 / self.Qout_f
         # Return the volume of HCl added and the outlet concentration of chloride ions
         return QHCl, Cout_mfpfr_g
      
@@ -278,6 +278,7 @@ unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2)
 # Call the calculate_HCl_addition method
 QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition()
 
+
 # Print the volume of HCl added and the outlet concentration of chloride ions
 print(f"HCl flow rate is {QHCl} l/h")
 print(f"C_out in g is {Cout_mfpfr_g} g/l")
@@ -293,7 +294,7 @@ Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr
 
 #Electricity consumption for pumping , KWh
 E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
-print("Electricity energy consumption is "+str(E_el_mfpf)+ " kwh")
+print("Electricity energy consumption is "+str(E_el_mfpf)+ " kw")
 
 #Electricity consumption for filtration unit 
 E_fil=scaleup.scaleup(0.5, 0.3*1000, Mout_2)
