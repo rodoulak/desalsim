@@ -166,7 +166,7 @@ class HClAddition:
         OH_initial = math.pow(10, -14) / math.pow(10, -self.ph_2)
         OH_final = math.pow(10, -14) / math.pow(10, -7)
         
-        #Calculate the volume of HCl 1M in liters
+        #Calculate the volume of HCl 1M in liters, Qout_f
         QHCl = (self.Qout_2 * OH_initial - self.Qout_2 * OH_final) / (OH_final + HCl_conc)  
         self.Qout_f = self.Qout_2+QHCl
 
@@ -284,9 +284,9 @@ print(f"HCl flow rate is {QHCl} l/h")
 print(f"C_out in g is {Cout_mfpfr_g} g/l")
 
 #Calculate final outlet flow rate
-Qout_2=Qout_2+QHCl #l/h
+Qout_f=Qout_2+QHCl #l/h
 d_out_s=density_calc(25,sum(Cout_mfpfr_g))/1000 #kg/m3
-Mout_2=Qout_2*d_out_s #kg/h
+Mout_2=Qout_f*d_out_s #kg/h
 
 #electicity consumption
 # Create an instance of the inputpar class with the defined parameters
