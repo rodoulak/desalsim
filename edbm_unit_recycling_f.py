@@ -382,8 +382,8 @@ MW_H2O=MW_H+MW_OH
 T=20+273.15
 
 #input data
-r=1-0.4/(5-0.4) #recycling rate 
-rs=1-1/(5-1) #recycling rate 
+r=0.91 #recycling rate 
+rs=0.75 #recycling rate 
 ph_s=4.71 #pH salt channel (units: -)
 ph_b=7#pH base channel (units: -)
 ph_a=7#pH acid channel (units: -)
