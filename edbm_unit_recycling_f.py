@@ -89,9 +89,10 @@ class EDBMCalc:
         self.CH_s_in=CH/MW_H
         #Create lists for initial concentration in each channel 
         self.Ci_s_in=[self.CNa_s_in,self.CCl_s_in,self.CK_s_in,self.CMg_s_in,self.CCa_s_in,self.CSO4_s_in,self.CHCO3_s_in, self.CH_s_in,self.COH_s_in]
-        self.Ci_b_in=[Cb1/MW_Na, Cb2/ MW_Cl,Cb3/MW_K,Cb4/MW_Mg,Cb5/MW_Ca,Cb6/MW_SO4,Cb7/MW_HCO3,CH/MW_H,COH/MW_OH]
-        self.Ci_a_in=[Ca1/MW_Na,Ca2/MW_Cl,Ca3/MW_K,Ca4/MW_Mg,Ca5/MW_Ca,Ca6/MW_SO4,Ca7/MW_HCO3,CH/MW_H,COH/MW_OH]
-        
+        self.Ci_b_in=[Cb1/MW_Na, Cb2/ MW_Cl,Cb3/MW_K,Cb4/MW_Mg,Cb5/MW_Ca,Cb6/MW_SO4,Cb7/MW_HCO3,Cb8/MW_H,Cb9/MW_OH]
+        self.Ci_a_in=[Ca1/MW_Na,Ca2/MW_Cl,Ca3/MW_K,Ca4/MW_Mg,Ca5/MW_Ca,Ca6/MW_SO4,Ca7/MW_HCO3,Ca8/MW_H,Ca9/MW_OH]
+        print("self.Ci_a_in is "+str(self.Ci_a_in))
+        print("self.Ci_b_in is "+str(self.Ci_b_in))
         #save initial concentration before recirculation: 
         self.Ci_s_in_0=self.Ci_s_in
         self.Ci_b_in_0=self.Ci_b_in
@@ -115,7 +116,10 @@ class EDBMCalc:
             self.M_s_in[i]=self.Q1_s_in*self.Ci_s_in[i]*self.PM_i[i]/1000 #units: kg/h
             self.M_b_in[i]=self.Q1_b_in*self.Ci_b_in[i]*self.PM_i[i]/1000 #units: kg/h
             self.M_a_in[i]=self.Q1_a_in*self.Ci_a_in[i]*self.PM_i[i]/1000 #units: kg/h
-    
+        
+        print("self.M_s_in is "+str(sum(self.M_s_in)))
+        print("self.M_a_in is "+str(self.M_a_in))
+        print("self.M_b_in is "+str(self.M_b_in))
         self.M_h2o_a_in=self.Q1_a_in*d_a-sum(self.M_a_in)          
         self.M_h2o_b_in=self.Q1_b_in*d_b-sum(self.M_b_in) 
         self.M_h2o_s_in=self.Q1_s_in*d_s-sum(self.M_s_in) 
@@ -150,7 +154,7 @@ class EDBMCalc:
         self.M_h2o_a_out=self.M_h2o_a_in-0.5*self.JA*MW_H2O
         #Calculation total outlet mass flow rate 
         self.M_a_out_t=self.M_h2o_a_out+self.M_a_out[7]+self.M_a_out[1]+self.M_a_out[8]+self.M_a_out[0]
-        
+
         #Calculation of outlet mass flow rate for other ionic species in channel 
         for i in range(2,7):
             self.M_a_out[i]=self.M_a_in[i]
@@ -187,13 +191,20 @@ class EDBMCalc:
             self.M_b_out[i]=self.M_b_in[i]  
             self.M_b_out_t=self.M_b_out_t+self.M_b_out[i]
             
+        d_s_new=density_calc.density_calc(25, self.M_b_out_t)/1000
+        print("d_s_new is "+str(d_s_new))
         #Calculate of volumetric outlet flow rate
-        self.Q1_b_out=self.M_b_out_t/1 #assume density is 1kg/l
+        self.Q1_b_out=self.M_b_out_t/d_s_new #assume density is 1kg/l
         
         #Calculation of outlet concentration of single ions in channel 
         for i in range(0,9):
             self.Ci_b_out[i]=self.M_b_out[i]/(self.Q1_b_out*self.PM_i[i]/1000)
-
+        print("self.M_b_out_t is "+str(self.M_b_out_t))
+        print("self.M_h2o_b_out is "+str(self.M_h2o_b_out))
+        print("self.M_b_out[7] is "+str(self.M_b_out[7]))
+        print("self.M_b_out[1] is "+str(self.M_b_out[1]))
+        print("self.M_b_out[0] is "+str(self.M_b_out[0]))
+        print("self.M_b_out[8] is "+str(self.M_b_out[8]))
     
     def salt_channel(self):
         #Performs mass balance calculations for Salt channel 
@@ -212,15 +223,21 @@ class EDBMCalc:
         #Calculation of outlet mass flow rate for water 
         self.M_h2o_s_out=self.M_h2o_s_in
         #Calculation total outlet mass flow rate 
-        self.M_s_out_t=self.M_s_out[0]+self.M_s_out[1]+self.M_s_out[8]+self.M_s_out[7]+self.M_h2o_s_out
-        
+        self.M_s_out_t=self.M_s_out[0]+self.M_s_out[1]+self.M_h2o_s_out#+self.M_s_out[8]+self.M_s_out[7]
+        print("self.M_s_out_t_0 is "+str(self.M_s_out_t))
         #Calculation of outlet mass flow rate for other ionic species in channel 
         for i in range(2,7):
             self.M_s_out[i]=self.M_s_in[i]
             self.M_s_out_t=self.M_s_out_t+self.M_s_out[i]
-            
+        
+        print("self.M_s_out_t is "+str(self.M_s_out_t))
+        print("self.M_h2o_s_out is "+str(self.M_h2o_s_out))
+        print("self.M_s_out[1] is "+str(self.M_s_out[1]))
+        print("self.M_s_out[0] is "+str(self.M_s_out[0]))
+        print("self.M_s_out "+str(self.M_s_out))
+
         #Calculate of volumetric outlet flow rate
-        self.Q1_s_out=self.M_s_out_t/1.1
+        self.Q1_s_out=self.M_s_out_t/d_in
         
         #Calculation of outlet concentration of single ions in channel 
         for i in range(0,9):
@@ -245,12 +262,12 @@ class EDBMCalc:
         
     def recycl_below1M(self):
         #Initialize the mass flow rate and concentration in each channel for recycling mode  
-        self.M_s_in=self.M_s_out
-        self.M_b_in=self.M_b_out
-        self.M_a_in=self.M_a_out
-        self.M_s_in_t=self.M_s_out_t
-        self.M_a_in_t=self.M_a_out_t
-        self.M_b_in_t=self.M_b_out_t
+        self.M_s_in=self.M_s_out_t
+        self.M_b_in=self.M_b_out_t
+        self.M_a_in=self.M_a_out_t
+        # self.M_s_in_t=self.M_s_out_t
+        # self.M_a_in_t=self.M_a_out_t
+        # self.M_b_in_t=self.M_b_out_t
         self.Ci_s_in=self.Ci_s_out
         self.Ci_b_in=self.Ci_b_out
         self.Ci_a_in=self.Ci_a_out
@@ -387,15 +404,15 @@ rs=0.75 #recycling rate
 ph_s=4.71 #pH salt channel (units: -)
 ph_b=7#pH base channel (units: -)
 ph_a=7#pH acid channel (units: -)
-d_a=1 #density acid channel (units: kg/l)
-d_s=1 #density salt channel (units: kg/l)
-d_b=1 #density base channel (units: kg/l)
+d_a=0.997 #density acid channel (units: kg/l)
+#d_s=1 #density salt channel (units: kg/l)
+d_b=0.997 #density base channel (units: kg/l)
 
 
 #Feed concentration g/L
 Cin_edbm=[13.44, 20.725, 1.146, 0, 0, 0.18]
 d_in=density_calc.density_calc(25,sum(Cin_edbm))/1000
-
+d_s=d_in
 #Feed flow rate L/h
 Q_in_edbm=1000
 
@@ -412,7 +429,7 @@ A=0.4 #range: 0.1-1
 Cna_s=[]
 
 #Create an instance of the EDBMCalc class with the defined parameters
-edbm_dat=EDBMCalc(Q_in_edbm, Cin_edbm[0], Cin_edbm[1], Cin_edbm[2], Cin_edbm[3], Cin_edbm[4], Cin_edbm[5], 0,  10**(-ph_s), 3.01551E-11, round(N_trip,0), 0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b)), 0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a)))
+edbm_dat=EDBMCalc(Q_in_edbm, Cin_edbm[0], Cin_edbm[1], Cin_edbm[2], Cin_edbm[3], Cin_edbm[4], Cin_edbm[5], 0,  10**(-ph_s), 3.01551E-11, N_trip, 0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b)), 0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a)))
 
 # Call the necessary methods to calculate values
 edbm_dat.flowrate()
@@ -432,7 +449,7 @@ while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.5):
     if edbm_dat.Ci_s_out[0]<0:
 
         break
-
+    
 # Loop for recycling at higher concentration
 for i in range(1): 
     edbm_dat.recycl_1M()
@@ -510,7 +527,7 @@ print("balance edbm is "+str(bal))
 #Energy consumption 
 V_ext=edbm_dat.V_ext #xternal 
 #Calculate energy consumption for pumping 
-Ppump=(edbm_dat.Q_s_r*N_trip*dp+edbm_dat.Q_a_r*N_trip*dp+edbm_dat.Q_b_r*N_trip*dp)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s  
+Ppump=(edbm_dat.Q_s_in_t*N_trip*dp+edbm_dat.Q_a_in_t*N_trip*dp+edbm_dat.Q_b_in_t*N_trip*dp)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s  
 
 #Calculate current efficiency 
 Cb_in=[0]
