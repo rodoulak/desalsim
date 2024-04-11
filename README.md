@@ -64,7 +64,7 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 |                                           | Input                                     | Output                                    |
 |-------------------------------------------|-----------------------------------------------|-------------------------------------------------------|
-| Economics                                 | Selling price for products [€/ton] or [€/m3] | Operating cost (OPEX) [€/year]                         |
+| <th rowspan="4">Economics</th>                                     | Selling price for products [€/ton] or [€/m3] | Operating cost (OPEX) [€/year]                         |
 |                                           | Prices for energy [€/KWh], input chemicals [€/m3], cooling water [€/m3] | Investment cost (CAPEX) [€] |                                                          |
 |                                           | Operating hours, lifetime                 | Revenues from selling products [€/year]       | Equipment cost [€]                                    |
 |                                           | Interest rate, Inflation rate             | Assumptions on CAPEX and OPEX calculations    |                                                       |
