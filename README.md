@@ -70,6 +70,24 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 |                                           | Interest rate, Inflation rate             | Assumptions on CAPEX and OPEX calculations |
 
 
+| CAPEX                             | Annual OPEX                                    |
+|-----------------------------------|------------------------------------------------|
+| Installation                      | Maintenance                                    |
+| 25% of purchased equipment cost  | 3% of the fixed-capital investment            |
+| Buildings, process, and auxiliary| Operating Supplies                             |
+| 20% of purchased equipment cost  | 5% of maintenance                              |
+| Land                              | Operating Labor                                |
+| 6% of purchased equipment cost   | 15% of annual OPEX                             |
+| Indirect costs                   | Direct supervisory and clerical labor          |
+| 15% of direct cost               | 15% of operating labor                         |
+| Working capital                  | Laboratory charges                             |
+| 20% of total investment cost     | 15% of operating labor                         |
+|                                   | Patents and royalties                          |
+|                                   | 3% of annual OPEX                              |
+|                                   | Fixed charges                                  |
+|                                   | 5% of annual OPEX                              |
+|                                   | Plant overhead costs                           |
+|                                   | 5% of annual OPEX                              |
 
 
 ## Key features 
