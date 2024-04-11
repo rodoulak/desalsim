@@ -60,8 +60,8 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 |                                           | Ion concentration [g/L]                     | Flow rate of base [m³/h] and composition [g/L]       |
 |                                           | Current density [A/m²]                      | Flow rate of salt [m³/h] and composition [g/L]       |
 |                                           | Number of triplets and Membrane area...     | Electricity requirements [kWhel]                     |
-| Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition...|
-|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and...        |
+| Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition [g/L]|
+|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 
