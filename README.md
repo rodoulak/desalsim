@@ -62,17 +62,13 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 **Table 2** gives an overview of the main inputs and outputs of economic model. 
 
-| Input                                     | Output                                    |
-|-------------------------------------------|-------------------------------------------|
-| Economics                                 | Selling price for products [€/ton] or [€/m3] |
-|                                           | Operating cost (OPEX) [€/year]            |
-|                                           | Prices for energy [€/KWh], input chemicals [€/m3], cooling water [€/m3] |
-|                                           | Investment cost (CAPEX) [€]               |
-|                                           | Operating hours, lifetime                 |
-|                                           | Revenues from selling products [€/year]   |
-|                                           | Equipment cost [€]                        |
-|                                           | Interest rate, Inflation rate             |
-|                                           | Assumptions on CAPEX and OPEX calculations|
+|                                           | Input                                     | Output                                    |
+|-------------------------------------------|-----------------------------------------------|-------------------------------------------------------|
+| Economics                                 | Selling price for products [€/ton] or [€/m3] | Operating cost (OPEX) [€/year]                         |
+|                                           | Prices for energy [€/KWh], input chemicals [€/m3], cooling water [€/m3] | Investment cost (CAPEX) [€] |                                                          |
+|                                           | Operating hours, lifetime                 | Revenues from selling products [€/year]       | Equipment cost [€]                                    |
+|                                           | Interest rate, Inflation rate             | Assumptions on CAPEX and OPEX calculations    |                                                       |
+
 
 
 ## Key features 
