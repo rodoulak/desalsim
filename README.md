@@ -51,7 +51,7 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 |                                           | Concentration of the acid solution [M]     | Acid solution flow rate [L/h]                        |
 |                                           | Products characteristics e.g. solubility...| Effluent flow rate [m<sup>3/h] and composition [g/L]      |
 |                                           |                                             | Electricity requirements [kWhel]                     |
-| Electrodialysis with bipolar membranes   | Feed flow rate [m<sup>3/h]                       | Flow rate of acid [m<sup>3/h] and composition [g/L]       |
+| Electrodialysis with bipolar membranes   | Feed flow rate [m<sup>3/h]                       | Flow rate of acid [m3/h] and composition [g/L]       |
 |                                           | Ion concentration [g/L]                     | Flow rate of base [m<sup>3/h] and composition [g/L]       |
 |                                           | Current density [A/m²]                      | Flow rate of salt [m<sup>3/h] and composition [g/L]       |
 |                                           | Number of triplets and Membrane area...     | Electricity requirements [kWhel]                     |
@@ -64,13 +64,13 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 |  Input                                     | Output                                    |
 |-------------------------------------------|-------------------------------------------|
-| Selling price for products [€/ton] or [€/m<sup>3] | Operating cost (OPEX) [€/year]          |
-| Prices for energy [€/KWh], input chemicals [€/m<sup>3], cooling water [€/m<sup>3] | Investment cost (CAPEX) [€]               |
+| Selling price for products [€/ton] or [€/m3] | Operating cost (OPEX) [€/year]          |
+| Prices for energy [€/KWh], input chemicals [€/m3], cooling water [€/m3] | Investment cost (CAPEX) [€]               |
 | Operating hours, lifetime                 | Revenues from selling products [€/year] |
 | Interest rate, Inflation rate             | Assumptions on CAPEX and OPEX calculations |
 
 
-For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m<sup>3/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function *scaleup*. 
+For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m3/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function *scaleup*. 
 
 
 **Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX . 
