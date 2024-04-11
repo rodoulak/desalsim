@@ -31,7 +31,7 @@ However, simulation models of more than one technology can be combined to simula
 Additionally, two example files are provided to demonstrate the usage of the simulation suite. These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a comparison file is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 
 ### Example 1
-**Figure 1** presents the process flow diagram of example 1 which consists of four technologies: Nanofiltration (NF), Multiple Feed Plug Flow Reactor (MF-PFR), Electrodialysis (ED), Electrodialysis With Bipolar Membranes (EDBM). The treatment chain represents an MLD system aiming to maximize valuable resources recovery from brine, such as Mg(OH)2, Ca(OH)2, HCl, and NaOH. The seawater stream or concentrate stream from a Reverse Osmosis plant (RO) first goes to the NF unit. The NF unit is separated into two different streams: one that is high in monovalent ions and one that is high in multi-valent ions. The latter stream from NF, high in monovalent ions, is directed to ED, in which the NaCl stream is concentrated further, and a dilute stream is also recovered. The former is directed to a treatment line comprising selective MF-PFR and EDBM units. In particular, the retentate is sent to the MF-PFR, in which magnesium and calcium are recovered in the form of hydroxide precipitates via a chemical reaction between the NF retentate and an alkaline reactant. Then, the brine stream is free from Mg2+ and Ca2+ mixed with the ED concentrate stream. The mixed solution (NaCl rich) is fed to EDBM. EDBM unit recovers, and the saline solution (low concentration) can be recycled back into the treatment chain. 
+**Figure 1** presents the process flow diagram of example 1 which consists of four technologies: Nanofiltration (NF), Multiple Feed Plug Flow Reactor (MF-PFR), Electrodialysis (ED), Electrodialysis With Bipolar Membranes (EDBM). The treatment chain represents an MLD system aiming to maximize valuable resources recovery from brine, such as Mg(OH)<sub>2, Ca(OH)<sub>2, HCl, and NaOH. The seawater stream or concentrate stream from a Reverse Osmosis plant (RO) first goes to the NF unit. The NF unit is separated into two different streams: one that is high in monovalent ions and one that is high in multi-valent ions. The latter stream from NF, high in monovalent ions, is directed to ED, in which the NaCl stream is concentrated further, and a dilute stream is also recovered. The former is directed to a treatment line comprising selective MF-PFR and EDBM units. In particular, the retentate is sent to the MF-PFR, in which magnesium and calcium are recovered in the form of hydroxide precipitates via a chemical reaction between the NF retentate and an alkaline reactant. Then, the brine stream is free from Mg2+ and Ca2+ mixed with the ED concentrate stream. The mixed solution (NaCl rich) is fed to EDBM. EDBM unit recovers, and the saline solution (low concentration) can be recycled back into the treatment chain. 
 <figure>
   <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e" alt="Image" style="width:600px;">
   <figcaption style="text-align:left;">Figure 1. Process flow diagram of example 1.</figcaption>
@@ -41,22 +41,22 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 | Process                                   | Input                                       | Output                                                |
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
-| Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
+| Nanofiltration                            | Feed flow rate [m<sup>3/h]                       | Permeate flow rate and composition [g/L]              |
 |                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
 |                                           | Osmotic pressure [bar]                      | Electrical requirements [kWhel]                       |
 |                                           | Water recovery [%]                          | Ion rejection [-]                                     |
-| Multi-plug flow reactor                   | Feed flow rate [m³/h]                       | Alkaline solution flow rate [L/h]                    |
+| Multi-plug flow reactor                   | Feed flow rate [m<sup>3/h]                       | Alkaline solution flow rate [L/h]                    |
 |                                           | Ion concentration [g/L]                     | Flow rate of Mg(OH)₂ [kg/h]                          |
 |                                           | Concentration of the alkaline solution [M] | Flow rate of Ca(OH)₂ [kg/h]                          |
 |                                           | Concentration of the acid solution [M]     | Acid solution flow rate [L/h]                        |
-|                                           | Products characteristics e.g. solubility...| Effluent flow rate [m³/h] and composition [g/L]      |
+|                                           | Products characteristics e.g. solubility...| Effluent flow rate [m<sup>3/h] and composition [g/L]      |
 |                                           |                                             | Electricity requirements [kWhel]                     |
-| Electrodialysis with bipolar membranes   | Feed flow rate [m³/h]                       | Flow rate of acid [m³/h] and composition [g/L]       |
-|                                           | Ion concentration [g/L]                     | Flow rate of base [m³/h] and composition [g/L]       |
-|                                           | Current density [A/m²]                      | Flow rate of salt [m³/h] and composition [g/L]       |
+| Electrodialysis with bipolar membranes   | Feed flow rate [m<sup>3/h]                       | Flow rate of acid [m<sup>3/h] and composition [g/L]       |
+|                                           | Ion concentration [g/L]                     | Flow rate of base [m<sup>3/h] and composition [g/L]       |
+|                                           | Current density [A/m²]                      | Flow rate of salt [m<sup>3/h] and composition [g/L]       |
 |                                           | Number of triplets and Membrane area...     | Electricity requirements [kWhel]                     |
-| Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition [g/L]|
-|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
+| Electrodialysis                          | Feed flow rate [m<sup>3/h]                       | Flow rate of diluted stream [m<sup>3/h] and composition [g/L]|
+|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m<sup>3/h] and composition [g/L]        |
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 
@@ -64,13 +64,13 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 |  Input                                     | Output                                    |
 |-------------------------------------------|-------------------------------------------|
-| Selling price for products [€/ton] or [€/m3] | Operating cost (OPEX) [€/year]          |
-| Prices for energy [€/KWh], input chemicals [€/m3], cooling water [€/m3] | Investment cost (CAPEX) [€]               |
+| Selling price for products [€/ton] or [€/m<sup>3] | Operating cost (OPEX) [€/year]          |
+| Prices for energy [€/KWh], input chemicals [€/m<sup>3], cooling water [€/m<sup>3] | Investment cost (CAPEX) [€]               |
 | Operating hours, lifetime                 | Revenues from selling products [€/year] |
 | Interest rate, Inflation rate             | Assumptions on CAPEX and OPEX calculations |
 
 
-For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m3/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function *scaleup*. 
+For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m<sup>3/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function *scaleup*. 
 
 
 **Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX . 
