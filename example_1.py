@@ -8,7 +8,7 @@ from mfpfr_unit_f import inputpar
 from mfpfr_unit_f import HClAddition
 from mfpfr_unit_f import energycons
 
-from ed_f import ElectrodialysisCalc
+from ed_unit_f import ElectrodialysisCalc
 
 from edbm_unit_f import EDBMCalc
 
