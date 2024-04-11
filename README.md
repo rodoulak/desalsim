@@ -70,6 +70,10 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 | Interest rate, Inflation rate             | Assumptions on CAPEX and OPEX calculations |
 
 
+For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m3/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function *scaleup*. 
+
+
+**Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX . 
 | CAPEX                             | Annual OPEX                                    |
 |-----------------------------------|------------------------------------------------|
 | Installation: 25% of purchased equipment cost| Maintenance: 3% of the fixed-capital investment            |
@@ -80,7 +84,6 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 |                                   | Patents and royalties: 3% of annual OPEX                          |
 |                                   | Fixed charges: 5% of annual OPEX                                  |
 |                                   | Plant overhead costs: 5% of annual OPEX                           |
-
 
 
 ## Key features 
