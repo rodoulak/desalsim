@@ -39,11 +39,6 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of example 1. 
 
-![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/0f1c7b73-1a72-459a-9b72-08e6ef7cc8b8)
-
-**Table 2** gives an overview of the main inputs and outputs of economic model. 
-![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/459ed1f1-65d7-4ca1-b712-bf2d8eb9a7db)
-
 | Process                                   | Input                                       | Output                                                |
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
 | Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
@@ -63,6 +58,21 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 | Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition [g/L]|
 |                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
+
+
+**Table 2** gives an overview of the main inputs and outputs of economic model. 
+
+| Input                                     | Output                                    |
+|-------------------------------------------|-------------------------------------------|
+| Economics                                 | Selling price for products [€/ton] or [€/m3] |
+|                                           | Operating cost (OPEX) [€/year]            |
+|                                           | Prices for energy [€/KWh], input chemicals [€/m3], cooling water [€/m3] |
+|                                           | Investment cost (CAPEX) [€]               |
+|                                           | Operating hours, lifetime                 |
+|                                           | Revenues from selling products [€/year]   |
+|                                           | Equipment cost [€]                        |
+|                                           | Interest rate, Inflation rate             |
+|                                           | Assumptions on CAPEX and OPEX calculations|
 
 
 ## Key features 
