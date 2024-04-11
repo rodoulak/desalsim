@@ -65,10 +65,6 @@ class EDBMCalc:
         
     Salt_channel():
         Calculates flow rates and outlet concentration in Salt channel 
-    recycl_below1M(): 
-        Recycling method for concentrations below 1M.
-    recycl_1M():
-        Recycling method for concentrations at 1M.
     """
     def __init__(self, Qin, Cc1, Cc2, Cc3, Cc4, Cc5, Cc6, Cc7, CH, COH, N,Cb1, Cb2,Cb3,Cb4,Cb5,Cb6,Cb7,Cb8,Cb9,Ca1,Ca2,Ca3,Ca4,Ca5,Ca6,Ca7,Ca8,Ca9):
         #input conditions   
