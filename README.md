@@ -107,7 +107,7 @@ Step 5: Results interpretation. <br>
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 
-**Table 2** gives an overview of the main inputs and outputs of economic model. 
+**Table 2** gives an overview of the main inputs and outputs of economic model (`economic_f.py`). 
 
 |  Input                                     | Output                                    |
 |-------------------------------------------|-------------------------------------------|
@@ -118,8 +118,8 @@ Step 5: Results interpretation. <br>
 |Equipment cost [€]  |                                          |
 | Assumptions on CAPEX and OPEX calculations |                                          |
 
-<br>
-For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m<sup>3</sup>/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function *scaleup*. 
+
+For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m<sup>3</sup>/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function `scaleup.py`. 
 
 
 **Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX. 
