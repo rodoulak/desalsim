@@ -31,8 +31,10 @@ However, simulation models of more than one technology can be combined to simula
 Additionally, two example files are provided to demonstrate the usage of the simulation suite. These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a comparison file is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 ### Example 1
 
-![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e)
-<img src="image_url" width="300">
+<figure>
+  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e" alt="Image" style="width:300px;">
+  <figcaption>Figure 1. Process flow diagram of example 1.</figcaption>
+</figure>
 
 ## Key features 
 - Simulation models for various desalination and brine treatment technologies
