@@ -70,10 +70,10 @@ class inputpar:
         self.CCa_in=Cc5/MW_Ca #Ca concentration (g/l) to (mol/l)
         self.CSO4_in=Cc6/MW_SO4 #SO4 concentration (g/l) to (mol/l)
         self.CHCO3_in=Cc7/MW_HCO3 #HCO3 concentration (g/l) to (mol/l)
-        self.C_NaOH_1=C_NaOH_1 
-        self.C_NaOH_2=C_NaOH_2 
-        self.conv_1=conv_1 
-        self.conv_2=conv_2 
+        self.C_NaOH_1=C_NaOH_1 #Molar concentration of NaOH (mol/l) used in the first precipitation step 
+        self.C_NaOH_2=C_NaOH_2 #Molar concentration of NaOH (mol/l) used in the first precipitation step 
+        self.conv_1=conv_1 #Conversion rate of Mg the first precipitation step 
+        self.conv_2=conv_2 #Conversion rate of Mg the first precipitation step 
     
     def calc_step1(self):
         #Calculate the molar flow rate of magnesium in the reactor during the 1° stepin mol/h
@@ -121,7 +121,7 @@ class inputpar:
        #Calculate concentration of the hydroxide ion in mol/L for a ph=13 solution  
        self.COH_ph13=10**(-(14-13)) 
        self.COH_st=10**(-(14-self.ph_1))
-       print("c stixh is "+ str(self.ph_1))
+
        #Calculate the added volumetric flow rate of sodium hydroxide needed to reach a pH = 13  L/h
        self.QNaOH_2_add=((0.0216-self.COH_ph13)*(self.QNaOH_2_st+self.Qtot_out_1))/(self.COH_ph13-self.C_NaOH_2)
        
@@ -278,34 +278,48 @@ unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2)
 # Call the calculate_HCl_addition method
 QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition()
 
-
 # Print the volume of HCl added and the outlet concentration of chloride ions
-print(f"HCl flow rate is {QHCl} l/h")
-print(f"C_out in g is {Cout_mfpfr_g} g/l")
+print(f"HCl flow rate is {round(QHCl,2)} l/hr")
+print(f"NaOH flow rate is {round(QNAOH,2)} l/hr")
+print("-----------------------------------------")
 
 #Calculate final outlet flow rate
 Qout_f=Qout_2+QHCl #l/h
-d_out_s=density_calc(25,sum(Cout_mfpfr_g))/1000 #kg/m3
-Mout_2=Qout_f*d_out_s #kg/h
+d_out_s=density_calc(25,round(sum(Cout_mfpfr_g),2))/1000 #kg/m3
+Mout_f=Qout_f*d_out_s #kg/h
+
+print("Mg(OH)2 mass flow rate is "+str(round(M_MgOH2_1,2))+"kg/hr")
+print("Ca(OH)2 mass flow rate is "+str(round(M_CaOH2,2))+"kg/hr")
+print("Total effluent flow rate is "+str(round(Mout_f,2))+"kg/hr")
+print("Total effluent flow rate is "+str(round(Qout_f,2))+"kg/hr")
+print("-----------------------------------------")
+
+#Mass balance 
+bal=Qin_mfpfr *d_in+QNAOH*1.04+QHCl*1.01-M_MgOH2_1-M_CaOH2-Mout_f-M_MgOH2
+error_perc=abs(bal)/(Qin_mfpfr *d_in+QNAOH+QHCl)*100
+
+print("Mass balance difference is "+str(round(bal,2)))
+print("Balance error percentage is "+str(round(error_perc,2))+"%")
+print("-----------------------------------------")
 
 #electicity consumption
-# Create an instance of the inputpar class with the defined parameters
+    # Create an instance of the inputpar class with the defined parameters
 Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr_dat.QNaOH_1, mfpfr_dat.QNaOH_2_add, mfpfr_dat.QNaOH_2_st)
 
-#Electricity consumption for pumping , KWh
+    #Electricity consumption for pumping , KWh
 E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
-print("Electricity energy consumption is "+str(E_el_mfpf)+ " kw")
+print("Total electricity energy consumption is "+str(round(E_el_mfpf,2))+ " KW")
 
-#Electricity consumption for filtration unit 
-E_fil=scaleup.scaleup(0.5, 0.3*1000, Mout_2)
+    #Electricity consumption for filtration unit 
+E_fil=scaleup.scaleup(0.5, 0.3*1000, Mout_f)
 
-#Total electricity consumption, KWh
+    #Total electricity consumption, KWh
 E_el_mfpf=E_el_mfpf+E_fil
 
-#Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
+    #Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
 SEC_el_prod=(E_el_mfpf)/(M_MgOH2)
-print("SEC_el_prod is "+str(SEC_el_prod)+" KWh/kg product ")
+print("Specific energy consumption per product is "+str(round(SEC_el_prod,2))+" KWh/kg product ")
 
-#Specific energy consumption per feed, KWh/m3 of feed
+    #Specific energy consumption per feed, KWh/m3 of feed
 SEC_el_feed=(E_el_mfpf)/(Qin_mfpfr/1000)
-print("SEC_el_feed is "+str(SEC_el_feed)+" KWh/m3 of feed ")
+print("Specific energy consumption per brine intake is "+str(round(SEC_el_feed,2))+" KWh/m3 of feed ")

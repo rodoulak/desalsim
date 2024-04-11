@@ -12,5 +12,4 @@ def density_calc(T, S):
     C = 4.8314E-4
     rho = 1000*(1 -(T+288.9414)/(508929.2*(T+68.12963))*(T-3.9863)**2)
     rhos = rho + A*S + B*S**(3/2) + C*S**2
-    print("density is " + str(rhos))
     return rhos

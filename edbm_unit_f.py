@@ -285,7 +285,7 @@ d_b=0.997 #density base channel (units: kg/l)
 
 
 #Feed concentration g/L
-Cin_edbm=[40, 40, 1.146, 0, 0, 0.18] #13.44, 20.725
+Cin_edbm=[13.44, 20.725, 1.146, 0, 0, 0.18] 
 d_in=density_calc.density_calc(25,sum(Cin_edbm))/1000
 d_s=d_in
 #Feed flow rate L/h

@@ -114,12 +114,13 @@ class EDBMCalc:
             self.M_s_in[i]=self.Q1_s_in*self.Ci_s_in[i]*self.PM_i[i]/1000 #units: kg/h
             self.M_b_in[i]=self.Q1_b_in*self.Ci_b_in[i]*self.PM_i[i]/1000 #units: kg/h
             self.M_a_in[i]=self.Q1_a_in*self.Ci_a_in[i]*self.PM_i[i]/1000 #units: kg/h
-            
-        #Calculate mass of water in the initial streams 
+        
+        print("self.M_s_in is "+str(sum(self.M_s_in)))
+        print("self.M_a_in is "+str(self.M_a_in))
+        print("self.M_b_in is "+str(self.M_b_in))
         self.M_h2o_a_in=self.Q1_a_in*d_a-sum(self.M_a_in)          
         self.M_h2o_b_in=self.Q1_b_in*d_b-sum(self.M_b_in) 
         self.M_h2o_s_in=self.Q1_s_in*d_s-sum(self.M_s_in) 
-        
         #Calculate inlet ionic water product in each channel 
         self.KW_s_in=self.Ci_s_in[7]*self.Ci_s_in[8] 
         self.KW_a_in=self.Ci_a_in[7]*self.Ci_a_in[8]
@@ -240,7 +241,107 @@ class EDBMCalc:
         self.V_ext=self.EMF+((self.I_ext*R_int)/(A*10000))*self.N_trip
         
             #Calculate gross power needed (W)
-        self.P=self.V_ext*self.I_ext         
+        self.P=self.V_ext*self.I_ext 
+        
+    def recycl_below1M(self):
+        #Initialize the mass flow rate and concentration in each channel for recycling mode  
+        self.M_s_in=self.M_s_out_t
+        self.M_b_in=self.M_b_out_t
+        self.M_a_in=self.M_a_out_t
+        self.Ci_s_in=self.Ci_s_out
+        self.Ci_b_in=self.Ci_b_out
+        self.Ci_a_in=self.Ci_a_out
+        
+        
+
+    def recycl_1M(self):
+        #Calculate density of outlet in each channel, kg/l
+        self.d_s_out=density_calc.density_calc(25, sum(self.Ci_s_out))/1000
+        self.d_a_out=density_calc.density_calc(25, sum(self.Ci_a_out))/1000
+        self.d_b_out=density_calc.density_calc(25, sum(self.Ci_b_out))/1000
+        
+        #Calculate recycling, outlet and new feed flow rate in each channel 
+            #Salt channel 
+        #Calculate recycling flow rate in salt stream 
+        self.Q_s_r=rs*self.M_s_out_t/self.d_s_out
+        #Calculate total outlet (including recycling stream) from salt stream 
+        self.Q_s_t_out=self.M_s_out_t*self.d_s_out
+        #self.Q_s_t_out=self.Q1_s_in*(1+rs)
+
+        #Calculate total inflow rate (including recycling)
+        self.Q_s_in_t=self.Q1_s_in+self.Q_s_r
+        #Calculate final outlet flowrate in salt stream 
+        self.Q_s_out=self.Q_s_in_t-self.Q_s_r
+        #Calculate the mass flowrates 
+        self.M_s_r=self.Q_s_r/self.d_s_out
+        self.M_s_in_t=self.Q1_s_in/d_in+self.Q_s_r/self.d_s_out
+        
+
+            #Acid channel 
+        #Calculate recycling flow rate in acid stream 
+        self.Q_a_r=r*self.M_a_out_t/self.d_a_out
+        #Calculate total outlet (including recycling stream) from acid stream
+        self.Q_a_t_out=self.Q1_a_in+self.Q_a_r
+        #self.Q_a_t_out=self.Q_a_r*(1+r)
+        #Calculate final outlet flowrate in acid stream 
+        self.Q_a_out=self.Q1_a_in
+        #Calculate total inflow rate (including recycling) to acid stream 
+        self.Q_a_in_t=self.Q1_a_in+self.Q_a_r
+        #Calculate the mass flowrates 
+        self.M_a_r=self.Q_a_r/self.d_a_out
+        self.M_a_t_out=self.Q_a_t_out/self.d_a_out
+        self.M_a_in_t=self.Q1_a_in/d_in+self.Q_a_r/self.d_a_out
+
+
+            #Base channel 
+        #Calculate recycling flow rate in base stream 
+        self.Q_b_r=r*self.M_b_out_t/self.d_b_out
+        #Calculate total outlet (including recycling stream) from base stream
+        self.Q_b_t_out=self.Q1_b_in+self.Q_b_r
+        #self.Q_b_t_out=self.Q1_b_in*(1+r)
+        #Calculate final outlet flowrate in base stream 
+        self.Q_b_out=self.Q1_b_in
+        #Calculate total inflow rate (including recycling) to base stream 
+        self.Q_b_in_t=self.Q1_b_in+self.Q_b_r
+        #Calculate the mass flowrates 
+        self.M_b_r=self.Q_b_r/self.d_b_out
+        self.M_b_t_out=self.Q_b_t_out/self.d_b_out
+        self.M_b_in_t=self.Q1_b_in/d_in+self.Q_b_r/self.d_b_out      
+
+        #Calculation of new concentration 
+        for i in range(len(self.Ci_a_in)):
+            self.Ci_s_in[i]=self.Ci_s_out[i]*self.M_s_r/self.M_s_in_t+self.Ci_s_in_0[i]*(self.M_s_in_t-self.M_s_r)/(self.M_s_in_t)      
+            self.M_s_in[i]=self.Ci_s_in[i]*self.Q_s_in_t
+            self.Ci_b_in[i]=self.Ci_b_out[i]*self.M_b_r/self.M_b_in_t+self.Ci_b_in_0[i]*(self.M_b_in_t-self.M_b_r)/(self.M_b_in_t) 
+            self.M_b_in[i]=self.Ci_a_in[i]*self.Q_b_in_t
+            self.Ci_a_in[i]=self.Ci_a_out[i]*self.Q_a_r/self.Q_a_in_t+self.Ci_a_in_0[i]*(self.Q1_a_in)/(self.Q_a_in_t) 
+            self.M_a_in[i]=self.Ci_a_in[i]*self.Q_a_in_t
+
+        #Calculation of final mass flow rates and ions mass flow rates
+        self.M_b_out_f=self.Q_b_out*self.d_b_out
+        self.M_a_out_f=self.Q_a_out*self.d_a_out
+        self.M_s_out_f=self.Q_s_out*self.d_s_out
+        
+        self.M_s_in=[[],[],[],[],[],[],[],[],[]]
+        self.M_b_in=[[],[],[],[],[],[],[],[],[]]
+        self.M_a_in=[[],[],[],[],[],[],[],[],[]]
+                
+        for i in range(0,9):
+            self.M_s_in[i]=self.Q_s_in_t*self.Ci_s_in[i]*self.PM_i[i]/1000 #units: kg/h
+            self.M_b_in[i]=self.Q_b_in_t*self.Ci_b_in[i]*self.PM_i[i]/1000 #units: kg/h
+            self.M_a_in[i]=self.Q_a_in_t*self.Ci_a_in[i]*self.PM_i[i]/1000 #units: kg/h
+    
+        self.M_h2o_a_in=self.Q_a_in_t*d_a-sum(self.M_a_in)          
+        self.M_h2o_b_in=self.Q_b_in_t*d_b-sum(self.M_b_in) 
+        self.M_h2o_s_in=self.Q_s_in_t*d_s-sum(self.M_s_in) 
+        self.KW_s_in=self.Ci_s_in[7]*self.Ci_s_in[8]
+        self.KW_a_in=self.Ci_a_in[7]*self.Ci_a_in[8]
+        self.KW_b_in=self.Ci_b_in[7]*self.Ci_b_in[8]
+    
+        if ph_s<7:
+            self.M_s_in[1]=self.Q_s_in_t*self.Ci_s_in[1]*self.PM_i[1]/1000+(self.M_s_in[7]/self.PM_i[7]-self.M_s_in[8]/self.PM_i[8])*(self.PM_i[1])
+        elif ph_s>7:
+            self.M_s_in[1]=self.Q_s_in_t*self.Ci_s_in[1]*self.PM_i[1]/1000+(self.M_s_in[8]/self.PM_i[8]-self.M_s_in[7]/self.PM_i[7])*self.PM_i[1]
             
 #%% Example usage 
 #constants
@@ -285,7 +386,7 @@ d_b=0.997 #density base channel (units: kg/l)
 
 
 #Feed concentration g/L
-Cin_edbm=[40, 40, 1.146, 0, 0, 0.18] #13.44, 20.725
+Cin_edbm=[13.44, 20.725, 1.146, 0, 0, 0.18]
 d_in=density_calc.density_calc(25,sum(Cin_edbm))/1000
 d_s=d_in
 #Feed flow rate L/h
@@ -295,7 +396,7 @@ Q_in_edbm=47000
 Mw_in=Q_in_edbm/d_in 
 
 #Set number of triplets 
-N_trip=50*47 # Number of triplets based on the inlet flow rate
+N_trip=50*47 #range: 20-200 triplets based on the inlet flow rate
 
 #Set membrane area based on the feed flow rate, m2 
 A=0.4 #range: 0.1-1
@@ -314,57 +415,85 @@ edbm_dat.base_channel()
 edbm_dat.salt_channel()
 Cna_s.append(edbm_dat.Ci_s_out[0])
 
+#Loop for the recycling process (closed loop configuration)
+while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.3):
+    edbm_dat.recycl_below1M()
+    edbm_dat.acid_channel()
+    edbm_dat.base_channel()
+    edbm_dat.salt_channel()
+    Cna_s.append(edbm_dat.Ci_s_out[0])
+    if edbm_dat.Ci_s_out[0]<0:
+
+        break
+ 
+# # Loop for recycling at higher concentration (Feed and Bleed Configuration)
+# for i in range(1): 
+#     edbm_dat.recycl_1M()
+#     while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.5):
+#         edbm_dat.recycl_below1M()
+#         edbm_dat.acid_channel()
+#         edbm_dat.base_channel()
+#         edbm_dat.salt_channel()
+#         Cna_s.append(edbm_dat.Ci_s_out[0])
+          edbm_dat.recycl_1M()
+#         if edbm_dat.Ci_s_out[0]<0:
+
+#               break
+
 # # Sum results
 
-"Salt channel "
-    #Concentration in salt channel 
+# "Salt channel "
+#     #Concentration in salt channel 
 Cbrine_out_t=sum(edbm_dat.Ci_s_out)
 Cbrine_out=edbm_dat.Ci_s_out #mol/l
 Cbrine_out_g=[Cbrine_out[0]*MW_Na, Cbrine_out[1]*MW_Cl, Cbrine_out[2]*MW_K, Cbrine_out[3]*MW_Mg, Cbrine_out[4]*MW_Ca, Cbrine_out[5]*MW_SO4] #g/l
-
-     #Mass flow rate
+print("cbrine out is "+str(Cbrine_out_g))
+#     #Mass flow rate
 M_s_out=edbm_dat.M_s_out_t*N_trip
-print("Salt channel: Mass flow rate out is "+str(round(M_s_out,2))+"kg/hr")
-    #Volumetric flow rate 
-Q_s_out=edbm_dat.Q1_s_out*N_trip
-print("Salt channel: Volumetric flow rate out is "+str(round(Q_s_out,2))+"l/hr")
-print("Na concentration:"+str(round(Cbrine_out[0],2))+"M and "+str(round(Cbrine_out_g[0],2))+"g/l")
-print("Cl concentration:"+str(round(Cbrine_out[1],2))+"M and "+str(round(Cbrine_out_g[1],2))+"g/l")
-print("-----------------------------------------")
+#M_s_out=edbm_dat.M_s_out_f*N_trip
+print("M_s_out is "+str(M_s_out)+"kg/hr")
+# M_s_out_r=edbm_dat.M_s_r*N_trip
+# print("M_s_out recycling is "+str(M_s_out_r)+"kg/hr")
+#     #Volumetric flow rate 
+# Q_s_out=edbm_dat.Q_s_out*N_trip
+# print("Q_s_out is "+str(Q_s_out)+"l/hr")
 
 "Base channel "
     #Concentration in base channel 
 Cb_out=edbm_dat.Ci_b_out[0:6]
 Cb_out_g=[Cb_out[0]*MW_Na, Cb_out[1]*MW_Cl, Cb_out[2]*MW_K, Cb_out[3]*MW_Mg, Cb_out[4]*MW_Ca, Cb_out[5]*MW_SO4]
-
-     #Mass flow rate
+print("cbout is "+str(Cb_out))
+#     #Mass flow rate
 M_b_out=edbm_dat.M_b_out_t*N_trip
-print("Base channel: Mass flow rate out is "+str(round(M_b_out,2))+"kg/hr")
-
-     #Volumetric flow rate 
+# M_b_out=edbm_dat.M_b_out_f*N_trip
+print("M_b_out is "+str(M_b_out)+"kg/hr")
+# M_b_out_r=edbm_dat.M_b_r*N_trip
+# print("M_b_out recycling is "+str(M_b_out_r)+"kg/hr")
+#     #Volumetric flow rate 
 Q_b_out=edbm_dat.Q1_b_out*N_trip
-print("Base channel: Volumetric flow rate out is "+str(round(Q_b_out,2))+"l/hr")
+#Q_b_out=edbm_dat.Q_b_out*N_trip
+print("Q_b_out is "+str(Q_b_out)+"l/hr")
 
-print("Na concentration "+str(round(Cb_out[0],2))+"M and "+str(round(Cb_out_g[0],2))+"g/l")
-    #Conversion to solid 
-M_NaOH_out=Q_b_out*edbm_dat.Ci_b_out[0]*constants.MW_NaOH/1000 #kg/hr 
-print("-----------------------------------------")
+#     #Conversion to solid 
+# M_NaOH_out=Q_b_out*edbm_dat.Ci_b_out[0]*constants.MW_NaOH/1000 #kg/hr 
 
 "Acid channel" 
     #Concentration in acid channel 
 Ca_out=edbm_dat.Ci_a_out
 Ca_out=edbm_dat.Ci_a_out[0:6]
 Ca_out_g=[Ca_out[0]*MW_Na, Ca_out[1]*MW_Cl, Ca_out[2]*MW_K, Ca_out[3]*MW_Mg, Ca_out[4]*MW_Ca, Ca_out[5]*MW_SO4]
-
+print("ca out is "+str(Ca_out))
     #Mass flow rate 
 M_a_out=edbm_dat.M_a_out_t*N_trip
-print("Acid channel: Mass flow rate out is "+str(round(M_a_out,2))+"kg/hr")
+# M_a_out=edbm_dat.M_a_out_f*N_trip
+print("M_a_out is "+str(M_a_out)+"kg/hr")
+# M_a_out_r=edbm_dat.M_a_r*N_trip
+# print("M_a_out recycling is "+str(M_a_out_r)+"kg/hr")
 
     #Volumetric flow rate 
 Q_a_out=edbm_dat.Q1_a_out*N_trip
-print("Acid channel: Volumetric flow rate out is "+str(round(Q_a_out,2))+"l/hr")
-print("Cl concentration "+str(round(Ca_out[1],2))+"M and "+str(round(Ca_out_g[1],2))+"g/l")
-print("-----------------------------------------")
+#Q_a_out=edbm_dat.Q_a_out*N_trip
+print("Q_a_out is "+str(Q_a_out)+"l/hr")
 
     #Conversion to solid 
 M_HCl_out=Q_a_out*constants.MW_HCl/1000 #kg/hr
@@ -374,23 +503,21 @@ Q_w_in=2*Q_in_edbm
 
 #Calculate mass balance 
 bal=(Q_in_edbm*d_in+2*Q_in_edbm)-M_a_out-M_s_out-M_b_out
-print("Mass balance difference is "+str(round(bal,2)))
-error_perc=abs(bal)/(Q_in_edbm*d_in+2*Q_in_edbm)*100
-print("Balance error percentage is "+str(round(error_perc,2))+"%")
+print("balance edbm is "+str(bal))
 
 #Energy consumption 
 V_ext=edbm_dat.V_ext #xternal 
 #Calculate energy consumption for pumping 
-Ppump=(edbm_dat.Q1_s_in*N_trip*dp+edbm_dat.Q1_a_in*N_trip*dp+edbm_dat.Q1_b_in*N_trip*dp)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s  
+# Ppump=(edbm_dat.Q_s_in_t*N_trip*dp+edbm_dat.Q_a_in_t*N_trip*dp+edbm_dat.Q_b_in_t*N_trip*dp)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s  
 
 #Calculate current efficiency 
 Cb_in=[0]
 CE=(Q_b_out)*(Cb_out[0]-Cb_in[0])*F/(3600*N_trip*I_d*A)*100 #%
-print("Current efficiency is "+str(round(CE,2))+"%")
-print("-----------------------------------------")
-#Total energy consumption 
-E_el_Edbm=V_ext*I_d*A/1000+Ppump/1000
+print("current efficiency is "+str(CE))
+
+# #Total energy consumption 
+# E_el_Edbm=V_ext*I_d*A/1000+Ppump/1000
 SEC=(V_ext*I_d*A)/(Q_b_out*(edbm_dat.Ci_b_out[0]-edbm_dat.Ci_b_in[0])*constants.MW_NaOH)
 
-print("Total electrical consumption for EDBM is " + str(round(E_el_Edbm,2))+ " KW")
-print("Specific energy consumption is "+str(round(SEC,2))+"kwh/kg NaOH")
+# print("Total electrical consumption for EDBM is " + str(E_el_Edbm)+ " KW")
+print("sec is "+str(SEC)+"kwh/kg naoh")

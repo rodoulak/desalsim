@@ -180,18 +180,18 @@ class revenue:
         
         
     def rev(self):
-        if self.prd_name=="water":
+        if self.prd_name=="Water":
             self.rev_prd=self.prd*w_pr*hr #euro/year
-        elif self.prd_name=="nacl":
+        elif self.prd_name=="NaCl":
             self.rev_prd=self.prd*nacl_pr*hr #euro/year
-        elif self.prd_name=="mgoh2":
+        elif self.prd_name=="Mg(OH)2":
             self.rev_prd=self.prd*mgoh2_pr*hr #euro/year
-        elif self.prd_name=="na2so4":
+        elif self.prd_name=="Na2SO4":
             self.rev_prd=self.prd*na2so4_pr*hr #euro/year
-        elif self.prd_name=="naoh":
+        elif self.prd_name=="NaOH":
             self.prd=self.prd*d_naoh
             self.rev_prd=self.prd*naoh_pr*hr #euro/year
-        elif self.prd_name=="hcl":
+        elif self.prd_name=="HCl":
             self.prd=self.prd*d_hcl
             self.rev_prd=self.prd*hcl_pr*hr #euro/year
 
@@ -265,25 +265,24 @@ for i in range(len(eq_c)):
     OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
     capex_list.append(total_econom.t_capital_inv)    
-print("opex is "+str(OPEX)+ " euro") 
-print("total capex of system: " + str(round(CAPEX))+ " euro")    
+print("Tottal operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
+print("Total investment cost (CAPEX) of system is " + str(round(CAPEX))+ " Euro")    
+print("-----------------------------------------")
 
 #amortisation factor 
 a=(r*(1+r)**lf)/((1+r)**lf-1)
-print("a is " +str(a))
-
 
 """Revenue calculation"""
 #Input data 
 reve_t=0
 reve_list=[]
 prd=[10,2,3,0,0,0]    
-prd_name= ["water", "nacl", "mgoh2", "na2so4", "naoh", "hcl"]   
+prd_name= ["Water", "NaCl", "Mg(OH)2", "Na2SO4", "NaOH", "HCl"]   
 
 #Revenue calculation
 for i in range(len(prd)):
     rev_calc=revenue(prd[i], prd_name[i])    
     rev_calc.rev()
-    print("rev_calc.rev_prd for " + prd_name[i]+" is " + str(rev_calc.rev_prd))
+    print("Revenues from selling product " + prd_name[i]+" are " + str(round(rev_calc.rev_prd,2))+" Euro/year")
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)

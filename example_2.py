@@ -136,6 +136,7 @@ Qf_med =Qperm
 T=20
 #feed flow density 
 d=density_calc(T, sum(Cin_med)) 
+Mf_med=Qf_med*d/1000 #Mass flow rate (units: kg/hr)
 
 #assumptions:
 T_in=40 #(oC)
@@ -167,7 +168,7 @@ elif (T_s>70) and (T_s<=75):
     lh_s=2321
 
 # Create an instance of the MEDCalculator class
-med_dat = MEDCalculator(Qf_med, Cin_med[0], Cin_med[1], Cin_med[2], Cin_med[3], Cin_med[4], Cin_med[5])
+med_dat = MEDCalculator(Qf_med, Mf_med, Cin_med[0], Cin_med[1], Cin_med[2], Cin_med[3], Cin_med[4], Cin_med[5])
 
 # Call methods to perform calculations
 med_dat.salinity_calc()
@@ -192,38 +193,38 @@ Qr=Xr*Qf_med
 # Calculate density for output concentration
 d_b = density_calc(45, sum(Cconc_med))
 
-print("Sum of output concentrations: " + str(sum(Cconc_med)))
-
-# Calculate mass balances
-for i in range(len(Cconc_med)):
-    bal_i = (Cin_med[i] * Qf_med / (d / 1000)) - (med_dat.Qb / (d_b / 1000) * Cconc_med[i] + med_dat.Qdist / 1 )
-    print("Mass balance for " + components[i] + ": " + str(bal_i))
-
+print("Sum of output concentrations: " + str(round(sum(Cconc_med),2))+"g/l")
+print("-----------------------------------------")
 
 # Calculate energy consumption
 E_el_med = ((Qf_med * 3.5 + med_dat.QCW * 3600 * 2 + (Qr + med_dat.Qb) * 3.5 + med_dat.Qdist * 1) / (1000 * npump)) * 1e5 / 3600 / 1000  # kWh
-print("Electrical energy consumption: " + str(E_el_med) + " kWh")
+print("Electrical energy consumption: " + str(round(E_el_med,2)) + " kWh")
 
 SEC_el = E_el_med / (Qf_med / d)  # kWh/m3 feed
-print("Specific energy consumption (electrical) per m3 feed: " + str(SEC_el) + " kWh/m3")
+print("Specific energy consumption (electrical) per m3 feed: " + str(round(SEC_el,2)) + " kWh/m3")
 
 SEC_el_prod = E_el_med / (med_dat.Qdist / 1000)  # kWh/m3 dist water
-print("Specific energy consumption (electrical) per m3 product (distilled water): " + str(SEC_el_prod) + " kWh/m3")
-
-Qcw_med = med_dat.QCW * 3600
-print("Cooling water flow rate: " + str(Qcw_med) + " kg/hr")
+print("Specific energy consumption (electrical) per m3 product (distilled water): " + str(round(SEC_el_prod,2)) + " kWh/m3")
+print("-----------------------------------------")
 
 E_th_med = med_dat.Q_Tot
-print("Total thermal energy consumption: " + str(E_th_med) + " kW")
+print("Total thermal energy consumption: " + str(round(E_th_med,2)) + " kW")
 
-SEC_th_med = E_th_med / (Qf_med / d)  # kWh_th/m3
-print("Specific energy consumption (thermal) per m3 feed: " + str(SEC_th_med) + " kWh_th/m3")
+SEC_th = E_th_med / (Qf_med / d)  # kWh_th/m3
+print("Specific energy consumption (thermal) per m3 feed: " + str(round(SEC_th,2)) + " kWh_th/m3")
+print("-----------------------------------------")
+
+#Calculate required cooling water 
+Qcw_med = med_dat.QCW * 3600 #units: kg/hr
+print("Cooling water flow rate: " + str(round(Qcw_med,2)) + " kg/hr")
+print("-----------------------------------------")
 
 # Chemical consumption
 Cchem_med = 0  # Placeholder for chemical consumption, update as needed
 
 # Print the results
-print("Total Chemical Consumption: " + str(Cchem_med))
+print("Total Chemical Consumption: " + str(round(Cchem_med,2))+"kg/hr")
+
 #%%
 #calculation thermal crystallizer 
 """--------TCr--------"""
@@ -278,6 +279,7 @@ th_cryst_dat.heat_bal_cryst()
 
 #Recovered salt flow rate (kg/h)
 M_Nacl=th_cryst_dat.solid_mass
+print("Mass flowrate of recovered salt is "+str(round(M_Nacl,2))+"kg/hr")
 
 # Calculation of the concentration of different ions in the solution
 th_cryst_dat_2=conc_cal(Qf_tcr, M_Nacl , 'Na',Cf_tcr_in[0], 'cl',Cf_tcr_in[1],'k', Cf_tcr_in[2], 'mg', Cf_tcr_in[3], 'ca', Cf_tcr_in[4], 'so4', Cf_tcr_in[5])
@@ -285,23 +287,22 @@ th_cryst_dat_2.molarity()
 th_cryst_dat_2.conc_salt_comp()
 th_cryst_dat_2.salt_conc()
 
-#Cooling water requirements (kg/h)
-Qcw_tcr=th_cryst_dat.cw_mass
-
 #Evaporation mass flow rate (water recovery), (kg/h)
 Q_evap_mass_tcr=th_cryst_dat.ev_mass
-
+print("Mass flowrate of recovered water is "+str(round(Q_evap_mass_tcr,2))+"kg/hr")
+print("-----------------------------------------")
 #Salt stream concentration (g/L)
 Csalt_out=[th_cryst_dat_2.CNa,th_cryst_dat_2.CCl, th_cryst_dat_2.CK, th_cryst_dat_2.CMg, th_cryst_dat_2.CCa, th_cryst_dat_2.CSO4]
 
-#Mass balance 
-for i in range(len(Cf_tcr_in)):
-    bal_i=Cf_tcr_in[i]*Qf_tcr/d_sol-(M_Nacl/d_salt*Csalt_out[i])
-
+#Cooling water requirements (kg/h)
+Qcw_tcr=th_cryst_dat.cw_mass
+print("Mass flowrate of required cooling water is "+str(round(Qcw_tcr,2))+"kg/hr")
+print("-----------------------------------------")
 #Calculate energy consumption 
 E_el_th_Cr, E_th_th_Cr, SEC_el_f, SEC_el_NaCl, SEC_el_w = calculate_energy(Qf_tcr, Q_evap_mass_tcr, Qcw_tcr, d_sol, npump)
 print(f"SEC_el_prod is {SEC_el_w} KWh/m3 product")
-print(f"SEC_el_prod2 is {SEC_el_NaCl} KWh/kg product")
+print(f"SEC_el_prod2 is {SEC_el_NaCl} KWh/kg of NaCl product")
+print("SEC_th_prod is "+str( round((E_th_th_Cr/(Qf_tcr/1000)),2))+" KWh/m3 intake")
 
 # Chemical consumption
 Cchem_tcr = 0  # Placeholder for chemical consumption, update as needed
@@ -419,7 +420,7 @@ for i in range(len(eq_c)):
     if Mf_basic_sc[i]!=Mf_sce[i]:
         eq_c[i]=scaleup.scaleup_eq(eq_c[i],Mf_basic_sc[i],Mf_sce[i],tec_names[i])
         
-   
+#Cost calculation 
 for i in range(len(eq_c)):
     total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
     total_econom.capex_calc()
@@ -427,30 +428,28 @@ for i in range(len(eq_c)):
     CAPEX=total_econom.t_capital_inv
     OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
-    capex_list.append(total_econom.t_capital_inv) 
-    
-print("total capex of system: " + str(round(CAPEX))+ " euro")
-print("total OPEX without externalities of system: " + str(round(OPEX))+ " euro/year") 
-print("total OPEX with externalities of system: " + str(round(OPEX_with_ext))+ " euro/year")  
-
+    capex_list.append(total_econom.t_capital_inv)    
+print("Tottal operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
+print("Total investment cost (CAPEX) of system is " + str(round(CAPEX))+ " Euro")    
+print("-----------------------------------------")
 
 #amortisation factor 
 a=(constants.r*(1+constants.r)**constants.lf)/((1+constants.r)**constants.lf-1)
 
-#Calculate annucal operating cost 
-oper_c_t=CAPEX*a+OPEX
-
+"""Revenue calculation"""
+#Input data 
 reve_t=0
-prd=[Qprod_med+Q_evap_mass_tcr, M_Nacl]    
-prd_name= ["water", "nacl"]   
 reve_list=[]
+prd=[10,2,3,0,0,0]    
+prd_name= ["Water", "NaCl", "Mg(OH)2", "Na2SO4", "NaOH", "HCl"]   
+
+#Revenue calculation
 for i in range(len(prd)):
     rev_calc=revenue(prd[i], prd_name[i])    
     rev_calc.rev()
-    print("rev_calc.rev_prd for " + prd_name[i]+" is " + str(rev_calc.rev_prd))
+    print("Revenues from selling product " + prd_name[i]+" are " + str(round(rev_calc.rev_prd,2))+" Euro/year")
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)
-Rev=reve_t
 
 #%%present results
 #Summary tables 
@@ -517,37 +516,16 @@ fig.update_layout(title_text="Sankey diagram for Example: Mass flow rates ", fon
 fig.show()
 plot(fig)
 
-#Figure 2: Sankey diagram for Example: Energy contribution
-fig = go.Figure(data=[go.Sankey(
-    node = dict(
-      pad = 15,
-      thickness = 20,
-      line = dict(color = "black", width = 0.5),
-      label = [ "NF", "MED", "Cryst", "total"],
-      color = "blue"
-    ),
-    link = dict(
-      source = [3, 3,3], 
-      target = [0,1,2],
-      value = [E_el_all[0], E_el_all[1], E_el_all[2]]
-  ))])
-color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
-fig.update_traces(node_color = color_for_nodes)
-fig.update_layout(title_text="Sankey diagram for Example: Energy contribution ", font_size=15)
-fig.show()
-plot(fig)
-
-
 #%% Results to excel 
 dfel=pd.DataFrame(E_el_all ,tec_names)
 dfeth=pd.DataFrame(E_th_all, tec_names)
 dfind=(Qw_tot, abs_Qw, rec, sum_el_en, sum_th_en, emis_t, Q_w_in,  OPEX, CAPEX)
 dfprod=(Qw_tot,M_Nacl, 0, 0, 0, 0, 0)
 
-dfprodn=("Water (kg/hr)", "NaCl (kg/hr)", "Mg(OH)2(kg/hr)", "Ca(OH)2(kg/hr)", "Na2SO4(kg/hr)", "1M NaOH (kg/hr)","1M HCl(kg/hr)")
+dfprodn=("Water (kg/hr)", "NaCl (kg/hr)", "Mg(OH)\u2082 (kg/hr)", "Ca(OH)\u2082 (kg/hr)", "Na\u2082SO\u2084(kg/hr)", "1M NaOH (kg/hr)","1M HCl(kg/hr)")
 ind=np.array(["Water production", "absolute water production", "water recovery","Total electrical consumption", "Total thermal energy consumption", "Carbon dioxide emission kg co2/year",
               "Water footprint","OPEX", "CAPEX"])
-units=pd.DataFrame(["kg/hr", "kg/hr", "%","KWh", "KWh"," kg co2/year","kg/hr","€/year", "€"])
+units=pd.DataFrame(["kg/hr", "kg/hr", "%","KWh", "KWh"," kg CO\u2082/year","kg/hr","€/year", "€"])
 dfind_t=pd.DataFrame(data=dfind, index=ind)
 dfprodn=pd.DataFrame(data=dfprod, index=dfprodn)
 with pd.ExcelWriter('results_example .xlsx') as writer:

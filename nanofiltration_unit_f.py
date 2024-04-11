@@ -209,11 +209,11 @@ class NfEnergy:
         SEC_el_feed = self.E_el_nf / (self.Qf / self.d_in) 
 
         return {
-            "Applied pressure": Papplied,
-            "Power for pump": Ppump,
-            "E_el_nf": self.E_el_nf,
-            "Specific Energy Consumption (KWh/m3 of permeate)": Spec,
-            "Specific Energy Consumption (KWh/m3 of feed)": SEC_el_feed
+            "Applied pressure (Bar)": round(Papplied,2),
+            "Power for pump (KW)": round(Ppump/1000,2) ,
+            "E_el_nf (KW)": round(self.E_el_nf,2),
+            "Specific Energy Consumption (KWh/m3 of permeate)": round(Spec,2),
+            "Specific Energy Consumption (KWh/m3 of feed)": round(SEC_el_feed,2)
         }
 
 #%%
@@ -266,6 +266,13 @@ nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf)
 Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
 Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
 Qperm = nfmass_objects[0].Qperm  # kg/hr
+Qconc = nfmass_objects[0].Qconc  # kg/hr
+print("Permeate stream flow rate is "+str(round(Qperm,2))+"kg/hr")
+print("Permeate stream total concentration is "+str(round(sum(Cperm),2))+"g/l")
+print("-----------------------------------------")
+print("Concentrate stream flow rate is "+str(round(Qconc,2))+"kg/hr")
+print("Concentrate stream total concentration is "+str(round(sum(Cconc),2))+"g/l")
+print("-----------------------------------------")
 
 # Calculate Osmotic Pressure
 P_osmo_f = OsmoticPressure(Ci_in, z_values, T).osmotic_pressure_calculation()

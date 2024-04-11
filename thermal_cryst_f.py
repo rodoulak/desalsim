@@ -146,16 +146,16 @@ class conc_cal:
         
     def salt_conc(self):
         """This method calculates the concentration of different salts in the outlet stream"""
-        self.CNacl_out=self.CNacl*self.Qf/self.d_sol/(self.solid_mass) 
-        self.CKCl_out=self.CKCl*self.Qf/self.d_sol/(self.solid_mass/d_salt)
-        self.CMgoh_out=self.CMgoh*self.Qf/self.d_sol/(self.solid_mass/d_salt)
-        self.CCaso4_out=self.CCaso4*self.Qf/self.d_sol/(self.solid_mass/d_salt)
-        self.CNa=self.CNacl_out/MW_NaCl*MW_Na
-        self.CCl=self.CNacl_out/MW_NaCl*MW_cl+self.CKCl_out/MW_KCl*MW_cl
-        self.CK=self.CKCl_out/MW_KCl*MW_K
-        self.CCa=self.CCaso4/MW_Caso4*MW_Ca
-        self.CSO4=self.CCaso4/MW_Caso4*MW_so4
-        self.CMg=self.Cc4*self.Qf/self.d_sol/(self.solid_mass/d_salt) 
+        self.CNacl_out=self.CNacl/(self.solid_mass) 
+        self.CKCl_out=self.CKCl/(self.solid_mass)
+        self.CMgoh_out=self.CMgoh/(self.solid_mass)
+        self.CCaso4_out=self.CCaso4/(self.solid_mass)
+        self.CNa=self.Cc1*Qf/(self.solid_mass) #g/kg
+        self.CCl=self.Cc2*Qf/(self.solid_mass) #g/kg
+        self.CK=self.Cc3*Qf/(self.solid_mass) #g/kg
+        self.CCa=self.Cc5*Qf/(self.solid_mass) #g/kg
+        self.CSO4=self.Cc6*Qf/(self.solid_mass) #g/kg
+        self.CMg=self.Cc4*Qf/(self.solid_mass) #g/kg
 
 
 def calculate_energy(Qf, Q_evap_mass, Qcw, d_sol, npump):
@@ -206,12 +206,12 @@ def calculate_energy(Qf, Q_evap_mass, Qcw, d_sol, npump):
     # Calculate specific electrical energy consumption per unit mass of NaCl produced
     SEC_el_NaCl = (E_fil + E_el_th_Cr)/(M_Nacl)
     
-    return E_el_th_Cr, E_th_th_Cr, SEC_el_f, SEC_el_NaCl, SEC_el_w
+    return round(E_el_th_Cr,2), round(E_th_th_Cr,2), round(SEC_el_f,2), round(SEC_el_NaCl,2), round(SEC_el_w,2)
 
 def mass_balance(Qf, Cf_in, M_Nacl, Csalt_out, d_sol):
     """Calculate the mass balance."""
     for i in range(len(Cf_in)):
-        bal_i = Cf_in[i]*Qf/d_sol - (M_Nacl/d_salt*Csalt_out[i])
+        bal_i=Cf_in[i]*(Qf)/1000 - (M_Nacl*Csalt_out[i]/1000)
         print(f"For {i}, mass balance equals: {bal_i}")
 
  #%%
@@ -238,7 +238,7 @@ MW_MgOH=constants.MW_MgOH
 Cp_f=3.14 # Feed specific heat capacity (units: KJ* Kg*oC)
 CP_cw=4.187 # Water specific heat capacity (units: KJ* Kg*oC)
 UA=45990
-LHV_v=2107.92 # kj/kg (gathered from steam table)
+LHV_v=2199.7#2107.92 # kj/kg (gathered from steam table)
 LHV_s=2357.69 # kj/kg (gathered from steam table)
 
 #Assumptions
@@ -274,6 +274,7 @@ th_cryst_dat.heat_bal_cryst()
 
 #Recovered salt flow rate (kg/h)
 M_Nacl=th_cryst_dat.solid_mass
+print("Mass flowrate of recovered salt is "+str(round(M_Nacl,2))+"kg/hr")
 
 # Calculation of the concentration of different ions in the solution
 th_cryst_dat_2=conc_cal(Qf, M_Nacl , 'Na',Cf_in[0], 'cl',Cf_in[1],'k', Cf_in[2], 'mg', Cf_in[3], 'ca', Cf_in[4], 'so4', Cf_in[5])
@@ -281,20 +282,31 @@ th_cryst_dat_2.molarity()
 th_cryst_dat_2.conc_salt_comp()
 th_cryst_dat_2.salt_conc()
 
-#Cooling water requirements (kg/h)
-Qcw=th_cryst_dat.cw_mass
-
 #Evaporation mass flow rate (water recovery), (kg/h)
 Q_evap_mass=th_cryst_dat.ev_mass
-
+print("Mass flowrate of recovered water is "+str(round(Q_evap_mass,2))+"kg/hr")
+print("-----------------------------------------")
 #Salt stream concentration (g/L)
 Csalt_out=[th_cryst_dat_2.CNa,th_cryst_dat_2.CCl, th_cryst_dat_2.CK, th_cryst_dat_2.CMg, th_cryst_dat_2.CCa, th_cryst_dat_2.CSO4]
 
 #Mass balance 
+    #Ion mass balance 
+bal_t=0 
 for i in range(len(Cf_in)):
-    bal_i=Cf_in[i]*Qf/d_sol-(M_Nacl/d_salt*Csalt_out[i])
+    bal_i=Cf_in[i]*(Qf)/1000 - (M_Nacl*Csalt_out[i]/1000)
+    bal_t=bal_t+bal_i
+error_bal=bal_t/sum(Cf_in)*100
+print("Balance error percentage is "+str(round(error_bal,2))+"%")
+    #Total mass balance 
+bal=Qf-M_Nacl-Q_evap_mass
+print("-----------------------------------------")
 
+#Cooling water requirements (kg/h)
+Qcw=th_cryst_dat.cw_mass
+print("Mass flowrate of required cooling water is "+str(round(Qcw,2))+"kg/hr")
+print("-----------------------------------------")
 #Calculate energy consumption 
 E_el_th_Cr, E_th_th_Cr, SEC_el_f, SEC_el_NaCl, SEC_el_w = calculate_energy(Qf, Q_evap_mass, Qcw, d_sol, npump)
 print(f"SEC_el_prod is {SEC_el_w} KWh/m3 product")
-print(f"SEC_el_prod2 is {SEC_el_NaCl} KWh/kg product")
+print(f"SEC_el_prod2 is {SEC_el_NaCl} KWh/kg of NaCl product")
+print("SEC_th_prod is "+str( round((E_th_th_Cr/(Qf/1000)),2))+" KWh/m3 intake")

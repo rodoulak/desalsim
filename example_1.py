@@ -10,7 +10,7 @@ from mfpfr_unit_f import energycons
 
 from ed_f import ElectrodialysisCalc
 
-from edbm_unit_recycling_f import EDBMCalc
+from edbm_unit_f import EDBMCalc
 
 from economic_f import revenue
 from economic_f import econom
@@ -119,10 +119,16 @@ nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_n
 Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
 Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
 Qperm = nfmass_objects[0].Qperm  # kg/hr
-Qconc= nfmass_objects[0].Qconc # kg/hr
+Qconc = nfmass_objects[0].Qconc  # kg/hr
+print("Permeate stream flow rate is "+str(round(Qperm,2))+"kg/hr")
+print("Permeate stream total concentration is "+str(round(sum(Cperm),2))+"g/l")
+print("-----------------------------------------")
+print("Concentrate stream flow rate is "+str(round(Qconc,2))+"kg/hr")
+print("Concentrate stream total concentration is "+str(round(sum(Cconc),2))+"g/l")
+print("-----------------------------------------")
 
 # Calculate Osmotic Pressure
-P_osmo_f = OsmoticPressure(c_values, z_values, T).osmotic_pressure_calculation()
+P_osmo_f = OsmoticPressure(Ci_in, z_values, T).osmotic_pressure_calculation()
 P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
 P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 
@@ -204,35 +210,42 @@ unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2)
 QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition()
 
 # Print the volume of HCl added and the outlet concentration of chloride ions
-print(f"HCl flow rate is {QHCl} l/h")
-print(f"C_out in g is {Cout_mfpfr_g} g/l")
+print(f"HCl flow rate is {round(QHCl,2)} l/hr")
+print(f"NaOH flow rate is {round(QNAOH,2)} l/hr")
+print("-----------------------------------------")
 
 #Calculate final outlet flow rate
-Qout_2=Qout_2+QHCl #l/h
-d_out_s=density_calc(25,sum(Cout_mfpfr_g))/1000 #kg/m3
-M_mfpfr_out=Qout_2*d_out_s #kg/h
+Qout_f=Qout_2+QHCl #l/h
+d_out_s=density_calc(25,round(sum(Cout_mfpfr_g),2))/1000 #kg/m3
+M_mfpfr_out=Qout_f*d_out_s #kg/h
+
+print("Mg(OH)2 mass flow rate is "+str(round(M_MgOH2_1,2))+"kg/hr")
+print("Ca(OH)2 mass flow rate is "+str(round(M_CaOH2,2))+"kg/hr")
+print("Total effluent flow rate is "+str(round(M_mfpfr_out,2))+"kg/hr")
+print("Total effluent flow rate is "+str(round(Qout_f,2))+"kg/hr")
+print("-----------------------------------------")
 
 #electicity consumption
-# Create an instance of the inputpar class with the defined parameters
+    # Create an instance of the inputpar class with the defined parameters
 Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr_dat.QNaOH_1, mfpfr_dat.QNaOH_2_add, mfpfr_dat.QNaOH_2_st)
 
-#Electricity consumption for pumping , KWh
+    #Electricity consumption for pumping , KWh
 E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
-print("Electricity energy consumption is "+str(E_el_mfpf)+ " kwh")
+print("Total electricity energy consumption is "+str(round(E_el_mfpf,2))+ " KW")
 
-#Electricity consumption for filtration unit 
+    #Electricity consumption for filtration unit 
 E_fil=scaleup.scaleup(0.5, 0.3*1000, M_mfpfr_out)
 
-#Total electricity consumption, KWh
+    #Total electricity consumption, KWh
 E_el_mfpf=E_el_mfpf+E_fil
 
-#Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
+    #Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
 SEC_el_prod=(E_el_mfpf)/(M_MgOH2)
-print("SEC_el_prod is "+str(SEC_el_prod)+" KWh/kg product ")
+print("Specific energy consumption per product is "+str(round(SEC_el_prod,2))+" KWh/kg product ")
 
-#Specific energy consumption per feed, KWh/m3 of feed
+    #Specific energy consumption per feed, KWh/m3 of feed
 SEC_el_feed=(E_el_mfpf)/(Qin_mfpfr/1000)
-print("SEC_el_feed is "+str(SEC_el_feed)+" KWh/m3 of feed ")
+print("Specific energy consumption per brine intake is "+str(round(SEC_el_feed,2))+" KWh/m3 of feed ")
 
 #%%
 """--------Electrodialysis--------"""
@@ -352,9 +365,6 @@ for j in range(1, N):
     Q_d[j] = Nw_d[j] * MWw / (rho_w * (1 - Sd[j] / 1000))
     print("sd for j " + str(j) + " is " + str(Sd[j]))
 
-print("effluent concentration dilute is " + str(Sd))
-print("effluent concentration brine is " + str(Sc))
-
 
 Cc_na_f=Sc[N-1]/MWs*constants.MW_Na
 Cc_cl_f=Sc[N-1]/MWs*constants.MW_cl
@@ -362,7 +372,8 @@ Sc_out=[Cc_na_f, Cc_cl_f]
 
 #Calculate the concnetrate stream flow rate 
 Mc=(Ns_c[N-1]*MWs/1000+Nw_c[N-1]*MWw/1000) #(kg/hr)
-print("Mass flowrate concentrate stream is "+str(Mc))
+print("Mass flowrate concentrate stream is "+str(round(Mc,2))+ " kg/hr")
+
 dc_out=density_calc(T-273, Sc[N-1])/1000 #(kg/l)
 Qc=Mc/dc_out #concnetrate stream volume flow rate (l/hr)
 i=2
@@ -370,41 +381,43 @@ i=2
 for i in range(2,len(Csw)):
     Sc_out.append(Csw[i]*Qed_in_c/Qc)
 
-print("volume flowrate concentrate stream is "+str(Qc))
+print("Volume flowrate concentrate stream is "+str(round(Qc,2))+" l/hr")
+print("The total effluent concentration concentrate stream  is " + str(round(Sc[N-1],2))+"g/kg")
+print("-----------------------------------------")
 
 #Calculations for diluate stream 
 Md=(Ns_d[N-1]*MWs/1000+Nw_d[N-1]*MWw/1000) #mass flow rate (kg/hr)
-print("Mass flowrate diluate stream is "+str(Md))
+print("Mass flowrate of diluate stream is "+str(round(Md,2))+" kg/hr")
+
 Sd_f=Sd[N-1]
 Cd_na_f=Sd_f/MWs*constants.MW_Na
 Cd_cl_f=Sd_f/MWs*constants.MW_cl
 dd_out=density_calc(T-273, Sd[N-1])/1000 #density of diluate stream
 Qd=Md/dd_out #diluate stream volume flow rate (l/hr)
-print("volume flowrate diluate stream is "+str(Qd))
+
+print("volume flowrate diluate stream is "+str(round(Qd,2))+" l/hr")
+print("The total effluent concentration dilute is " + str(round(Sd[N-1],2))+"g/kg")
 
 Sd_out=[Cd_na_f, Cd_cl_f]
 
 for i in range(2,len(Csw)):
     Sd_out.append(Csw[i]*Qed_in/Qd)
-    
-#solid mass balance
-bal=Qed_in-Md-Mc
-bal=(Qed_in*sum(Csw) -Md*(sum(Sd_out))-Mc*Sc_o)/1000
-print("balance is "+str(bal))
+print("-----------------------------------------")
 
 #Energy consumption 
 #power required 
 Ws = 0
 for j in range(N):
      Ws += Ij * Acp_tot_j * (Ncp * Vcp + Vel)
-print("Ws is "+str(Ws))
+print("Power required is "+str(round(Ws/1000,2))+"KW")
 
 #Calculate energy consumption for pumping 
 Ppump_ed=(Qed_in_d*1+Qed_in_c*1+Qc*2+Qd*1)/1000/3600*1e5/npump
 Eel_t_ed=Ws/1000+Ppump_ed/1000
-print("total energy consumption is "+str(Eel_t_ed))
+print("Total energy consumption is "+str(round(Eel_t_ed,2))+"KW")
 sec_ed=Eel_t_ed/(Qed_in/1000)
-print("sec ed is "+str(sec_ed))
+print("Specific energy consumption of Electrodialysis (ED) is "+str(round(sec_ed,2))+"KW/m3 feed")
+
 #%%
 """--------Electrodialysis with Bipolar Membranes--------"""
 #constants
@@ -447,32 +460,24 @@ C_in_mix=[]
 for i in range(len(Cconc)):
     C_in_mix.append(Cout_mfpfr_g[i]*M_mfpfr_out/Q_in_edbm+Sc_out[i]*Mc/Q_in_edbm)
     
-Cf_tcr_in=C_in_mix #[Na, Cl, K, Mg, Ca, SO4 ]
+Cin_edbm=C_in_mix #[Na, Cl, K, Mg, Ca, SO4 ]
 
-d_in=density_calc(25,Cin_edbm)/1000
-
-
+d_in=density_calc(25,sum(Cin_edbm))/1000
 
 #Calculate water quantity in inflow 
 Mw_in=Q_in_edbm/d_in 
 
 #Set number of triplets 
-N_trip=50
+N_trip=50*47
 
 #Set membrane area based on the feed flow rate 
 A=0.4#scaleup.scaleup(19.2, 300, Q_in_edbm)/3 
-
-"or"
-# N_trip=round(scaleup.scaleup(20, 300, Q_in_edbm),0)       
-# A=0.4#19/40
-# A_tot=19*Q_in_edbm/60 #scaleup.scaleup(0.19, 100, Q_in_edbm)#19*Q_in_edbm/60/3#
-# N_trip=round(A_tot/A,0)/10
 
 #Initialize concentration of Na in salt channel 
 Cna_s=[]
 
 #Create an instance of the EDBMCalc class with the defined parameters
-edbm_dat=EDBMCalc(Q_in_edbm, C_in_mix[0], C_in_mix[1], C_in_mix[2], C_in_mix[3], C_in_mix[4], C_in_mix[5], 0,  10**(-ph_s), 3.01551E-11, round(N_trip,0), 0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b)), 0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a)))
+edbm_dat=EDBMCalc(Q_in_edbm, Cin_edbm[0], Cin_edbm[1], Cin_edbm[2], Cin_edbm[3], Cin_edbm[4], Cin_edbm[5], 0,  10**(-ph_s), 3.01551E-11, N_trip, 0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b)), 0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a)))
 
 # Call the necessary methods to calculate values
 edbm_dat.flowrate()
@@ -482,32 +487,7 @@ edbm_dat.base_channel()
 edbm_dat.salt_channel()
 Cna_s.append(edbm_dat.Ci_s_out[0])
 
-#Loop for the recycling process 
-while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.2):
-    edbm_dat.recycl_below1M()
-    edbm_dat.acid_channel()
-    edbm_dat.base_channel()
-    edbm_dat.salt_channel()
-    Cna_s.append(edbm_dat.Ci_s_out[0])
-    if edbm_dat.Ci_s_out[0]<0:
-
-        break
-
-# Loop for recycling at higher concentration
-for i in range(1): 
-    edbm_dat.recycl_1M()
-    while (edbm_dat.Ci_b_out[0]<1) and (edbm_dat.Ci_s_out[0]>=0.2):
-        edbm_dat.recycl_below1M()
-        edbm_dat.acid_channel()
-        edbm_dat.base_channel()
-        edbm_dat.salt_channel()
-        Cna_s.append(edbm_dat.Ci_s_out[0])
-        
-        if edbm_dat.Ci_s_out[0]<0:
-
-              break
-
-# Sum results
+# # Sum results
 
 "Salt channel "
     #Concentration in salt channel 
@@ -515,31 +495,33 @@ Cbrine_out_t=sum(edbm_dat.Ci_s_out)
 Cbrine_out=edbm_dat.Ci_s_out #mol/l
 Cbrine_out_g=[Cbrine_out[0]*MW_Na, Cbrine_out[1]*MW_Cl, Cbrine_out[2]*MW_K, Cbrine_out[3]*MW_Mg, Cbrine_out[4]*MW_Ca, Cbrine_out[5]*MW_SO4] #g/l
 
-    #Mass flow rate
-M_s_out=edbm_dat.M_s_out_f*N_trip
-print("M_s_out is "+str(M_s_out)+"kg/hr")
-M_s_out_r=edbm_dat.M_s_r*N_trip
-print("M_s_out recycling is "+str(M_s_out_r)+"kg/hr")
+     #Mass flow rate
+M_s_out=edbm_dat.M_s_out_t*N_trip
+print("Salt channel: Mass flow rate out is "+str(round(M_s_out,2))+"kg/hr")
     #Volumetric flow rate 
-Q_s_out=edbm_dat.Q_s_out*N_trip
-print("Q_s_out is "+str(Q_s_out)+"l/hr")
+Q_s_out=edbm_dat.Q1_s_out*N_trip
+print("Salt channel: Volumetric flow rate out is "+str(round(Q_s_out,2))+"l/hr")
+print("Na concentration:"+str(round(Cbrine_out[0],2))+"M and "+str(round(Cbrine_out_g[0],2))+"g/l")
+print("Cl concentration:"+str(round(Cbrine_out[1],2))+"M and "+str(round(Cbrine_out_g[1],2))+"g/l")
+print("-----------------------------------------")
 
 "Base channel "
     #Concentration in base channel 
 Cb_out=edbm_dat.Ci_b_out[0:6]
 Cb_out_g=[Cb_out[0]*MW_Na, Cb_out[1]*MW_Cl, Cb_out[2]*MW_K, Cb_out[3]*MW_Mg, Cb_out[4]*MW_Ca, Cb_out[5]*MW_SO4]
 
-    #Mass flow rate
-M_b_out=edbm_dat.M_b_out_f*N_trip
-print("M_b_out is "+str(M_b_out)+"kg/hr")
-M_b_out_r=edbm_dat.M_b_r*N_trip
+     #Mass flow rate
+M_b_out=edbm_dat.M_b_out_t*N_trip
+print("Base channel: Mass flow rate out is "+str(round(M_b_out,2))+"kg/hr")
 
-    #Volumetric flow rate 
-Q_b_out=edbm_dat.Q_b_out*N_trip
-print("Q_b_out is "+str(Q_b_out)+"l/hr")
+     #Volumetric flow rate 
+Q_b_out=edbm_dat.Q1_b_out*N_trip
+print("Base channel: Volumetric flow rate out is "+str(round(Q_b_out,2))+"l/hr")
 
+print("Na concentration "+str(round(Cb_out[0],2))+"M and "+str(round(Cb_out_g[0],2))+"g/l")
     #Conversion to solid 
 M_NaOH_out=Q_b_out*edbm_dat.Ci_b_out[0]*constants.MW_NaOH/1000 #kg/hr 
+print("-----------------------------------------")
 
 "Acid channel" 
     #Concentration in acid channel 
@@ -548,38 +530,43 @@ Ca_out=edbm_dat.Ci_a_out[0:6]
 Ca_out_g=[Ca_out[0]*MW_Na, Ca_out[1]*MW_Cl, Ca_out[2]*MW_K, Ca_out[3]*MW_Mg, Ca_out[4]*MW_Ca, Ca_out[5]*MW_SO4]
 
     #Mass flow rate 
-M_a_out=edbm_dat.M_a_out_f*N_trip
-print("M_a_out is "+str(M_a_out)+"kg/hr")
-M_a_out_r=edbm_dat.M_a_r*N_trip
-print("M_a_out recycling is "+str(M_a_out_r)+"kg/hr")
+M_a_out=edbm_dat.M_a_out_t*N_trip
+print("Acid channel: Mass flow rate out is "+str(round(M_a_out,2))+"kg/hr")
 
     #Volumetric flow rate 
-Q_a_out=edbm_dat.Q_a_out*N_trip
-print("Q_a_out is "+str(Q_a_out)+"l/hr")
+Q_a_out=edbm_dat.Q1_a_out*N_trip
+print("Acid channel: Volumetric flow rate out is "+str(round(Q_a_out,2))+"l/hr")
+print("Cl concentration "+str(round(Ca_out[1],2))+"M and "+str(round(Ca_out_g[1],2))+"g/l")
+print("-----------------------------------------")
 
     #Conversion to solid 
 M_HCl_out=Q_a_out*constants.MW_HCl/1000 #kg/hr
-
 
 #Calculate required amount of water for the operation mode 
 Q_w_in=2*Q_in_edbm
 
 #Calculate mass balance 
 bal=(Q_in_edbm*d_in+2*Q_in_edbm)-M_a_out-M_s_out-M_b_out
-print("balance edbm is "+str(bal))
+print("Mass balance difference is "+str(round(bal,2)))
+error_perc=abs(bal)/(Q_in_edbm*d_in+2*Q_in_edbm)*100
+print("Balance error percentage is "+str(round(error_perc,2))+"%")
 
 #Energy consumption 
-
+V_ext=edbm_dat.V_ext #xternal 
 #Calculate energy consumption for pumping 
-Ppump=(3*Q_in_edbm*dp_f+Q_s_out*dp_p+Q_b_out*dp_p+Q_a_out*dp_p+edbm_dat.Q_s_r*N_trip*dp_r+edbm_dat.Q_a_r*N_trip*dp_r+edbm_dat.Q_b_r*N_trip*dp_r)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s  
+Ppump=(edbm_dat.Q1_s_in*N_trip*dp+edbm_dat.Q1_a_in*N_trip*dp+edbm_dat.Q1_b_in*N_trip*dp)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s  
 
+#Calculate current efficiency 
+Cb_in=[0]
+CE=(Q_b_out)*(Cb_out[0]-Cb_in[0])*F/(3600*N_trip*I_d*A)*100 #%
+print("Current efficiency is "+str(round(CE,2))+"%")
+print("-----------------------------------------")
 #Total energy consumption 
-E_el_Edbm=48*I_d*A/1000+Ppump/1000
-SEC=(48*I_d*A)/(Q_b_out*(edbm_dat.Ci_b_out[0]-edbm_dat.Ci_b_in[0])*constants.MW_NaOH)
+E_el_Edbm=V_ext*I_d*A/1000+Ppump/1000
+SEC=(V_ext*I_d*A)/(Q_b_out*(edbm_dat.Ci_b_out[0]-edbm_dat.Ci_b_in[0])*constants.MW_NaOH)
 
-print("Total electrical consumption for EDBM is " + str(E_el_Edbm)+ " KW")
-print("sec is "+str(SEC)+"kwh/kg naoh")
-
+print("Total electrical consumption for EDBM is " + str(round(E_el_Edbm,2))+ " KW")
+print("Specific energy consumption is "+str(round(SEC,2))+"kwh/kg NaOH")
 
 #%%
 #Concentration of saline solution 
@@ -730,6 +717,7 @@ for i in range(len(eq_c)):
     if Mf_basic_sc[i]!=Mf_sce[i]:
         eq_c[i]=scaleup.scaleup_eq(eq_c[i],Mf_basic_sc[i],Mf_sce[i],tec_names[i])
         
+#Cost calculation 
 for i in range(len(eq_c)):
     total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
     total_econom.capex_calc()
@@ -737,29 +725,30 @@ for i in range(len(eq_c)):
     CAPEX=total_econom.t_capital_inv
     OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
-    capex_list.append(total_econom.t_capital_inv) 
-    
-#amortisation factor     
+    capex_list.append(total_econom.t_capital_inv)    
+print("Tottal operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
+print("Total investment cost (CAPEX) of system is " + str(round(CAPEX))+ " Euro")    
+print("-----------------------------------------")
+
+#amortisation factor 
 a=(constants.r*(1+constants.r)**constants.lf)/((1+constants.r)**constants.lf-1)
 
-#Calculate annucal operating cost 
-oper_c_t=CAPEX*a+OPEX
-
+"""Revenue calculation"""
+#Input data 
 reve_t=0
 reve_list=[]
-prd=[Qw_tot, M_MgOH2_1, Qnaoh_s*constants.MW_NaOH/1000, Qhcl_s*constants.MW_HCl/1000 ]  
-print("prd is "+str(prd))  
-prd_name= ["water", "mgoh2",  "naoh", "hcl"]   
+prd=[10,2,3,0,0,0]    
+prd_name= ["Water", "NaCl", "Mg(OH)2", "Na2SO4", "NaOH", "HCl"]   
+
+#Revenue calculation
 for i in range(len(prd)):
     rev_calc=revenue(prd[i], prd_name[i])    
     rev_calc.rev()
-    print("rev_calc.rev_prd for " + prd_name[i]+" is " + str(rev_calc.rev_prd))
+    print("Revenues from selling product " + prd_name[i]+" are " + str(round(rev_calc.rev_prd,2))+" Euro/year")
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)
-
-Rev=reve_t
-print("revenue is "+str(Rev)+"")
-#%%present results
+    
+#%%Present results
 #Summary tables 
     #Table C: Ion concentration 
 sum_table_C={'F1: Seawater': Ci_in,
@@ -837,25 +826,6 @@ fig.update_layout(title_text="Sankey diagram for Example: Mass flow rates ", fon
 fig.show()
 plot(fig)
 
-#Figure 2: Sankey diagram for Example: Energy contribution
-fig = go.Figure(data=[go.Sankey(
-    node = dict(
-      pad = 15,
-      thickness = 20,
-      line = dict(color = "black", width = 0.5),
-      label = [ "NF","MF-PFR","ED",  "EDBM", "total"],
-      color = "blue"
-    ),
-    link = dict(
-      source = [4, 4,4,4], 
-      target = [0,1,2,3],
-      value = [E_el_all[0], E_el_all[1], E_el_all[2], E_el_all[3]]
-  ))])
-color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
-fig.update_traces(node_color = color_for_nodes)
-fig.update_layout(title_text="Sankey diagram for Example: Energy contribution ", font_size=15)
-fig.show()
-plot(fig)
 #%% Results to excel 
 dfel=pd.DataFrame(E_el_all ,tec_names)
 dfeth=pd.DataFrame(E_th_all, tec_names)

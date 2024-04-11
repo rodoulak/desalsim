@@ -228,9 +228,6 @@ for j in range(1, N):
     #Calculate net salt flux 
     Js[j] = (ElectrodialysisCalc.Ts_cp(Sd[j - 1]) * Ij / F - 
              (ElectrodialysisCalc.Ls_cp(Sc[j - 1], Sd[j - 1])) * concentration_diff)
-    print(f"Ts_cp={ElectrodialysisCalc.Ts_cp(Sd[j - 1])}, Ij={Ij}, F={F}, "
-          f"Ls_cp={ElectrodialysisCalc.Ls_cp(Sc[j - 1], Sd[j - 1])}, Sc[j-1]={Sc[j - 1]}, Sd[j-1]={Sd[j - 1]}")
-    print("Js is " + str(Js[j]))
     #calculate net water flux 
     Jw[j] = (ElectrodialysisCalc.Tw_cp(Sc[j - 1], Sd[j - 1]) * Ij / F +
              ElectrodialysisCalc.Lw_cp(Sc[j - 1]) * (ElectrodialysisCalc.p_osmo2(Sc[j - 1]) - 
@@ -246,10 +243,9 @@ for j in range(1, N):
     # Update the flow rates of the concentrate and dilute streams
     Q_c[j] = Nw_c[j] * MWw / (rho_w * (1 - Sc[j] / 1000))
     Q_d[j] = Nw_d[j] * MWw / (rho_w * (1 - Sd[j] / 1000))
-    print("sd for j " + str(j) + " is " + str(Sd[j]))
 
-print("effluent concentration dilute is " + str(Sd))
-print("effluent concentration brine is " + str(Sc))
+
+
 
 
 Cc_na_f=Sc[N-1]/MWs*constants.MW_Na
@@ -258,7 +254,8 @@ Sc_out=[Cc_na_f, Cc_cl_f]
 
 #Calculate the concnetrate stream flow rate 
 Mc=(Ns_c[N-1]*MWs/1000+Nw_c[N-1]*MWw/1000) #(kg/hr)
-print("Mass flowrate concentrate stream is "+str(Mc))
+print("Mass flowrate concentrate stream is "+str(round(Mc,2))+ " kg/hr")
+
 dc_out=density_calc.density_calc(T-273, Sc[N-1])/1000 #(kg/l)
 Qc=Mc/dc_out #concnetrate stream volume flow rate (l/hr)
 i=2
@@ -266,41 +263,48 @@ i=2
 for i in range(2,len(Csw)):
     Sc_out.append(Csw[i]*Qed_in_c/Qc)
 
-print("volume flowrate concentrate stream is "+str(Qc))
+print("Volume flowrate concentrate stream is "+str(round(Qc,2))+" l/hr")
+print("The total effluent concentration concentrate stream  is " + str(round(Sc[N-1],2))+"g/kg")
+print("-----------------------------------------")
 
 #Calculations for diluate stream 
 Md=(Ns_d[N-1]*MWs/1000+Nw_d[N-1]*MWw/1000) #mass flow rate (kg/hr)
-print("Mass flowrate diluate stream is "+str(Md))
+print("Mass flowrate of diluate stream is "+str(round(Md,2))+" kg/hr")
+
 Sd_f=Sd[N-1]
 Cd_na_f=Sd_f/MWs*constants.MW_Na
 Cd_cl_f=Sd_f/MWs*constants.MW_cl
 dd_out=density_calc.density_calc(T-273, Sd[N-1])/1000 #density of diluate stream
 Qd=Md/dd_out #diluate stream volume flow rate (l/hr)
-print("volume flowrate diluate stream is "+str(Qd))
+
+print("volume flowrate diluate stream is "+str(round(Qd,2))+" l/hr")
+print("The total effluent concentration dilute is " + str(round(Sd[N-1],2))+"g/kg")
 
 Sd_out=[Cd_na_f, Cd_cl_f]
 
 for i in range(2,len(Csw)):
     Sd_out.append(Csw[i]*Qed_in/Qd)
-    
+print("-----------------------------------------")
 
 #solid mass balance
 bal=Qed_in-Md-Mc
 bal=(Qed_in*sum(Csw) -Md*(sum(Sd_out))-Mc*Sc_o)/1000
-print("balance is "+str(bal))
-
+print("Mass balance difference is "+str(round(bal,2)))
+error_perc=abs(bal)/(Qed_in*sum(Csw))*100
+print("Balance error percentage is "+str(round(error_perc,2))+"%")
+print("-----------------------------------------")
 #Energy consumption 
 #power required 
 Ws = 0
 for j in range(N):
      Ws += Ij * Acp_tot_j * (Ncp * Vcp + Vel)
-print("Ws is "+str(Ws))
+print("Power required is "+str(round(Ws/1000,2))+"KW")
 
 #Calculate energy consumption for pumping 
 Ppump_ed=(Qed_in_d*1+Qed_in_c*1+Qc*2+Qd*1)/1000/3600*1e5/npump
 Eel_t_ed=Ws/1000+Ppump_ed/1000
-print("total energy consumption is "+str(Eel_t_ed))
+print("Total energy consumption is "+str(round(Eel_t_ed,2))+"KW")
 sec_ed=Eel_t_ed/(Qed_in/1000)
-print("sec ed is "+str(sec_ed))
+print("Specific energy consumption of Electrodialysis (ED) is "+str(round(sec_ed,2))+"KW/m3 feed")
 
 
