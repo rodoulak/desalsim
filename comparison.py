@@ -69,7 +69,7 @@ plt.savefig('OPEX.png')
 plt.show()
 
 #Figure 5: Revenues 
-Rev= [sc1.Rev,  sc2.Rev]
+Rev= [sc1.reve_t,  sc2.reve_t]
 Rev = [i/1e6 for i in Rev]
 plt.bar(X_axis - 0.4, Rev, 0.4, color="#00516a")  
 plt.xticks(X_axis, X)
@@ -92,10 +92,10 @@ plt.show()
 #%% Create dataframes 
 ind=np.array(["Water production", "Total electrical consumption (GWh)", "Total thermal energy consumption (GWh)","Carbon dioxide emission (Kton co2/year) ",
               "OPEX (M€/year)", "CAPEX (M€)"])
-sum_res_1=np.array([Qw_y[1],Eel[1], Eth[1],co2_em[1], OPEX[1], Cap[1]])
+sum_res_1=np.array([Qw_y[0],Eel[0], Eth[0],co2_em[0], OPEX[0], Cap[0]])
 df1=pd.DataFrame(sum_res_1, ind)
 
-sum_res_2=np.array([Qw_y[2],Eel[2], Eth[2],co2_em[2], OPEX[2], Cap[2]])
+sum_res_2=np.array([Qw_y[1],Eel[1], Eth[1],co2_em[1], OPEX[1], Cap[1]])
 df2=pd.DataFrame(sum_res_2, ind)
 
 #all
