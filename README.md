@@ -30,11 +30,14 @@ However, simulation models of more than one technology can be combined to simula
 
 Additionally, two example files are provided to demonstrate the usage of the simulation suite. These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a comparison file is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 ### Example 1
-
+Figure 1 presents the process flow diagram of example 1 which consists of four technologies: Nanofiltration (NF), Multiple Feed Plug Flow Reactor (MF-PFR), Electrodialysis (ED), Electrodialysis With Bipolar Membranes (EDBM). The treatment chain represents an MLD system aiming to maximize valuable resources recovery from brine, such as Mg(OH)2, Ca(OH)2, HCl, and NaOH. The seawater stream or concentrate stream from a Reverse Osmosis plant (RO) first goes to the NF unit. The NF unit is separated into two different streams: one that is high in monovalent ions and one that is high in multi-valent ions. The latter stream from NF, high in monovalent ions, is directed to ED, in which the NaCl stream is concentrated further, and a dilute stream is also recovered. The former is directed to a treatment line comprising selective MF-PFR and EDBM units. In particular, the retentate is sent to the MF-PFR, in which magnesium and calcium are recovered in the form of hydroxide precipitates via a chemical reaction between the NF retentate and an alkaline reactant. Then, the brine stream is free from Mg2+ and Ca2+ mixed with the ED concentrate stream. The mixed solution (NaCl rich) is fed to EDBM. EDBM unit recovers, and the saline solution (low concentration) can be recycled back into the treatment chain. 
 <figure>
   <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e" alt="Image" style="width:600px;">
   <figcaption style="text-align:left;">Figure 1. Process flow diagram of example 1.</figcaption>
 </figure>
+
+**Table 1** gives an overview of the main inputs and outputs for each process unit of example 1. 
+![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/0f1c7b73-1a72-459a-9b72-08e6ef7cc8b8)
 
 ## Key features 
 - Simulation models for various desalination and brine treatment technologies
@@ -57,7 +60,7 @@ The software was developed by Rodoula Ktori, with theoretical support by all co-
 - Multi-effect Distillation: Alessandro Trezzi,
 - MF-PFR: Fabrizio Vassallo, Carmelo Morgante, Andrea Cipollina,
 - EDBM: Calogero Cassaro, Andrea Culcasi,
-- EFC: Marcos Rodriguez Pascual, Geert Jan Witkamp.
+- EFC: Marcos Rodriguez Pascual.
 
 This work was supported by the EU within the WATER MINING (Next generation water-smart management systems: large scale demonstrations for a circular economy and society) - Horizon 2020 research and innovation programme under grant agreement No 869474.
 
