@@ -42,13 +42,6 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 ![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/0f1c7b73-1a72-459a-9b72-08e6ef7cc8b8)
 
 **Table 2** gives an overview of the main inputs and outputs of economic model. 
-
-Economics 	Selling price for products 	Operating cost (OPEX) [€/year]
-	Prices for energy, input chemicals, cooling water 	Investment cost (CAPEX) [€]
-	Operating hours, lifetime 	Revenues from selling products [€/year]
-	Equipment cost	
-	Interest rate, Inflation rate 	
-	Assumptions on CAPEX and OPEX calculations 	
 ![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/459ed1f1-65d7-4ca1-b712-bf2d8eb9a7db)
 
 ## Key features 
