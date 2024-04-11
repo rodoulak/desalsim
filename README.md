@@ -41,22 +41,22 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 | Process                                   | Input                                       | Output                                                |
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
-| Nanofiltration                            | Feed flow rate [m<sup>3/h]                       | Permeate flow rate and composition [g/L]              |
+| Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
 |                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
 |                                           | Osmotic pressure [bar]                      | Electrical requirements [kWhel]                       |
 |                                           | Water recovery [%]                          | Ion rejection [-]                                     |
-| Multi-plug flow reactor                   | Feed flow rate [m<sup>3/h]                       | Alkaline solution flow rate [L/h]                    |
+| Multi-plug flow reactor                   | Feed flow rate [m³/h]                       | Alkaline solution flow rate [L/h]                    |
 |                                           | Ion concentration [g/L]                     | Flow rate of Mg(OH)₂ [kg/h]                          |
 |                                           | Concentration of the alkaline solution [M] | Flow rate of Ca(OH)₂ [kg/h]                          |
 |                                           | Concentration of the acid solution [M]     | Acid solution flow rate [L/h]                        |
-|                                           | Products characteristics e.g. solubility...| Effluent flow rate [m<sup>3/h] and composition [g/L]      |
+|                                           | Products characteristics e.g. solubility...| Effluent flow rate [m³/h] and composition [g/L]      |
 |                                           |                                             | Electricity requirements [kWhel]                     |
-| Electrodialysis with bipolar membranes   | Feed flow rate [m<sup>3/h]                       | Flow rate of acid [m3/h] and composition [g/L]       |
-|                                           | Ion concentration [g/L]                     | Flow rate of base [m<sup>3/h] and composition [g/L]       |
-|                                           | Current density [A/m²]                      | Flow rate of salt [m<sup>3/h] and composition [g/L]       |
-|                                           | Number of triplets and Membrane area...     | Electricity requirements [kWhel]                     |
-| Electrodialysis                          | Feed flow rate [m<sup>3/h]                       | Flow rate of diluted stream [m<sup>3/h] and composition [g/L]|
-|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m<sup>3/h] and composition [g/L]        |
+| Electrodialysis with bipolar membranes   | Feed flow rate [m³/h]                       | Flow rate of acid [m³/h] and composition [g/L]       |
+|                                           | Ion concentration [g/L]                     | Flow rate of base [m³/h] and composition [g/L]       |
+|                                           | Current density [A/m²]                      | Flow rate of salt [m³/h] and composition [g/L]       |
+|                                           | Number of triplets and Membrane area and other characteristics      | Electricity requirements [kWhel]                     |
+| Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition [g/L]|
+|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 
@@ -67,13 +67,15 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 | Selling price for products [€/ton] or [€/m3] | Operating cost (OPEX) [€/year]          |
 | Prices for energy [€/KWh], input chemicals [€/m3], cooling water [€/m3] | Investment cost (CAPEX) [€]               |
 | Operating hours, lifetime                 | Revenues from selling products [€/year] |
-| Interest rate, Inflation rate             | Assumptions on CAPEX and OPEX calculations |
+| Interest rate, Inflation rate             |                                         |
+|Equipment cost [€]  |                                          |
+| Assumptions on CAPEX and OPEX calculations |                                          |
 
 
 For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m3/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function *scaleup*. 
 
 
-**Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX . 
+**Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX. 
 | CAPEX                             | Annual OPEX                                    |
 |-----------------------------------|------------------------------------------------|
 | Installation: 25% of purchased equipment cost| Maintenance: 3% of the fixed-capital investment            |
