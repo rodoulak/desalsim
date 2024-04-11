@@ -44,10 +44,26 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 **Table 2** gives an overview of the main inputs and outputs of economic model. 
 ![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/459ed1f1-65d7-4ca1-b712-bf2d8eb9a7db)
 
- Header 1 | Header 2 | Header 3 
-----------|----------|----------
- Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 
- Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 
+| Process                                   | Input                                       | Output                                                |
+|-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
+| Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
+|                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
+|                                           | Osmotic pressure [bar]                      | Electrical requirements [kWhel]                       |
+|                                           | Water recovery [%]                          | Ion rejection [-]                                     |
+| Multi-plug flow reactor                   | Feed flow rate [m³/h]                       | Alkaline solution flow rate [L/h]                    |
+|                                           | Ion concentration [g/L]                     | Flow rate of Mg(OH)₂ [kg/h]                          |
+|                                           | Concentration of the alkaline solution [M] | Flow rate of Ca(OH)₂ [kg/h]                          |
+|                                           | Concentration of the acid solution [M]     | Acid solution flow rate [L/h]                        |
+|                                           | Products characteristics e.g. solubility...| Effluent flow rate [m³/h] and composition [g/L]      |
+|                                           |                                             | Electricity requirements [kWhel]                     |
+| Electrodialysis with bipolar membranes   | Feed flow rate [m³/h]                       | Flow rate of acid [m³/h] and composition [g/L]       |
+|                                           | Ion concentration [g/L]                     | Flow rate of base [m³/h] and composition [g/L]       |
+|                                           | Current density [A/m²]                      | Flow rate of salt [m³/h] and composition [g/L]       |
+|                                           | Number of triplets and Membrane area...     | Electricity requirements [kWhel]                     |
+| Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition...|
+|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and...        |
+|                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
+
 
 ## Key features 
 - Simulation models for various desalination and brine treatment technologies
