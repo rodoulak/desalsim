@@ -32,7 +32,7 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 ### Example 1
 
 <figure>
-  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e" alt="Image" style="width:300px;">
+  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e" alt="Image" style="width:600px;">
   <figcaption>Figure 1. Process flow diagram of example 1.</figcaption>
 </figure>
 
