@@ -44,6 +44,11 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 **Table 2** gives an overview of the main inputs and outputs of economic model. 
 ![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/459ed1f1-65d7-4ca1-b712-bf2d8eb9a7db)
 
+| Header 1 | Header 2 | Header 3 |
+|----------|----------|----------|
+| Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 |
+| Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 |
+
 ## Key features 
 - Simulation models for various desalination and brine treatment technologies
 - Analysis of salt concentration profiles, ion fluxes, energy consumption, and chemical usage
