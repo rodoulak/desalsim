@@ -32,6 +32,7 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 ### Example 1
 
 ![image](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e)
+<image src="image_url" alt="Alt text" width="300">
 
 ## Key features 
 - Simulation models for various desalination and brine treatment technologies
