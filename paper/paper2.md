@@ -1,30 +1,43 @@
 
-title: "Desalination and brine treatment systems integrated modelling framework: simulation and evaluation of water and resource recovery"
-authors:
-  - name: "Rodoula Ktori"
-    affiliations:
-      - "Department of Biotechnology, Delft University of Technology, Van der Maasweg 9, 2629 HZ, Delft, The Netherlands"
+---
+title: 'Desalination and brine treatment systems integrated modelling framework: simulation and evaluation of water and resource recovery'
+tags:
+  - Python
+  - Desalination
+  - Brine treatment
+  - resource recovery
+  - Techno-economic assessment 
 
-
-    
 authors:
   - name: Rodoula Ktori
-    affiliation: "1" 
-  - name: Fabrizio Vassallo affiliation: "2"
-  - Giovanni Virruso2,
-  - Carmelo Morgante2,
-  - Andrea Culcasi2,
-  - Dionysia Diamantidou3,
-  - Niels Van Linden3,
-  - Alessandro Trezzi4,
-  - Adithya Krishnan5,
-  - Andrea Cipollina2,
-  - Giorgio Micale2,
-  - Mark C.M. van Loosdrecht1,
-  - Dimitrios Xevgenos6
+    affiliation: 1 
+  - name: Fabrizio Vassallo
+    affiliation: 2
+  - name: Giovanni Virruso
+    affiliation: 2
+  - name: Carmelo Morgante
+    affiliation: 2
+  - name: Andrea Culcasi
+    affiliation: 2
+  - name: Dionysia Diamantidou
+    affiliation: 3
+  - name: Niels Van Linden
+    affiliation: 3
+  - name: Alessandro Trezzi
+    affiliation: 4
+  - name: Adithya Krishnan
+    affiliation: 5
+  - name: Andrea Cipollina
+    affiliation: 2
+  - name: Giorgio Micale
+    affiliation: 2
+  - name: Mark C.M. van Loosdrecht
+    affiliation: 1
+  - name: Dimitrios Xevgenos
+    affiliation: 6
 
 affiliations:
-- name: Department of Biotechnology, Delft University of Technology, Van der Maasweg 9, 2629 HZ, Delft, The Netherland
+ - name:  Department of Biotechnology, Delft University of Technology, Van der Maasweg 9, 2629 HZ, Delft, The Netherland
    index: 1
 - name: Dipartimento di Ingegneria, Università degli Studi di Palermo - viale delle Scienze Ed.6, 90128 Palermo, Italy
    index: 2
@@ -38,6 +51,7 @@ affiliations:
    index: 6
   
 bibliography: paper.bib
+---
 
 # Summary 
 
