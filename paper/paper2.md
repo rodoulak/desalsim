@@ -1,4 +1,3 @@
-
 ---
 title: 'Desalination and brine treatment systems integrated modelling framework: simulation and evaluation of water and resource recovery'
 tags:
@@ -7,7 +6,6 @@ tags:
   - Brine treatment
   - resource recovery
   - Techno-economic assessment 
-
 authors:
   - name: Rodoula Ktori
     affiliation: 1 
@@ -35,22 +33,19 @@ authors:
     affiliation: 1
   - name: Dimitrios Xevgenos
     affiliation: 6
-
 affiliations:
- - name:  Department of Biotechnology, Delft University of Technology, Van der Maasweg 9, 2629 HZ, Delft, The Netherland
-   index: 1
-- name: Dipartimento di Ingegneria, Università degli Studi di Palermo - viale delle Scienze Ed.6, 90128 Palermo, Italy
-   index: 2
-- name: Lenntech BV, Distributieweg 3, 2645 EG Delfgauw, The Netherlands
-   index: 3
-- name: Sofinter S.p.A, Piazza Francesco Buffoni, 3, 21013 Gallarate VA, Italy
-   index: 4
-- name: Water & Energy Intelligence BV, the Netherlands
-   index: 5
-- name: Department of Engineering Systems and Services, Delft University of Technology, Jaffalaan 5, 2628 BX Delft, The Netherlands
-   index: 6
-  
-bibliography: paper.bib
+  - name: Department of Biotechnology, Delft University of Technology, Van der Maasweg 9, 2629 HZ, Delft, The Netherlands
+    index: 1
+  - name: Dipartimento di Ingegneria, Università degli Studi di Palermo - viale delle Scienze Ed.6, 90128 Palermo, Italy
+    index: 2
+  - name: Lenntech BV, Distributieweg 3, 2645 EG Delfgauw, The Netherlands
+    index: 3
+  - name: Sofinter S.p.A, Piazza Francesco Buffoni, 3, 21013 Gallarate VA, Italy
+    index: 4
+  - name: Water & Energy Intelligence BV, the Netherlands
+    index: 5
+  - name: Department of Engineering Systems and Services, Delft University of Technology, Jaffalaan 5, 2628 BX Delft, The Netherlands
+    index: 6
 ---
 
 # Summary 
