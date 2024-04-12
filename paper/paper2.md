@@ -46,6 +46,7 @@ affiliations:
     index: 5
   - name: Department of Engineering Systems and Services, Delft University of Technology, Jaffalaan 5, 2628 BX Delft, The Netherlands
     index: 6
+bibliography: paper.bib
 ---
 
 # Summary 
@@ -66,7 +67,7 @@ The proposed software is not intended to be a substitute for sophisticated physi
 # Acknowledgements 
 The software was developed by Rodoula Ktori, with theoretical support from all co-authors. Technological experts conducted the validation of each simulation model for the respective technology: Nanofiltration: Dionysia Diamantidou, Niels van Linden; Multi-effect Distillation: Alessandro Trezzi; MF-PFR: Fabrizio Vassallo, Carmelo Morgante, Andrea Cipollina; EDBM: Giovanni Virruso, Andrea Culcasi; EFC: Marcos Rodriguez Pascual.
 
-The technical process models were developed based on the report from Xevgenos et al., (2023) and the following literature (Nayar et al., 2019; Morgante et al., 2022; Cassaro et al., 2023). Then they were valisated with experimental results from The development of economic models were influenced by (Peters, Timmerhaus and West, 2003; Abraham and Luthra, 2011; Bilton et al., 2011; Kesieme et al., 2013; Choi et al., 2015). The analysis and comparison were developed based on (Ktori et al., 2024) and Ktori et., (under review). 
+The technical process models were developed based on the report from Xevgenos et al., (2023) and the following literature (Nayar et al., 2019; Morgante et al., 2022; Cassaro et al., 2023). Then they were valisated with experimental results from . The development of economic models were influenced by (Peters, Timmerhaus and West, 2003; Abraham and Luthra, 2011; Bilton et al., 2011; Kesieme et al., 2013; Choi et al., 2015). The analysis and comparison were developed based on (Ktori et al., 2024) and Ktori et., (under review). 
 This work was supported by the EU within the WATER MINING (Next generation water-smart management systems: large scale demonstrations for a circular economy and society) - Horizon 2020 research and innovation programme under grant agreement No 869474.
 
 # References 
