@@ -5,7 +5,7 @@ from density_calc import density_calc
 import math
 import constants
 #%%
-class MFPFRCALC:
+class inputpar:
     """
     A class used to represent Mass Balance for percipitation step with the addition of alkaline solution 
 
@@ -239,7 +239,7 @@ Qin_mfpfr = 1000  # Flow rate in l/hr
 d_in = density_calc(25, sum(Cin_mfpfr)) / 1000
 
 # Create an instance of the inputpar class with the defined parameters
-mfpfr_dat = MFPFRCALC(Qin_mfpfr, *Cin_mfpfr, 0, *C_NaOH, *conv)
+mfpfr_dat = inputpar(Qin_mfpfr, *Cin_mfpfr, 0, *C_NaOH, *conv)
 
 # Call the calc_step1 and calc_step2 methods to calculate the necessary values
 mfpfr_dat.calc_step1()
