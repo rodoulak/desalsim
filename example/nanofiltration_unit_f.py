@@ -216,73 +216,73 @@ class NfEnergy:
             "Specific Energy Consumption (KWh/m3 of feed)": round(SEC_el_feed,2)
         }
 
-# #%%
-# #Example usage
-# #Feed concentration
-# components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
-# Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
-# z_values = [1, -1, 1, 2, 2, -2]
+#%%
+#Example usage
+#Feed concentration
+components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
+Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
+z_values = [1, -1, 1, 2, 2, -2]
 
 
-# #Constants
-# R=8.314 #gas constant (units: J / mol·K)
-# T=20+273 #Operating temperature (units: K)
+#Constants
+R=8.314 #gas constant (units: J / mol·K)
+T=20+273 #Operating temperature (units: K)
 
-#     #molecular weight
-# MW_Na=constants.MW_Na
-# MW_Cl=constants.MW_cl
-# MW_SO4=constants.MW_so4
-# MW_K=constants.MW_K
-# MW_Ca=constants.MW_Ca
-# MW_Mg=constants.MW_Mg
-# MW_HCO3=constants.MW_HCO3
-# MW_values = [MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4]
-# mg_in = sum(Ci_in)
-# #Feed flow density 
-# d_in = density_calc(T-273, mg_in)  # kg/m3
+    #molecular weight
+MW_Na=constants.MW_Na
+MW_Cl=constants.MW_cl
+MW_SO4=constants.MW_so4
+MW_K=constants.MW_K
+MW_Ca=constants.MW_Ca
+MW_Mg=constants.MW_Mg
+MW_HCO3=constants.MW_HCO3
+MW_values = [MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4]
+mg_in = sum(Ci_in)
+#Feed flow density 
+d_in = density_calc(T-273, mg_in)  # kg/m3
 
-# #Feed flowrate
-# Qsw = 3000 / 24 * d_in #m3/d
-# Qf = Qsw  # kg/hr
+#Feed flowrate
+Qsw = 3000 / 24 * d_in #m3/d
+Qf = Qsw  # kg/hr
 
-# #Asuumptions  
-# rjr_values = [0.16, 0.29, 0.21, 0.98, 0.95, 0.98] #Ions rejection rates based on membrane characteristics (units: -)
-# Wrec = 0.7 # Water recovery based on membrane characteristics (units: -)
-# n=0.8 #pump efficiency (units: -)
-# dp=2 # pressure drop (units: bar)
+#Asuumptions  
+rjr_values = [0.16, 0.29, 0.21, 0.98, 0.95, 0.98] #Ions rejection rates based on membrane characteristics (units: -)
+Wrec = 0.7 # Water recovery based on membrane characteristics (units: -)
+n=0.8 #pump efficiency (units: -)
+dp=2 # pressure drop (units: bar)
 
 
-# # Create molarity objects and calculate meq for each component
-# molarity_objects = [molarity(MW, z, Ci) for MW, z, Ci in zip(MW_values, z_values, Ci_in)]
-# meq_values = [m.calculate_meq() for m in molarity_objects]
+# Create molarity objects and calculate meq for each component
+molarity_objects = [molarity(MW, z, Ci) for MW, z, Ci in zip(MW_values, z_values, Ci_in)]
+meq_values = [m.calculate_meq() for m in molarity_objects]
 
-# # Function to create NFMass objects for different components
-# def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
-#     return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
+# Function to create NFMass objects for different components
+def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
+    return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
 
-# # Create NFMass objects for different components
-# nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf)
+# Create NFMass objects for different components
+nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf)
 
-# Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
-# Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
-# Qperm = nfmass_objects[0].Qperm  # kg/hr
-# Qconc = nfmass_objects[0].Qconc  # kg/hr
-# print("Permeate stream flow rate is "+str(round(Qperm,2))+"kg/hr")
-# print("Permeate stream total concentration is "+str(round(sum(Cperm),2))+"g/l")
-# print("-----------------------------------------")
-# print("Concentrate stream flow rate is "+str(round(Qconc,2))+"kg/hr")
-# print("Concentrate stream total concentration is "+str(round(sum(Cconc),2))+"g/l")
-# print("-----------------------------------------")
+Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
+Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
+Qperm = nfmass_objects[0].Qperm  # kg/hr
+Qconc = nfmass_objects[0].Qconc  # kg/hr
+print("Permeate stream flow rate is "+str(round(Qperm,2))+"kg/hr")
+print("Permeate stream total concentration is "+str(round(sum(Cperm),2))+"g/l")
+print("-----------------------------------------")
+print("Concentrate stream flow rate is "+str(round(Qconc,2))+"kg/hr")
+print("Concentrate stream total concentration is "+str(round(sum(Cconc),2))+"g/l")
+print("-----------------------------------------")
 
-# # Calculate Osmotic Pressure
-# P_osmo_f = OsmoticPressure(Ci_in, z_values, T).osmotic_pressure_calculation()
-# P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
-# P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
+# Calculate Osmotic Pressure
+P_osmo_f = OsmoticPressure(Ci_in, z_values, T).osmotic_pressure_calculation()
+P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
+P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 
-# d_p=density_calc(T-273, sum(Cperm))
+d_p=density_calc(T-273, sum(Cperm))
 
-# #Calculate Energy consumption 
-# elec=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf, d_in,n)
-# result=elec.calculate_energy_consumption()
-# for key, value in result.items():
-#         print(f"{key}: {value}")
+#Calculate Energy consumption 
+elec=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf, d_in,n)
+result=elec.calculate_energy_consumption()
+for key, value in result.items():
+        print(f"{key}: {value}")
