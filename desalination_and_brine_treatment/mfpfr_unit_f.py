@@ -156,22 +156,23 @@ class inputpar:
        return self.QCa_in_2, self.QNaOH_2_st, self.COH_ph13, self.QNaOH_2_add, self.Qtot_out_2, self.M_CaOH2_2, self.M_MgOH2_2, self.magma_d_2, self.Qout_2, self.CNa_out_2, self.CCa_out_2, self.CCl_out_2, self.CK_out_2, self.CMg_out_2, self.CSO4_out_2, self.CHCO3_out_2, self.ph_2
 
 class HClAddition:
-    def __init__(self, Qout_2, Cout_all_m, MW_cl, ph_2):
+    def __init__(self, Qout_2, Cout_all_m, MW_cl, ph_2, HCl_conc):
         self.Qout_2 = Qout_2
         self.Cout_all_m = Cout_all_m
         self.MW_cl = MW_cl
         self.ph_2 = ph_2
+        self.HCl_conc=HCl_conc
 
     def calculate_HCl_addition(self):
         OH_initial = math.pow(10, -14) / math.pow(10, -self.ph_2)
         OH_final = math.pow(10, -14) / math.pow(10, -7)
         
         #Calculate the volume of HCl 1M in liters, Qout_f
-        QHCl = (self.Qout_2 * OH_initial - self.Qout_2 * OH_final) / (OH_final + HCl_conc)  
+        QHCl = (self.Qout_2 * OH_initial - self.Qout_2 * OH_final) / (OH_final + self.HCl_conc)  
         self.Qout_f = self.Qout_2+QHCl
 
         # Calculate the outlet concentration of chloride ions
-        C_cl_out = (self.Cout_all_m[1] * self.Qout_2 + QHCl * HCl_conc) / self.Qout_f  # mol/l
+        C_cl_out = (self.Cout_all_m[1] * self.Qout_2 + QHCl * self.HCl_conc) / self.Qout_f  # mol/l
         self.Cout_all_m[1] = C_cl_out
         C_cl_out = C_cl_out * self.MW_cl  # g/l
         Cout_mfpfr_g[1] = C_cl_out
@@ -273,7 +274,7 @@ QNAOH = mfpfr_dat.QNaOH_1 + mfpfr_dat.QNaOH_2_add + mfpfr_dat.QNaOH_2_st # conve
 
 #hcl to decrease ph to 7
 HCl_conc=1 #l of HCl 1M
-unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2)
+unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2, HCl_conc)
 
 # Call the calculate_HCl_addition method
 QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition()
