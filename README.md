@@ -1,4 +1,4 @@
-# Desalination and Brine Treatment Simulation Suite
+# Desalination and Brine Treatment simulation model
 
  
 ## Overview 
