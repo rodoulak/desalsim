@@ -4,7 +4,7 @@ from nanofiltration_unit_f import molarity
 from nanofiltration_unit_f import NFMass
 from nanofiltration_unit_f import NfEnergy
 
-from mfpfr_unit_f import inputpar
+from mfpfr_unit_f import MFPFRCALC
 from mfpfr_unit_f import HClAddition
 from mfpfr_unit_f import energycons
 
@@ -169,7 +169,7 @@ Qin_mfpfr = Qconc # Flow rate in l/hr
 d_in = density_calc(25, sum(Cin_mfpfr)) / 1000
 
 # Create an instance of the inputpar class with the defined parameters
-mfpfr_dat = inputpar(Qin_mfpfr, *Cin_mfpfr, 0, *C_NaOH, *conv)
+mfpfr_dat = MFPFRCALC(Qin_mfpfr, *Cin_mfpfr, 0, *C_NaOH, *conv)
 
 # Call the calc_step1 and calc_step2 methods to calculate the necessary values
 mfpfr_dat.calc_step1()
@@ -204,7 +204,7 @@ QNAOH = mfpfr_dat.QNaOH_1 + mfpfr_dat.QNaOH_2_add + mfpfr_dat.QNaOH_2_st # conve
 
 #hcl to decrease ph to 7
 HCl_conc=1 #l of HCl 1M
-unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2)
+unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2, HCl_conc)
 
 # Call the calculate_HCl_addition method
 QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition()
