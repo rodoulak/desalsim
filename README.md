@@ -17,7 +17,6 @@ The simulation models implemented here calculate various parameters such as salt
 ## Purpose 
 The purpose of this software suite is to provide researchers, engineers, and policymakers with a powerful tool for evaluating the performance and economics of desalination and brine treatment systems. By integrating technical process models with economic and environmental analyses, the suite enables users to make informed decisions about technology integration, process optimization, and resource management.
 
-3.  Choose the simulation model for the desired technology (e.g., electrodialysis, reverse osmosis, thermal desalination) and run the corresponding script.
 
 ## Key features 
 - Simulation models for various desalination and brine treatment technologies
