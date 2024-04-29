@@ -35,8 +35,6 @@ MW_H=1.00784
 MW_OH=17.008
 MW_H2O=MW_H+MW_OH
 MW_values = [MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4]
-
-
 MW_MgOH=58.3197
 MW_CaOH=74.09
 MW_Na2SO4=142.039458
@@ -148,7 +146,6 @@ T_cw_in=25 #intake cooling water temperature (oC)
 T_cw_out=35 #out cooling water temperature (oC)
 T_s=70 #steam temperature oC
 DT_loss=1 #temperature difference (oC)
-T3=69
 dp=0.1  # pressure drop (units: bar)
 dp_slurry=1 # pressure drop (units: bar)
 npump=0.8 #pump efficiency (units: -)
@@ -168,13 +165,13 @@ elif (T_s>70) and (T_s<=75):
     lh_s=2321
 
 # Create an instance of the MEDCalculator class
-med_dat = MEDCalculator(Qf_med, Mf_med, Cin_med[0], Cin_med[1], Cin_med[2], Cin_med[3], Cin_med[4], Cin_med[5])
+med_dat = MEDCalculator(Qf_med, Mf_med, Cin_med[0], Cin_med[1], Cin_med[2], Cin_med[3], Cin_med[4], Cin_med[5], T_in)
 
 # Call methods to perform calculations
 med_dat.salinity_calc()
-med_dat.temperature_calc()
-med_dat.mass_balance_med()
-med_dat.performance_parameters()
+med_dat.temperature_calc(DT_loss, T_N, T_s)
+med_dat.mass_balance_med(Cb_out)
+med_dat.performance_parameters(lh_s,  T_cw_in)
 med_dat.output_concentration()
 
 # Sum results
@@ -273,7 +270,7 @@ d_sol=density_calc(T_in, Cf_tcr)/1000 #density of feed
 Cf_caso4=Cf_tcr_in[4]*MW_CaSO4/MW_Ca #CaSO4 concentration in feed solution (g/L)
 
 #Calculation 
-th_cryst_dat=thermal_calc(T_op, Qf_tcr, Cf_tcr, Cf_caso4, T_in, Cf_tcr_in)
+th_cryst_dat=thermal_calc(T_op, Qf_tcr, Cf_tcr, Cf_caso4, T_in, Cf_tcr_in, salt_mois, LHV_v, LHV_s, T_cw_o, T_cw_f)
 th_cryst_dat.mass_bal_cryst()
 th_cryst_dat.heat_bal_cryst()
 
@@ -282,7 +279,7 @@ M_Nacl=th_cryst_dat.solid_mass
 print("Mass flowrate of recovered salt is "+str(round(M_Nacl,2))+"kg/hr")
 
 # Calculation of the concentration of different ions in the solution
-th_cryst_dat_2=conc_cal(Qf_tcr, M_Nacl , 'Na',Cf_tcr_in[0], 'cl',Cf_tcr_in[1],'k', Cf_tcr_in[2], 'mg', Cf_tcr_in[3], 'ca', Cf_tcr_in[4], 'so4', Cf_tcr_in[5])
+th_cryst_dat_2=conc_cal(Qf_tcr, M_Nacl , 'Na',Cf_tcr_in[0], 'cl',Cf_tcr_in[1],'k', Cf_tcr_in[2], 'mg', Cf_tcr_in[3], 'ca', Cf_tcr_in[4], 'so4', Cf_tcr_in[5], T_in)
 th_cryst_dat_2.molarity()
 th_cryst_dat_2.conc_salt_comp()
 th_cryst_dat_2.salt_conc()
@@ -299,7 +296,8 @@ Qcw_tcr=th_cryst_dat.cw_mass
 print("Mass flowrate of required cooling water is "+str(round(Qcw_tcr,2))+"kg/hr")
 print("-----------------------------------------")
 #Calculate energy consumption 
-E_el_th_Cr, E_th_th_Cr, SEC_el_f, SEC_el_NaCl, SEC_el_w = calculate_energy(Qf_tcr, Q_evap_mass_tcr, Qcw_tcr, d_sol, npump)
+heat_req=th_cryst_dat.heat_req
+E_el_th_Cr, E_th_th_Cr, SEC_el_f, SEC_el_NaCl, SEC_el_w = calculate_energy(Qf_tcr, Q_evap_mass_tcr, Qcw_tcr, M_Nacl, heat_req, d_sol, dp_f, dp_w, dp_slurry, dp_cw, npump)
 print(f"SEC_el_prod is {SEC_el_w} KWh/m3 product")
 print(f"SEC_el_prod2 is {SEC_el_NaCl} KWh/kg of NaCl product")
 print("SEC_th_prod is "+str( round((E_th_th_Cr/(Qf_tcr/1000)),2))+" KWh/m3 intake")
@@ -396,6 +394,44 @@ print("Total chemical consumption is "+str(Chem_cons)+" kg of chemical/kg of sea
 
 #%%
 #Economic 
+#Input data 
+hr=24*300 #hours/year
+lf= 20 #years
+r=0.06 # interest rate
+inf=0.02 # inflation rate 
+
+#prices 
+el_pr=0.253 #euro/kwh
+s_pr=0 #euro/kwh
+co2_em_c=23 #euro/ton co2 
+nacl_pr=66/1000 # euro/kg 
+hcl_pr=1040.0/180 #euro/l 1M solution 
+w_pr=0.001 #euro/kg
+na2so4_pr=140*0.83/1000 #euro/kg
+mgoh2_pr=1000/1000 #euro/kg
+caoh2_pr=125/1000#euro/kg
+naoh_pr=6840/950#euro/L 1M NaOH solution  
+antisc_pr=0.002 #euro/ml
+cw_pr=0.118/1000#euro/kg
+m_salt_pr=5/1000#euro/kg
+
+#density
+d_naoh=1.04 #kg/l for 1M solution 
+d_hcl=1.0585#kg/l for 1M solution 
+
+#Assumptions 
+main_c_percent=0.03  # % of the fixed-capital investment
+oper_sup_c_percent=0.05  # % of maintenance 
+oper_lab_c_percent=0.15    # % of annual OPEX
+super_c_percent=0.15 # % of operating labor 
+lab_c_percent=0.15 # % of operating labor 
+pat_c_percent=0.03 # % of annual OPEX
+fix_char_percent=0.05 # % of annual OPEX
+over_c_percent=0.05 # %of annual OPEX
+norm_factor =(1 -oper_lab_c_percent-oper_lab_c_percent*super_c_percent- oper_lab_c_percent*lab_c_percent-pat_c_percent-fix_char_percent-over_c_percent)
+economic_assumptions=[main_c_percent,oper_sup_c_percent, oper_lab_c_percent, super_c_percent, lab_c_percent, pat_c_percent, 
+                      fix_char_percent, over_c_percent, norm_factor ]
+
 CAPEX=0
 OPEX=0
 CO2_c=0
@@ -424,7 +460,7 @@ for i in range(len(eq_c)):
 for i in range(len(eq_c)):
     total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
     total_econom.capex_calc()
-    total_econom.opex_calc()
+    total_econom.opex_calc(hr, el_pr, s_pr, cw_pr, w_pr, economic_assumptions)
     CAPEX=total_econom.t_capital_inv
     OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
@@ -446,7 +482,7 @@ prd_name= ["Water", "NaCl", "Mg(OH)2", "Na2SO4", "NaOH", "HCl"]
 #Revenue calculation
 for i in range(len(prd)):
     rev_calc=revenue(prd[i], prd_name[i])    
-    rev_calc.rev()
+    rev_calc.rev(hr, w_pr, nacl_pr, mgoh2_pr,na2so4_pr, naoh_pr, hcl_pr)
     print("Revenues from selling product " + prd_name[i]+" are " + str(round(rev_calc.rev_prd,2))+" Euro/year")
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)
