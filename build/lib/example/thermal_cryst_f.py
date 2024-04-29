@@ -238,4 +238,101 @@ def mass_balance(Qf, Cf_in, M_Nacl, Csalt_out, d_sol):
         bal_i=Cf_in[i]*(Qf)/1000 - (M_Nacl*Csalt_out[i]/1000)
         print(f"For {i}, mass balance equals: {bal_i}")
 
- 
+#%%
+#Example usage       
+#constants
+R=8.31446261815324 #gas constant
+d_salt=1.974463 #density_salt (NaCl)=1974.5 kg/m3
+    #Molecular weight 
+MW_Na=constants.MW_Na
+MW_cl=constants.MW_cl
+MW_so4=constants.MW_so4
+MW_K=constants.MW_K
+MW_Ca=constants.MW_Ca
+MW_Mg=constants.MW_Mg
+MW_HCO3=constants.MW_HCO3
+MW_NaCl=constants.MW_NaCl
+MW_KCl=MW_K+MW_cl
+MW_Mgso4=MW_Mg+MW_so4
+MW_Caso4=MW_Ca+MW_so4
+MW_Na2so4=2*MW_Na+MW_so4
+MW_MgOH=constants.MW_MgOH
+
+    # Thermodynamics 
+Cp_f=3.14 # Feed specific heat capacity (units: KJ* Kg*oC)
+CP_cw=4.187 # Water specific heat capacity (units: KJ* Kg*oC)
+UA=45990
+LHV_v=2199.7#2107.92 # kj/kg (gathered from steam table)
+LHV_s=2357.69 # kj/kg (gathered from steam table)
+
+#Assumptions
+dp=0.1 # pressure drop (units: bar)
+dp_slurry=3.5 #pressure drop for slurry streams (units: bar)
+dp_f=3.5 #pressure drop for feed (units: bar)
+dp_w=1 #pressure drop for qater streams (units: bar)
+dp_cw=2 #pressure drop for cooling water (units: bar) 
+salt_mois=20 # % moinsture in salt stream (units: %)
+npump=0.8 #pump efficiency (units: -)
+
+
+#Input parameters
+T_in=40 #oC
+T_top=60 #oC
+T_cw_f=25 #oC
+T_cw_o=40 #oC
+T_op=60 #oC
+
+#Feed flowrate
+Qf=1000 #kg/h
+
+#Feed concentration 
+
+Cf_tcr_in=[80.42, 116.69, 2.29, 0.01, 0.04, 0.54] #[Na, Cl, K, Mg, Ca, SO4 ]
+Cf_s=sum(Cf_tcr_in) #total salt concentration (g/L)
+d_sol=density_calc.density_calc(T_in, Cf_s)/1000 #density of feed
+Cf_caso4=Cf_tcr_in[4]*MW_Caso4/MW_Ca #CaSO4 concentration in feed solution (g/L)
+
+#Calculation 
+th_cryst_dat=thermal_calc(T_op, Qf, Cf_s, Cf_caso4, T_in, Cf_tcr_in, salt_mois, LHV_v, LHV_s, T_cw_o, T_cw_f)
+th_cryst_dat.mass_bal_cryst()
+th_cryst_dat.heat_bal_cryst()
+
+#Recovered salt flow rate (kg/h)
+M_Nacl=th_cryst_dat.solid_mass
+print("Mass flowrate of recovered salt is "+str(round(M_Nacl,2))+"kg/hr")
+
+# Calculation of the concentration of different ions in the solution
+th_cryst_dat_2=conc_cal(Qf, M_Nacl , 'Na',Cf_tcr_in[0], 'cl',Cf_tcr_in[1],'k', Cf_tcr_in[2], 'mg', Cf_tcr_in[3], 'ca', Cf_tcr_in[4], 'so4', Cf_tcr_in[5], T_in)
+th_cryst_dat_2.molarity()
+th_cryst_dat_2.conc_salt_comp()
+th_cryst_dat_2.salt_conc()
+
+#Evaporation mass flow rate (water recovery), (kg/h)
+Q_evap_mass=th_cryst_dat.ev_mass
+print("Mass flowrate of recovered water is "+str(round(Q_evap_mass,2))+"kg/hr")
+print("-----------------------------------------")
+#Salt stream concentration (g/L)
+Csalt_out=[th_cryst_dat_2.CNa,th_cryst_dat_2.CCl, th_cryst_dat_2.CK, th_cryst_dat_2.CMg, th_cryst_dat_2.CCa, th_cryst_dat_2.CSO4]
+
+#Mass balance 
+    #Ion mass balance 
+bal_t=0 
+for i in range(len(Cf_tcr_in)):
+    bal_i=Cf_tcr_in[i]*(Qf)/1000 - (M_Nacl*Csalt_out[i]/1000)
+    bal_t=bal_t+bal_i
+error_bal=bal_t/sum(Cf_tcr_in)*100
+print("Balance error percentage is "+str(round(error_bal,2))+"%")
+    #Total mass balance 
+bal=Qf-M_Nacl-Q_evap_mass
+print("-----------------------------------------")
+
+#Cooling water requirements (kg/h)
+Qcw_tcr=th_cryst_dat.cw_mass
+print("Mass flowrate of required cooling water is "+str(round(Qcw_tcr,2))+"kg/hr")
+print("-----------------------------------------")
+#Calculate energy consumption 
+heat_req=th_cryst_dat.heat_req
+E_el_th_Cr, E_th_th_Cr, SEC_el_f, SEC_el_NaCl, SEC_el_w = calculate_energy(Qf, Q_evap_mass, Qcw_tcr, M_Nacl, heat_req, d_sol, dp_f, dp_w, dp_slurry, dp_cw, npump)
+print(f"SEC_el_prod is {SEC_el_w} KWh/m3 product")
+print(f"SEC_el_prod2 is {SEC_el_NaCl} KWh/kg of NaCl product")
+print("SEC_th_prod is "+str( round((E_th_th_Cr/(Qf/1000)),2))+" KWh/m3 intake")

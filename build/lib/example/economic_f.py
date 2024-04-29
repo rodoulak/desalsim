@@ -201,3 +201,95 @@ class revenue:
             self.prd=self.prd*d_hcl
             self.rev_prd=self.prd*hcl_pr*hr #euro/year
 
+#%%
+#Example usage
+#constants
+#Input data 
+hr=24*300 #hours/year
+lf= 20 #years
+r=0.06 # interest rate
+inf=0.02 # inflation rate 
+
+#prices 
+el_pr=0.253 #euro/kwh
+s_pr=0 #euro/kwh
+co2_em_c=23 #euro/ton co2 
+nacl_pr=66/1000 # euro/kg 
+hcl_pr=1040.0/180 #euro/l 1M solution 
+w_pr=0.001 #euro/kg
+na2so4_pr=140*0.83/1000 #euro/kg
+mgoh2_pr=1000/1000 #euro/kg
+caoh2_pr=125/1000#euro/kg
+naoh_pr=6840/950#euro/L 1M NaOH solution  
+antisc_pr=0.002 #euro/ml
+cw_pr=0.118/1000#euro/kg
+m_salt_pr=5/1000#euro/kg
+
+#density
+d_naoh=1.04 #kg/l for 1M solution 
+d_hcl=1.0585#kg/l for 1M solution 
+
+#Assumptions 
+main_c_percent=0.03  # % of the fixed-capital investment
+oper_sup_c_percent=0.05  # % of maintenance 
+oper_lab_c_percent=0.15    # % of annual OPEX
+super_c_percent=0.15 # % of operating labor 
+lab_c_percent=0.15 # % of operating labor 
+pat_c_percent=0.03 # % of annual OPEX
+fix_char_percent=0.05 # % of annual OPEX
+over_c_percent=0.05 # %of annual OPEX
+norm_factor =(1 -oper_lab_c_percent-oper_lab_c_percent*super_c_percent- oper_lab_c_percent*lab_c_percent-pat_c_percent-fix_char_percent-over_c_percent)
+economic_assumptions=[main_c_percent,oper_sup_c_percent, oper_lab_c_percent, super_c_percent, lab_c_percent, pat_c_percent, 
+                      fix_char_percent, over_c_percent, norm_factor ]
+
+"""Cost calculation"""
+#Initialize costs and lists  
+OPEX=0
+OPEX2=0
+CO2_c=0
+Mf_basic_sc=[]
+opex_list=[]
+capex_list=[]
+
+#Input data 
+tec_names=["NF",]
+eq_c=[1500000 ]
+el_conc=[10] 
+s_conc=[0 ]
+chem1_conc=[10]
+chem1_pr=[0.002]
+chem2_conc=[0,0]
+chem2_pr=[0.002]
+wat_conc=[0]
+cw_conc=[0]
+
+#Cost calculation 
+for i in range(len(eq_c)):
+    total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
+    total_econom.capex_calc()
+    total_econom.opex_calc(hr, el_pr, s_pr, cw_pr, w_pr, economic_assumptions)
+    CAPEX=total_econom.t_capital_inv
+    OPEX=total_econom.opex
+    opex_list.append(total_econom.opex)
+    capex_list.append(total_econom.t_capital_inv)    
+print("Tottal operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
+print("Total investment cost (CAPEX) of system is " + str(round(CAPEX))+ " Euro")    
+print("-----------------------------------------")
+
+#amortisation factor 
+a=(r*(1+r)**lf)/((1+r)**lf-1)
+
+"""Revenue calculation"""
+#Input data 
+reve_t=0
+reve_list=[]
+prd=[10,2,3,0,0,0]    
+prd_name= ["Water", "NaCl", "Mg(OH)2", "Na2SO4", "NaOH", "HCl"]   
+
+#Revenue calculation
+for i in range(len(prd)):
+    rev_calc=revenue(prd[i], prd_name[i])    
+    rev_calc.rev(hr, w_pr, nacl_pr, mgoh2_pr,na2so4_pr, naoh_pr, hcl_pr )
+    print("Revenues from selling product " + prd_name[i]+" are " + str(round(rev_calc.rev_prd,2))+" Euro/year")
+    reve_t = reve_t+rev_calc.rev_prd
+    reve_list.append(rev_calc.rev_prd)
