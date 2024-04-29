@@ -4,7 +4,7 @@ from nanofiltration_unit_f import molarity
 from nanofiltration_unit_f import NFMass
 from nanofiltration_unit_f import NfEnergy
 
-from mfpfr_unit_f import inputpar
+from mfpfr_unit_f import MFPFRCALC
 from mfpfr_unit_f import HClAddition
 from mfpfr_unit_f import energycons
 
@@ -169,11 +169,11 @@ Qin_mfpfr = Qconc # Flow rate in l/hr
 d_in = density_calc(25, sum(Cin_mfpfr)) / 1000
 
 # Create an instance of the inputpar class with the defined parameters
-mfpfr_dat = inputpar(Qin_mfpfr, *Cin_mfpfr, 0, *C_NaOH, *conv)
+mfpfr_dat = MFPFRCALC(Qin_mfpfr, Cin_mfpfr, *C_NaOH, *conv)
 
 # Call the calc_step1 and calc_step2 methods to calculate the necessary values
-mfpfr_dat.calc_step1()
-mfpfr_dat.calc_step2()
+mfpfr_dat.calc_step1(kps_MgOH, d_mgoh_2)
+mfpfr_dat.calc_step2(d_mgoh_2, d_caoh_2 )
 ph_2=mfpfr_dat.ph_2
 
 # Calculate the total outlet concentration and the concentration of sulfate ions
@@ -204,10 +204,10 @@ QNAOH = mfpfr_dat.QNaOH_1 + mfpfr_dat.QNaOH_2_add + mfpfr_dat.QNaOH_2_st # conve
 
 #hcl to decrease ph to 7
 HCl_conc=1 #l of HCl 1M
-unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2)
+unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2, HCl_conc)
 
 # Call the calculate_HCl_addition method
-QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition()
+QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition(Cout_mfpfr_g)
 
 # Print the volume of HCl added and the outlet concentration of chloride ions
 print(f"HCl flow rate is {round(QHCl,2)} l/hr")
@@ -227,7 +227,7 @@ print("-----------------------------------------")
 
 #electicity consumption
     # Create an instance of the inputpar class with the defined parameters
-Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr_dat.QNaOH_1, mfpfr_dat.QNaOH_2_add, mfpfr_dat.QNaOH_2_st)
+Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr_dat.QNaOH_1, mfpfr_dat.QNaOH_2_add, mfpfr_dat.QNaOH_2_st, dp, npump)
 
     #Electricity consumption for pumping , KWh
 E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
@@ -350,8 +350,8 @@ for j in range(1, N):
     print("Js is " + str(Js[j]))
     #calculate net water flux 
     Jw[j] = (ElectrodialysisCalc.Tw_cp(Sc[j - 1], Sd[j - 1]) * Ij / F +
-             ElectrodialysisCalc.Lw_cp(Sc[j - 1]) * (ElectrodialysisCalc.p_osmo2(Sc[j - 1]) - 
-                                                      ElectrodialysisCalc.p_osmo2(Sd[j - 1])))
+             ElectrodialysisCalc.Lw_cp(Sc[j - 1]) * (ElectrodialysisCalc.p_osmo(Sc[j - 1], T, MWs) - 
+                                                      ElectrodialysisCalc.p_osmo(Sd[j - 1], T, MWs)))
     
     #Calculate he total concentrate and dilute molar flow rates
     Ns_c[j] = Ns_c[j - 1] + Acp_tot_j * Js[j]
@@ -434,6 +434,7 @@ npump=0.8 #pump efficiency (units: -)
 dp_f=0.1 #pressure drop for feed (units: bar)
 dp_r=1.2 #pressure drop for recycling (units: bar)
 dp_p=1 #pressure drop for extracting products (units: bar)
+T_in=25
 
 #Membrane characteristics
 
@@ -461,9 +462,11 @@ for i in range(len(Cconc)):
     C_in_mix.append(Cout_mfpfr_g[i]*M_mfpfr_out/Q_in_edbm+Sc_out[i]*Mc/Q_in_edbm)
     
 Cin_edbm=C_in_mix #[Na, Cl, K, Mg, Ca, SO4 ]
+Cin_edbm.extend([0, 10**(-ph_s), 3.01551E-11])
+d_in=density_calc(T_in,sum(Cin_edbm))/1000
 
-d_in=density_calc(25,sum(Cin_edbm))/1000
-
+C_b_in=[0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b))]
+C_a_in=[0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a))]
 #Calculate water quantity in inflow 
 Mw_in=Q_in_edbm/d_in 
 
@@ -471,20 +474,20 @@ Mw_in=Q_in_edbm/d_in
 N_trip=50*47
 
 #Set membrane area based on the feed flow rate 
-A=0.4#scaleup.scaleup(19.2, 300, Q_in_edbm)/3 
+A=0.4
 
 #Initialize concentration of Na in salt channel 
 Cna_s=[]
 
 #Create an instance of the EDBMCalc class with the defined parameters
-edbm_dat=EDBMCalc(Q_in_edbm, Cin_edbm[0], Cin_edbm[1], Cin_edbm[2], Cin_edbm[3], Cin_edbm[4], Cin_edbm[5], 0,  10**(-ph_s), 3.01551E-11, N_trip, 0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b)), 0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a)))
+edbm_dat=EDBMCalc(Q_in_edbm, A, I_d, N_trip, Cin_edbm, C_b_in, C_a_in, T_in )
 
 # Call the necessary methods to calculate values
 edbm_dat.flowrate()
-edbm_dat.in_mass_flow_rates()
+edbm_dat.in_mass_flow_rates(ph_s)
 edbm_dat.acid_channel()
 edbm_dat.base_channel()
-edbm_dat.salt_channel()
+edbm_dat.salt_channel(Cm_bp_H, Cm_bp_OH)
 Cna_s.append(edbm_dat.Ci_s_out[0])
 
 # # Sum results
@@ -694,6 +697,44 @@ Qw_use=Q_w_in+Qnaoh_need+Qhcl_need
 
 #%%
 #Economic 
+#Input data 
+hr=24*300 #hours/year
+lf= 20 #years
+r=0.06 # interest rate
+inf=0.02 # inflation rate 
+
+#prices 
+el_pr=0.253 #euro/kwh
+s_pr=0 #euro/kwh
+co2_em_c=23 #euro/ton co2 
+nacl_pr=66/1000 # euro/kg 
+hcl_pr=1040.0/180 #euro/l 1M solution 
+w_pr=0.001 #euro/kg
+na2so4_pr=140*0.83/1000 #euro/kg
+mgoh2_pr=1000/1000 #euro/kg
+caoh2_pr=125/1000#euro/kg
+naoh_pr=6840/950#euro/L 1M NaOH solution  
+antisc_pr=0.002 #euro/ml
+cw_pr=0.118/1000#euro/kg
+m_salt_pr=5/1000#euro/kg
+
+#density
+d_naoh=1.04 #kg/l for 1M solution 
+d_hcl=1.0585#kg/l for 1M solution 
+
+#Assumptions 
+main_c_percent=0.03  # % of the fixed-capital investment
+oper_sup_c_percent=0.05  # % of maintenance 
+oper_lab_c_percent=0.15    # % of annual OPEX
+super_c_percent=0.15 # % of operating labor 
+lab_c_percent=0.15 # % of operating labor 
+pat_c_percent=0.03 # % of annual OPEX
+fix_char_percent=0.05 # % of annual OPEX
+over_c_percent=0.05 # %of annual OPEX
+norm_factor =(1 -oper_lab_c_percent-oper_lab_c_percent*super_c_percent- oper_lab_c_percent*lab_c_percent-pat_c_percent-fix_char_percent-over_c_percent)
+economic_assumptions=[main_c_percent,oper_sup_c_percent, oper_lab_c_percent, super_c_percent, lab_c_percent, pat_c_percent, 
+                      fix_char_percent, over_c_percent, norm_factor ]
+
 CAPEX=0
 OPEX=0
 CO2_c=0
@@ -721,7 +762,7 @@ for i in range(len(eq_c)):
 for i in range(len(eq_c)):
     total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
     total_econom.capex_calc()
-    total_econom.opex_calc()
+    total_econom.opex_calc(hr, el_pr, s_pr, cw_pr, w_pr, economic_assumptions)
     CAPEX=total_econom.t_capital_inv
     OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
@@ -743,7 +784,7 @@ prd_name= ["Water", "NaCl", "Mg(OH)2", "Na2SO4", "NaOH", "HCl"]
 #Revenue calculation
 for i in range(len(prd)):
     rev_calc=revenue(prd[i], prd_name[i])    
-    rev_calc.rev()
+    rev_calc.rev(hr, w_pr, nacl_pr, mgoh2_pr,na2so4_pr, naoh_pr, hcl_pr)
     print("Revenues from selling product " + prd_name[i]+" are " + str(round(rev_calc.rev_prd,2))+" Euro/year")
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)

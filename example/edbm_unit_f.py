@@ -268,3 +268,160 @@ class EDBMCalc:
         
             #Calculate gross power needed (W)
         self.P=self.V_ext*self.I_ext         
+
+#%% Example usage 
+#constants
+I_d=400 # The electricl current desnity Am2
+
+F=96485.3 #Coulombs/mol
+R_const=8.314462618 #kg⋅m2⋅s−2⋅K−1⋅mol−1
+# R_int=0.28 #ohm cm2
+R_int=45 #ohm cm2
+z=1
+npump=0.8 #pump efficiency (units: -)
+dp=1 #pressure drop (units: bar)
+
+#Membrane characteristics
+
+Cm_bp_H= 0.0000001 #mol/l 
+Cm_bp_OH= 0.0000001 #mol/l 
+
+#Molecular weight 
+MW_Na=constants.MW_Na
+MW_Cl=constants.MW_cl
+MW_SO4=constants.MW_so4
+MW_K=constants.MW_K
+MW_Ca=constants.MW_Ca
+MW_Mg=constants.MW_Mg
+MW_HCO3=constants.MW_HCO3
+MW_H=1.00784
+MW_OH=17.008
+MW_H2O=MW_H+MW_OH
+
+T=20+273.15
+
+#input data
+r=0.91 #recycling rate 
+rs=0.75 #recycling rate 
+ph_s=4.71 #pH salt channel (units: -)
+ph_b=7#pH base channel (units: -)
+ph_a=7#pH acid channel (units: -)
+d_a=0.997 #density acid channel (units: kg/l)
+#d_s=1 #density salt channel (units: kg/l)
+d_b=0.997 #density base channel (units: kg/l)
+
+
+#Feed concentration g/L
+Cin_edbm=[13.44, 20.725, 1.146, 0, 0, 0.18, 0, 10**(-ph_s), 3.01551E-11] 
+d_in=density_calc.density_calc(25,sum(Cin_edbm))/1000
+d_s=d_in
+
+C_b_in=[0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b))]
+C_a_in=[0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a))]
+
+#Feed flow rate L/h
+Q_in_edbm=47000
+
+#Calculate water quantity in inflow 
+Mw_in=Q_in_edbm/d_in 
+
+#Set number of triplets 
+N_trip=50*47 # Number of triplets based on the inlet flow rate
+
+#Set membrane area based on the feed flow rate, m2 
+A=0.4 #range: 0.1-1
+
+#Initialize concentration of Na in salt channel 
+Cna_s=[]
+
+#Create an instance of the EDBMCalc class with the defined parameters
+edbm_dat=EDBMCalc(Q_in_edbm, A, I_d, N_trip, Cin_edbm, C_b_in, C_a_in, T )
+
+# Call the necessary methods to calculate values
+edbm_dat.flowrate()
+edbm_dat.in_mass_flow_rates(ph_s)
+edbm_dat.acid_channel()
+edbm_dat.base_channel()
+edbm_dat.salt_channel(Cm_bp_H, Cm_bp_OH)
+Cna_s.append(edbm_dat.Ci_s_out[0])
+
+# # Sum results
+
+"Salt channel "
+    #Concentration in salt channel 
+Cbrine_out_t=sum(edbm_dat.Ci_s_out)
+Cbrine_out=edbm_dat.Ci_s_out #mol/l
+Cbrine_out_g=[Cbrine_out[0]*MW_Na, Cbrine_out[1]*MW_Cl, Cbrine_out[2]*MW_K, Cbrine_out[3]*MW_Mg, Cbrine_out[4]*MW_Ca, Cbrine_out[5]*MW_SO4] #g/l
+
+     #Mass flow rate
+M_s_out=edbm_dat.M_s_out_t*N_trip
+print("Salt channel: Mass flow rate out is "+str(round(M_s_out,2))+"kg/hr")
+    #Volumetric flow rate 
+Q_s_out=edbm_dat.Q1_s_out*N_trip
+print("Salt channel: Volumetric flow rate out is "+str(round(Q_s_out,2))+"l/hr")
+print("Na concentration:"+str(round(Cbrine_out[0],2))+"M and "+str(round(Cbrine_out_g[0],2))+"g/l")
+print("Cl concentration:"+str(round(Cbrine_out[1],2))+"M and "+str(round(Cbrine_out_g[1],2))+"g/l")
+print("-----------------------------------------")
+
+"Base channel "
+    #Concentration in base channel 
+Cb_out=edbm_dat.Ci_b_out[0:6]
+Cb_out_g=[Cb_out[0]*MW_Na, Cb_out[1]*MW_Cl, Cb_out[2]*MW_K, Cb_out[3]*MW_Mg, Cb_out[4]*MW_Ca, Cb_out[5]*MW_SO4]
+
+     #Mass flow rate
+M_b_out=edbm_dat.M_b_out_t*N_trip
+print("Base channel: Mass flow rate out is "+str(round(M_b_out,2))+"kg/hr")
+
+     #Volumetric flow rate 
+Q_b_out=edbm_dat.Q1_b_out*N_trip
+print("Base channel: Volumetric flow rate out is "+str(round(Q_b_out,2))+"l/hr")
+
+print("Na concentration "+str(round(Cb_out[0],2))+"M and "+str(round(Cb_out_g[0],2))+"g/l")
+    #Conversion to solid 
+M_NaOH_out=Q_b_out*edbm_dat.Ci_b_out[0]*constants.MW_NaOH/1000 #kg/hr 
+print("-----------------------------------------")
+
+"Acid channel" 
+    #Concentration in acid channel 
+Ca_out=edbm_dat.Ci_a_out
+Ca_out=edbm_dat.Ci_a_out[0:6]
+Ca_out_g=[Ca_out[0]*MW_Na, Ca_out[1]*MW_Cl, Ca_out[2]*MW_K, Ca_out[3]*MW_Mg, Ca_out[4]*MW_Ca, Ca_out[5]*MW_SO4]
+
+    #Mass flow rate 
+M_a_out=edbm_dat.M_a_out_t*N_trip
+print("Acid channel: Mass flow rate out is "+str(round(M_a_out,2))+"kg/hr")
+
+    #Volumetric flow rate 
+Q_a_out=edbm_dat.Q1_a_out*N_trip
+print("Acid channel: Volumetric flow rate out is "+str(round(Q_a_out,2))+"l/hr")
+print("Cl concentration "+str(round(Ca_out[1],2))+"M and "+str(round(Ca_out_g[1],2))+"g/l")
+print("-----------------------------------------")
+
+    #Conversion to solid 
+M_HCl_out=Q_a_out*constants.MW_HCl/1000 #kg/hr
+
+#Calculate required amount of water for the operation mode 
+Q_w_in=2*Q_in_edbm
+
+#Calculate mass balance 
+bal=(Q_in_edbm*d_in+2*Q_in_edbm)-M_a_out-M_s_out-M_b_out
+print("Mass balance difference is "+str(round(bal,2)))
+error_perc=abs(bal)/(Q_in_edbm*d_in+2*Q_in_edbm)*100
+print("Balance error percentage is "+str(round(error_perc,2))+"%")
+
+#Energy consumption 
+V_ext=edbm_dat.V_ext #xternal 
+#Calculate energy consumption for pumping 
+Ppump=(edbm_dat.Q1_s_in*N_trip*dp+edbm_dat.Q1_a_in*N_trip*dp+edbm_dat.Q1_b_in*N_trip*dp)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s  
+
+#Calculate current efficiency 
+Cb_in=[0]
+CE=(Q_b_out)*(Cb_out[0]-Cb_in[0])*F/(3600*N_trip*I_d*A)*100 #%
+print("Current efficiency is "+str(round(CE,2))+"%")
+print("-----------------------------------------")
+#Total energy consumption 
+E_el_Edbm=V_ext*I_d*A/1000+Ppump/1000
+SEC=(V_ext*I_d*A)/(Q_b_out*(edbm_dat.Ci_b_out[0]-edbm_dat.Ci_b_in[0])*constants.MW_NaOH)
+
+print("Total electrical consumption for EDBM is " + str(round(E_el_Edbm,2))+ " KW")
+print("Specific energy consumption is "+str(round(SEC,2))+"kwh/kg NaOH")
