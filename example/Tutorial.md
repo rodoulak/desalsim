@@ -78,3 +78,10 @@ For the economic analysis of a full-scale desalination plant, the equipment cost
 
 ### Comparison file 
 In comparison file, results from different treatment chains are summarised. Indicators are formulated to compare the treatment chains. 
+For example, the two examples are compared based on the operating costs (OPEX). 
+<figure>
+  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/71c0fa99-49f8-4b69-916a-48cdaa6d303e" alt="Image" style="width:600px;">
+</figure>
+
+
+
