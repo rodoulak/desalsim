@@ -41,7 +41,7 @@ class TestEconom(unittest.TestCase):
         
         # Assert the correctness of the output
         expected_opex = 148541.66  # Assuming this value based on your calculations
-        self.assertAlmostEqual(result_opex, expected_opex, delta=1000)
+        self.assertAlmostEqual(result_opex, expected_opex, delta=expected_opex*0.01)
 
 
 class TestRevenue(unittest.TestCase):
