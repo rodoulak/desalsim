@@ -8,11 +8,12 @@ The simulation models implemented here calculate various parameters such as salt
 
 ## Table of contents
 * [Purpose](#purpose)
+* [Key features](#key-features)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Key features](#key-features)
 * [Contributing](#contributing)
 * [Authors and Acknowledgements](#authors-and-acknowledgements)
+* [License](#license)
 
 ## Purpose 
 The purpose of this software suite is to provide researchers, engineers, and policymakers with a powerful tool for evaluating the performance and economics of desalination and brine treatment systems. By integrating technical process models with economic and environmental analyses, the suite enables users to make informed decisions about technology integration, process optimization, and resource management.
