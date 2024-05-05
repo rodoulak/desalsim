@@ -80,61 +80,12 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 **<u>Followed steps:</u>**<br>
 Step 1: Import required fucntions for process units in the treatment chain.<br>
 Step 2: Set input data like feed flow rate, ion concentration, relevant ions for the feed solution.<br>
-Step 3: Set input parameters for each process unit as shown in **Table 1** and for economic model as shown in **Table 2** and **Table 3**.<br>
+Step 3: Set input parameters for each process unit.<br>
 Step 4: Call function of each process unit, creat objects for each calculation.<br>
 Step 5: Results interpretation. <br>
 <br>
 
-**Table 1** gives an overview of the main inputs and outputs for each process unit of example 1. 
-| Process                                   | Input                                       | Output                                                |
-|-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
-| Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
-|                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
-|                                           | Osmotic pressure [bar]                      | Electrical requirements [kWhel]                       |
-|                                           | Water recovery [%]                          | Ion rejection [-]                                     |
-| Multi-plug flow reactor                   | Feed flow rate [m³/h]                       | Alkaline solution flow rate [L/h]                    |
-|                                           | Ion concentration [g/L]                     | Flow rate of Mg(OH)₂ [kg/h]                          |
-|                                           | Concentration of the alkaline solution [M] | Flow rate of Ca(OH)₂ [kg/h]                          |
-|                                           | Concentration of the acid solution [M]     | Acid solution flow rate [L/h]                        |
-|                                           | Products characteristics e.g. solubility...| Effluent flow rate [m³/h] and composition [g/L]      |
-|                                           |                                             | Electricity requirements [kWhel]                     |
-| Electrodialysis with bipolar membranes   | Feed flow rate [m³/h]                       | Flow rate of acid [m³/h] and composition [g/L]       |
-|                                           | Ion concentration [g/L]                     | Flow rate of base [m³/h] and composition [g/L]       |
-|                                           | Current density [A/m²]                      | Flow rate of salt [m³/h] and composition [g/L]       |
-|                                           | Number of triplets and Membrane area and other characteristics      | Electricity requirements [kWhel]                     |
-| Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition [g/L]|
-|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
-|                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
-
-
-**Table 2** gives an overview of the main inputs and outputs of economic model (`economic_f.py`). 
-
-|  Input                                     | Output                                    |
-|-------------------------------------------|-------------------------------------------|
-| Selling price for products [€/ton] or [€/m<sup>3</sup>] | Operating cost (OPEX) [€/year]          |
-| Prices for energy [€/KWh], input chemicals [€/m<sup>3</sup>], cooling water [€/m<sup>3</sup>] | Investment cost (CAPEX) [€]               |
-| Operating hours, lifetime                 | Revenues from selling products [€/year] |
-| Interest rate, Inflation rate             |                                         |
-|Equipment cost [€]  |                                          |
-| Assumptions on CAPEX and OPEX calculations |                                          |
-
-
-For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m<sup>3</sup>/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function `scaleup.py`. 
-
-
-**Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX. 
-| CAPEX                             | Annual OPEX                                    |
-|-----------------------------------|------------------------------------------------|
-| Installation: 25% of purchased equipment cost| Maintenance: 3% of the fixed-capital investment            |
-| Buildings, process, and auxiliary: 20% of purchased equipment cost| Operating Supplies: 5% of maintenance |
-| Land: 6% of purchased equipment cost  | Operating Labor: 15% of annual OPEX                             |
-| Indirect costs: 15% of direct cost                   | Direct supervisory and clerical labor:15% of operating labor                         |
-| Working capital: 20% of total investment cost  | Laboratory charges: 15% of operating labor                         |
-|                                   | Patents and royalties: 3% of annual OPEX                          |
-|                                   | Fixed charges: 5% of annual OPEX                                  |
-|                                   | Plant overhead costs: 5% of annual OPEX                           |
-
-
+For more details on input/output parameters and assumption see [Link to Tutorial File](example/Tutorial.md)
 
 
 ## Contributing
