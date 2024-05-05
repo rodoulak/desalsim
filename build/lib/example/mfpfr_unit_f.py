@@ -87,7 +87,7 @@ class MFPFRCALC:
         self.C_NaOH_2=C_NaOH_2 #Molar concentration of NaOH (mol/l) used in the first precipitation step 
         self.conv_1=conv_1 #Conversion rate of Mg the first precipitation step 
         self.conv_2=conv_2 #Conversion rate of Mg the first precipitation step 
-        self.d_in=density_calc(25, sum(Cin_mfpfr))
+        self.d_in=density_calc(25, sum(Cin_mfpfr))/1000
     
     def calc_step1(self, kps_MgOH, d_mgoh_2):
         #Calculate the molar flow rate of magnesium in the reactor during the 1° stepin mol/h
