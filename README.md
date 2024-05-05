@@ -47,6 +47,17 @@ Here is a brief overview of each file in the project:
 - `scaleup.py`: This file contains the main script for scaling-up a technology with known capacity using the six-tenths factor rule (m=0.6).
 - `LICENSE`: License file containing the MIT License terms.
 
+## Installation 
+
+To run the simulation models, follow these steps:
+1. Clone the repository to your local machine:
+```
+git clone https://github.com/your-username/desalination-brine-treatment-simulation.git
+```
+2. Install the required dependencies:
+ ```
+pip install -r requirements.txt
+ ```
 
 ## Usage 
 Each simulation model serves as a standalone tool for analyzing the performance of a specific desalination or brine treatment technology. Before running the simulation, ensure that you have provided the necessary input parameters, such as feed flow rates, salinity levels, membrane properties, heat sources, and operating conditions.
