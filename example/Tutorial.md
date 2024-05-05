@@ -76,3 +76,5 @@ For the economic analysis of a full-scale desalination plant, the equipment cost
 |                                   | Fixed charges: 5% of annual OPEX                                  |
 |                                   | Plant overhead costs: 5% of annual OPEX                           |
 
+### Comparison file 
+In comparison file, results from different treatment chains are summarised. Indicators are formulated to compare the treatment chains. 
