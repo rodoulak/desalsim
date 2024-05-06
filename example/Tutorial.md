@@ -60,7 +60,7 @@ The mathematical description of each technology is given in  [Mathematical descr
 ### Economic models 
 
 For more detailed steps and instructions see [Tutorial for Economic model](example/Economic_Tutorial.md).  
-The mathematical description of economic model is given also in  [Mathematical description](paper/Mathematical_description.pdf).  
+The mathematical description of economic model is given also in [Mathematical description](paper/Mathematical_description.pdf).  
 
 **Table 2** gives an overview of the main inputs and outputs of economic model (`economic_f.py`). 
 
