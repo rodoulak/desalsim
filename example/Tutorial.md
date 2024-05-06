@@ -1,4 +1,5 @@
 # Tutorial 
+## Introduction 
 
 ## Usage 
 Each simulation model serves as a standalone tool for analyzing the performance of a specific desalination or brine treatment technology. Before running the simulation, ensure that you have provided the necessary input parameters, such as feed flow rates, salinity levels, membrane properties, heat sources, and operating conditions.
@@ -7,16 +8,7 @@ The simulation results, including salt concentration profiles, ion fluxes, energ
 
 However, simulation models of more than one technology can be combined to simulate and evaluate the performance of a treatment chain (desalination and brine treatment system). In this case, the output flow rates and stream concentrate are the input data for the next technology. 
 
-Additionally, two example files are provided to demonstrate the usage of the simulation suite. These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a comparison file is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
-
-### Example 1
-**Figure 1** presents the process flow diagram of example 1 which consists of four technologies: Nanofiltration (NF), Multiple Feed Plug Flow Reactor (MF-PFR), Electrodialysis (ED), Electrodialysis With Bipolar Membranes (EDBM). The treatment chain represents an MLD system aiming to maximize valuable resources recovery from brine, such as Mg(OH)<sub>2</sub>, Ca(OH)<sub>2</sub>, HCl, and NaOH. The seawater stream or concentrate stream from a Reverse Osmosis plant (RO) first goes to the NF unit. The NF unit is separated into two different streams: one that is high in monovalent ions and one that is high in multi-valent ions. The latter stream from NF, high in monovalent ions, is directed to ED, in which the NaCl stream is concentrated further, and a dilute stream is also recovered. The former is directed to a treatment line comprising selective MF-PFR and EDBM units. In particular, the retentate is sent to the MF-PFR, in which magnesium and calcium are recovered in the form of hydroxide precipitates via a chemical reaction between the NF retentate and an alkaline reactant. Then, the brine stream is free from Mg<sup>2+</sup> and Ca<sup>2+</sup> mixed with the ED concentrate stream. The mixed solution (NaCl rich) is fed to EDBM. EDBM unit recovers, and the saline solution (low concentration) can be recycled back into the treatment chain. 
-<figure>
-  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e" alt="Image" style="width:600px;">
-</figure>
-
-**Figure 1**. Process flow diagram of example 1.
-<br>
+Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example Folder](example), [Example 1](example/example_1.py) and [Example 2](example/example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a [comparison file](example/comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 
 **<u>Followed steps:</u>**<br>
 Step 1: Import required fucntions for process units in the treatment chain.<br>
@@ -26,29 +18,49 @@ Step 4: Call function of each process unit, creat objects for each calculation.<
 Step 5: Results interpretation. <br>
 <br>
 
-For more details see 
+### Technical process models 
+For more detailed steps and instructions see [Tutorial for Example 1](example/Example_1_Tutorial.md).  
+The mathematical description of each technology is given in  [Mathematical description](paper/Mathematical_description.pdf).  
+
 **Table 1** gives an overview of the main inputs and outputs for each process unit of example 1. 
-| Process                                   | Input                                       | Output                                                |
-|-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
-| Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
-|                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
-|                                           | Water recovery [%]                   | Electrical requirements [kWhel]                       |
-|                                           |                         | Ion rejection [-]                                     |
-| Multi-plug flow reactor                   | Feed flow rate [m³/h]                       | Alkaline solution flow rate [L/h]                    |
-|                                           | Ion concentration [g/L]                     | Flow rate of Mg(OH)₂ [kg/h]                          |
-|                                           | Concentration of the alkaline solution [M] | Flow rate of Ca(OH)₂ [kg/h]                          |
-|                                           | Concentration of the acid solution [M]     | Acid solution flow rate [L/h]                        |
-|                                           | Products characteristics e.g. solubility...| Effluent flow rate [m³/h] and composition [g/L]      |
-|                                           |                                             | Electricity requirements [kWhel]                     |
-| Electrodialysis with bipolar membranes   | Feed flow rate [m³/h]                       | Flow rate of acid [m³/h] and composition [g/L]       |
-|                                           | Ion concentration [g/L]                     | Flow rate of base [m³/h] and composition [g/L]       |
-|                                           | Current density [A/m²]                      | Flow rate of salt [m³/h] and composition [g/L]       |
-|                                           | Number of triplets and Membrane area and other characteristics      | Electricity requirements [kWhel]                     |
-| Electrodialysis                          | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition [g/L]|
-|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
-|                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
+| Process                                | Input                                        | Output                                                     |
+|----------------------------------------|----------------------------------------------|------------------------------------------------------------|
+| Nanofiltration                         | Feed flow rate [m3/h]                        | Permeate flow rate and composition [g/L]                   |
+|                                        | Ion concentration [g/L]                      | Concentrate flow rate and composition [g/L]                |
+|                                        | Osmotic pressure [bar]                       | Electrical requirements [kWhel]                            |
+|                                        | Water recovery [%]                          |                                        |
+|                                        | Ion rejection [-]                          |                                       |
+| Multi-effect distillation             | Feed flow rate [m3/h]                        | Flow rate of water [m3/h]                                  |
+|                                        | Ion concentration [g/L]                      | Effluent flow rate and composition [g/L]                   |
+|                                        | Feed temperature [°C]                        | Electrical [kWhel] and thermal [kWhth] requirements        |
+|                                        | Steam temperature [°C]                       | Cooling water flow rate [m3/h]                             |
+| Thermal crystallizer                  | Feed flow rate [m3/h]                        | Flow rate of water [kg/h]                                  |
+|                                        | Ion concentration [g/L]                      | Flow rate of NaCl [kg/h]                                   |
+|                                        | Feed temperature [°C]                        | Cooling water flow rate [m3/h]                             |
+|                                        | Steam temperature [°C]                       | Electrical [kWhel] and thermal [kWhth] requirements        |
+| Multi-plug flow reactor               | Feed flow rate [m3/h]                        | Alkaline solution flow rate [L/h]                          |
+|                                        | Ion concentration [g/L]                      | Flow rate of Mg(OH)₂ [kg/h]                               |
+|                                        | Concentration of the alkaline solution (NaOH) [M] | Flow rate of Ca(OH)₂ [kg/h]                          |
+|                                        | Concentration of the acid solution (HCl) [M] | Acid solution flow rate [L/h]                             |
+|                                        |                                            | Effluent flow rate [m3/h] and composition [g/L]            |
+|                                        |                                            | Electricity requirements [kWhel]                          |
+| Eutectic freeze crystallizer          | Feed flow rate [m3/h]                        | Flow rate of Na2SO4 [kg/h]                                |
+|                                        | Ion concentration [g/L]                      | Flow rate of ice [kg/h]                                    |
+|                                        | Feed temperature [°C]                        | Effluent flow rate [m3/h] and composition [g/L]            |
+|                                        |                                            | Electricity requirements [kWhel]                          |
+| Electrodialysis with bipolar membranes| Feed flow rate [m3/h]                        | Flow rate of acid [m3/h] and composition [g/L]             |
+|                                        | Ion concentration [g/L]                      | Flow rate of base [m3/h] and composition [g/L]             |
+|                                        | Electric density                            | Flow rate of salt [m3/h] and composition [g/L]             |
+|                                        |                                            | Electricity requirements [kWhel]                          |
+| Electrodialysis                        | Feed flow rate [m3/h]                        | Flow rate of diluted stream [m3/h] and composition [g/L]   |
+|                                        | Ion concentration [g/L]                      | Flow rate of concentrate stream [m3/h] and composition [g/L]|
+|                                        | Electric density                            | Electricity requirements [kWhel]                          |
 
 
+### Economic models 
+
+For more detailed steps and instructions see [Tutorial for Example 1](example/Example_1_Tutorial.md).  
+The mathematical description of each technology is given in  [Mathematical description](paper/Mathematical_description.pdf).  
 **Table 2** gives an overview of the main inputs and outputs of economic model (`economic_f.py`). 
 
 |  Input                                     | Output                                    |
@@ -76,7 +88,8 @@ For the economic analysis of a full-scale desalination plant, the equipment cost
 |                                   | Fixed charges: 5% of annual OPEX                                  |
 |                                   | Plant overhead costs: 5% of annual OPEX                           |
 
-### Comparison file 
+
+### Treatment chains comparison 
 In comparison file, results from different treatment chains are summarised. Indicators are formulated to compare the treatment chains. 
 For example, the two examples are compared based on the operating costs (OPEX). 
 <figure>
