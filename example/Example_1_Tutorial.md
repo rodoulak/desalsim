@@ -482,3 +482,73 @@ After the set of input parameters, the **Carbon dioxide emissions** of the treat
 # Calculate Carbon dioxide emission 
 emis=(sum(E_el_all)*CO2_el)+(sum(E_th_all)*CO2_st)
 ```
+### 4.2.4. Export results to excel file 
+After running the process and economic models, the calculation of indicators and results can be exported to Excel. 
+
+Here is an example: 
+```python
+#%% Results to excel
+  # Create dataframes 
+dfel=pd.DataFrame(E_el_all ,tec_names)
+dfeth=pd.DataFrame(E_th_all, tec_names)
+dfind=(Qw_tot, abs_Qw, rec, Tot_el, Tot_th, emis_t, Q_w_in,  OPEX, CAPEX)
+dfprod=(Qw_tot, M_MgOH2_1, M_CaOH2,  M_b_out, M_a_out)
+
+dfprodn=("Water (kg/hr)",  "Mg(OH)2(kg/hr)", "Ca(OH)2(kg/hr)",  "1M NaOH (kg/hr)","1M HCl(kg/hr)")
+ind=np.array(["Water production", "absolute water production", "water recovery","Total electrical consumption", "Total thermal energy consumption", "Carbon dioxide emission kg co2/year",
+              "Water footprint","OPEX", "CAPEX"])
+units=pd.DataFrame(["kg/hr", "kg/hr", "%","KWh", "KWh"," kg co2/year","kg/hr","€/year", "€"])
+dfind_t=pd.DataFrame(data=dfind, index=ind)
+dfprodn=pd.DataFrame(data=dfprod, index=dfprodn)
+
+  # Write results in excel document
+with pd.ExcelWriter('results_example.xlsx') as writer:
+    dfel.to_excel(writer,sheet_name="example", startcol=0, startrow=14, header=True)
+    dfeth.to_excel(writer,sheet_name="example", startcol=2, startrow=14, header=True)
+    dfprodn.to_excel(writer,sheet_name="example", startcol=0, startrow=23, header=True)
+    dfind_t.to_excel(writer,sheet_name="indicators")
+    units.to_excel(writer,sheet_name="indicators",startcol=2, startrow=0, header=True)
+```
+
+Additionally, table with flowrates and concentrations can be developed (see 'exmple_1.py) and printed in Excel. 
+
+### 4.3. Visualization 
+For the visualization of the treatment chain, a **Sankey** diagram is created. For this diagram, the mass flow rates are needed. 
+
+First, you need to import: 
+```python
+#sankey diagram 
+import plotly.graph_objects as go
+from plotly.offline import plot
+```
+Then you can create the figure as below: 
+```python
+#Figure 1: Sankey diagram for Example: Mass flow rates
+fig = go.Figure(data=[go.Sankey(
+    node = dict(
+      pad = 15,
+      thickness = 20,
+      line = dict(color = "black", width = 0.5),
+      label = ["Seawater", "Water", "NaCl",  "NF", "ED", "MF-PFR", "EDBM", "HCl", "NaOH", "Mg(OH)\u2082", "Ca(OH)\u2082", "Utilities", "Saline solution"],
+      color = "blue"
+    ),
+    link = dict(
+      source = [0,3,3,4,4,5,5,5,6,6,6,11,11], 
+      target = [3,4,5,6,12,6,9,10,7,8,12,5,6],
+      value = [Qsw, Qperm, Qconc,Mc, Md,M_mfpfr_out, M_MgOH2_1,M_CaOH2,Q_a_out, Q_b_out,Q_s_out, QNAOH+QHCl, Q_w_in ]
+  ))])
+color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
+fig.update_traces(node_color = color_for_nodes)
+fig.update_layout(title_text="Sankey diagram for Example: Mass flow rates ", font_size=15)
+fig.show()
+plot(fig)
+```
+
+
+<figure>
+  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/09d80c5b-3398-4618-8d5c-3b0d2db7ad07" alt="Image" style="width:600px;">
+</figure>
+
+**Figure 2**. Sankey diagram of example 1.
+<br>
+
