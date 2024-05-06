@@ -26,7 +26,7 @@ Step 5: Results interpretation. <br>
 
 ### 3. Technical process models 
 For more detailed steps and instructions see [Tutorial for Example 1](Example_1_Tutorial.md).  
-The mathematical description of each technology is given in  [Mathematical description](paper/Mathematical_description.pdf).  
+The mathematical description of each technology is given in  [Mathematical description](.../paper/Mathematical_description.pdf).  
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of example 1. 
 | Process                                | Input                                        | Output                                                     |
