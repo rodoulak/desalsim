@@ -70,10 +70,9 @@ eq_c_th_cr=94800
 eq_c_mfpfr=80000
 eq_c_efc=72579.59
 eq_c_edbm= 90000   
-eq_c_ev_pd=10000
 eq_c_nf_conc=7000
 eq_c_ed=123437.5
 
 #capacity of basic scenario
-#Mf_basic_sc=nf, med, thermal cryst, mfpfr, nf conc step, efc, edbm, ev_ponds ]
-Mf_basic_sc=[2290.858979,1695.830673,199.5094909, 595.0283063,300,100, 229.0522085, 253, 55130.92]
+#Mf_basic_sc=nf, med, thermal cryst, mfpfr, nf conc step, efc, edbm]
+Mf_basic_sc=[2290.858979,1695.830673,199.5094909, 595.0283063,300,100, 229.0522085, 253]

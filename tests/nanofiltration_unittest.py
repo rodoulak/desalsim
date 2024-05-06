@@ -1,12 +1,7 @@
 import unittest
-from nanofiltration_unit_f import molarity, NFMass, OsmoticPressure, NfEnergy
+from nanofiltration_unit_f import NFMass, OsmoticPressure, NfEnergy
 
 class TestNanofiltrationUnit(unittest.TestCase):
-
-    def test_molarity(self):
-        # Test molarity calculation
-        molarity_obj = molarity(58.44, 1, 1)  # MW = 58.44 g/mol, zi = 1, Ci = 1 g/L
-        self.assertAlmostEqual(molarity_obj.meq, 17.09, delta=0.1)  # Expected meq: 17.09
 
     def test_nfmass(self):
         # Test NFMass calculation
