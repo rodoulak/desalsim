@@ -32,8 +32,8 @@ For more details see
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
 | Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
 |                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
-|                                           | Osmotic pressure [bar]                      | Electrical requirements [kWhel]                       |
-|                                           | Water recovery [%]                          | Ion rejection [-]                                     |
+|                                           | Water recovery [%]                   | Electrical requirements [kWhel]                       |
+|                                           |                         | Ion rejection [-]                                     |
 | Multi-plug flow reactor                   | Feed flow rate [m³/h]                       | Alkaline solution flow rate [L/h]                    |
 |                                           | Ion concentration [g/L]                     | Flow rate of Mg(OH)₂ [kg/h]                          |
 |                                           | Concentration of the alkaline solution [M] | Flow rate of Ca(OH)₂ [kg/h]                          |
