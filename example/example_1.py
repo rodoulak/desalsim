@@ -82,8 +82,7 @@ T=20+273 #Operating temperature (units: K)
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
 Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
 z_values = [1, -1, 1, 2, 2, -2]
-c_values = [Ci / 1000 for Ci in Ci_in]
-mg_in = sum(c_values)
+mg_in = sum(Ci_in )
 #Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
 
@@ -345,9 +344,7 @@ for j in range(1, N):
     #Calculate net salt flux 
     Js[j] = (ElectrodialysisCalc.Ts_cp(Sd[j - 1]) * Ij / F - 
              (ElectrodialysisCalc.Ls_cp(Sc[j - 1], Sd[j - 1])) * concentration_diff)
-    print(f"Ts_cp={ElectrodialysisCalc.Ts_cp(Sd[j - 1])}, Ij={Ij}, F={F}, "
-          f"Ls_cp={ElectrodialysisCalc.Ls_cp(Sc[j - 1], Sd[j - 1])}, Sc[j-1]={Sc[j - 1]}, Sd[j-1]={Sd[j - 1]}")
-    print("Js is " + str(Js[j]))
+
     #calculate net water flux 
     Jw[j] = (ElectrodialysisCalc.Tw_cp(Sc[j - 1], Sd[j - 1]) * Ij / F +
              ElectrodialysisCalc.Lw_cp(Sc[j - 1]) * (ElectrodialysisCalc.p_osmo(Sc[j - 1], T, MWs) - 
@@ -363,7 +360,6 @@ for j in range(1, N):
     # Update the flow rates of the concentrate and dilute streams
     Q_c[j] = Nw_c[j] * MWw / (rho_w * (1 - Sc[j] / 1000))
     Q_d[j] = Nw_d[j] * MWw / (rho_w * (1 - Sd[j] / 1000))
-    print("sd for j " + str(j) + " is " + str(Sd[j]))
 
 
 Cc_na_f=Sc[N-1]/MWs*constants.MW_Na
