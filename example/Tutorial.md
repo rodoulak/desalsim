@@ -98,7 +98,79 @@ For the economic analysis of a full-scale desalination plant, the equipment cost
 
 ### 5. Treatment chains comparison 
 In comparison file, results from different treatment chains are summarised. Indicators are formulated to compare the treatment chains. 
-For example, the two examples are compared based on the operating costs (OPEX). 
+
+#### Import results
+First, import the results from the two examples.
+
+```python
+#Import results 
+import example_1 as sc1
+import example_2 as sc2
+```
+Import required functions: 
+```python
+import numpy as np
+import pandas as pd
+import numpy as np 
+```
+#### Create lists with results
+```python
+X = ['Example 1', 'Example 2']
+X_axis = np.arange(len(X))
+```
+#### Electrical consumption Vs Thermal consumption  
+For instance, the two examples are compared based on their electrical and thernal energy requirements. 
+
+```python
+  # Create lists for OPEX and asigned reuslts for Electrical consumption and thermal consumption 
+Eel = [ sc1.sum_el_en, sc2.sum_el_en]
+Eth = [sc1.sum_th_en,   sc2.sum_th_en]
+  # Yearly calculation 
+Eel = [i * hr/1e6 for i in Eel] # Total electrical energy consumption 
+Eth = [i * hr/1e6 for i in Eth] # Total thermal energy consumption 
+```
+#### Visualization 
+For the visualization, a bar figure is created and saved.  
+
+```python
+ # Create Figure 1: Electrical consumption Vs thermal consumption 
+plt.bar(X_axis - 0.2, Eel, 0.4, color="#00516a", label = 'Electrical (GWel)')
+plt.bar(X_axis + 0.2, Eth, 0.4, color="sandybrown", label = 'Thermal (GWth)')
+plt.xticks(X_axis, X)
+plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+plt.xlabel("Scenarios")
+plt.ylabel("Eenergy consumption (GW)")
+plt.legend()
+plt.savefig('electricVSthermal.png')
+plt.show()
+```
+<figure>
+  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/640b2dde-d5c6-439d-a44d-fc0e73dcf342" alt="Image" style="width:600px;">
+</figure>
+
+#### Operating costs (OPEX)
+For instance, the two examples are compared based on the operating costs (OPEX). 
+
+```python
+  # Create lists for OPEX and asigned reuslts 
+OPEX = [sc1.OPEX, sc2.OPEX]
+# Yearly calculation 
+OPEX = [i/1e6 for i in OPEX]
+```
+#### Visualization 
+For the visualization, a bar figure is created and saved.  
+
+```python
+# Create Figure 2: OPEX 
+plt.bar(X_axis - 0.4, OPEX, 0.4, color="#00516a")    
+plt.xticks(X_axis, X)
+plt.xlabel("Scenarios")
+plt.ylabel("OPEX (M€/year)")
+plt.savefig('OPEX.png')
+plt.show()
+
+```
+
 <figure>
   <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/71c0fa99-49f8-4b69-916a-48cdaa6d303e" alt="Image" style="width:600px;">
 </figure>
