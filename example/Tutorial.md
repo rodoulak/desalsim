@@ -13,7 +13,8 @@ The simulation results, including salt concentration profiles, ion fluxes, energ
 
 However, simulation models of more than one technology can be combined to simulate and evaluate the performance of a treatment chain (desalination and brine treatment system). In this case, the output flow rates and stream concentrate are the input data for the next technology. 
 
-Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example Folder](example), [Example 1](example/example_1.py) and [Example 2](example/example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a [comparison file](example/comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
+Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example Folder](example), [Example 1](example/example_1.py) and [Example 2](example/example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. The economic evaluation of the treatment chain is given in [Example 1](example/example_1.py) and in the [Economic Tutorial](example/Economic_Tutorial.md). 
+Furthermore, a [comparison file](example/comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 
 **<u>Followed steps:</u>**<br>
 Step 1: Import required fucntions for process units in the treatment chain.<br>
@@ -64,7 +65,7 @@ The mathematical description of each technology is given in  [Mathematical descr
 
 ### 4. Economic models 
 
-For more detailed steps and instructions see [Tutorial for Economic model](example/Economic_Tutorial.md).  
+For more detailed steps and instructions see [Economic Tutorial](example/Economic_Tutorial.md).  
 The mathematical description of economic model is given also in [Mathematical description](paper/Mathematical_description.pdf).  
 
 **Table 2** gives an overview of the main inputs and outputs of economic model (`economic_f.py`). 
