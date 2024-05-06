@@ -13,7 +13,8 @@ The simulation results, including salt concentration profiles, ion fluxes, energ
 
 However, simulation models of more than one technology can be combined to simulate and evaluate the performance of a treatment chain (desalination and brine treatment system). In this case, the output flow rates and stream concentrate are the input data for the next technology. 
 
-Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example Folder](example), [Example 1](example/example_1.py) and [Example 2](example/example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. Furthermore, a [comparison file](example/comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
+Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example 1](example_1.py) and [Example 2](example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. The economic evaluation of the treatment chain is given in [Example 1](example_1.py) and in the [Economic Tutorial](Economic_Tutorial.md). 
+Furthermore, a [comparison file](comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 
 **<u>Followed steps:</u>**<br>
 Step 1: Import required fucntions for process units in the treatment chain.<br>
@@ -24,8 +25,8 @@ Step 5: Results interpretation. <br>
 <br>
 
 ### 3. Technical process models 
-For more detailed steps and instructions see [Tutorial for Example 1](example/Example_1_Tutorial.md).  
-The mathematical description of each technology is given in  [Mathematical description](paper/Mathematical_description.pdf).  
+For more detailed steps and instructions see [Tutorial for Example 1](Example_1_Tutorial.md).  
+The mathematical description of each technology is given in  [Mathematical description](../paper/Mathematical_description.pdf).  
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of example 1. 
 | Process                                | Input                                        | Output                                                     |
@@ -64,7 +65,7 @@ The mathematical description of each technology is given in  [Mathematical descr
 
 ### 4. Economic models 
 
-For more detailed steps and instructions see [Tutorial for Economic model](example/Economic_Tutorial.md).  
+For more detailed steps and instructions see [Economic Tutorial](Economic_Tutorial.md).  
 The mathematical description of economic model is given also in [Mathematical description](paper/Mathematical_description.pdf).  
 
 **Table 2** gives an overview of the main inputs and outputs of economic model (`economic_f.py`). 
@@ -97,7 +98,79 @@ For the economic analysis of a full-scale desalination plant, the equipment cost
 
 ### 5. Treatment chains comparison 
 In comparison file, results from different treatment chains are summarised. Indicators are formulated to compare the treatment chains. 
-For example, the two examples are compared based on the operating costs (OPEX). 
+
+#### Import results
+First, import the results from the two examples.
+
+```python
+#Import results 
+import example_1 as sc1
+import example_2 as sc2
+```
+Import required functions: 
+```python
+import numpy as np
+import pandas as pd
+import numpy as np 
+```
+#### Create lists with results
+```python
+X = ['Example 1', 'Example 2']
+X_axis = np.arange(len(X))
+```
+#### Electrical consumption Vs Thermal consumption  
+For instance, the two examples are compared based on their electrical and thernal energy requirements. 
+
+```python
+  # Create lists for OPEX and asigned reuslts for Electrical consumption and thermal consumption 
+Eel = [ sc1.sum_el_en, sc2.sum_el_en]
+Eth = [sc1.sum_th_en,   sc2.sum_th_en]
+  # Yearly calculation 
+Eel = [i * hr/1e6 for i in Eel] # Total electrical energy consumption 
+Eth = [i * hr/1e6 for i in Eth] # Total thermal energy consumption 
+```
+#### Visualization 
+For the visualization, a bar figure is created and saved.  
+
+```python
+ # Create Figure 1: Electrical consumption Vs thermal consumption 
+plt.bar(X_axis - 0.2, Eel, 0.4, color="#00516a", label = 'Electrical (GWel)')
+plt.bar(X_axis + 0.2, Eth, 0.4, color="sandybrown", label = 'Thermal (GWth)')
+plt.xticks(X_axis, X)
+plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+plt.xlabel("Scenarios")
+plt.ylabel("Eenergy consumption (GW)")
+plt.legend()
+plt.savefig('electricVSthermal.png')
+plt.show()
+```
+<figure>
+  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/640b2dde-d5c6-439d-a44d-fc0e73dcf342" alt="Image" style="width:600px;">
+</figure>
+
+#### Operating costs (OPEX)
+For instance, the two examples are compared based on the operating costs (OPEX). 
+
+```python
+  # Create lists for OPEX and asigned reuslts 
+OPEX = [sc1.OPEX, sc2.OPEX]
+# Yearly calculation 
+OPEX = [i/1e6 for i in OPEX]
+```
+#### Visualization 
+For the visualization, a bar figure is created and saved.  
+
+```python
+# Create Figure 2: OPEX 
+plt.bar(X_axis - 0.4, OPEX, 0.4, color="#00516a")    
+plt.xticks(X_axis, X)
+plt.xlabel("Scenarios")
+plt.ylabel("OPEX (M€/year)")
+plt.savefig('OPEX.png')
+plt.show()
+
+```
+
 <figure>
   <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/71c0fa99-49f8-4b69-916a-48cdaa6d303e" alt="Image" style="width:600px;">
 </figure>
