@@ -1,7 +1,6 @@
 #Scenario 2
 ##treatment train: NF-> MED-> THERMAL CRYST                 
 from nanofiltration_unit_f import OsmoticPressure
-from nanofiltration_unit_f import molarity
 from nanofiltration_unit_f import NFMass
 from nanofiltration_unit_f import NfEnergy
 
@@ -87,10 +86,6 @@ rjr_values = [0.16, 0.29, 0.21, 0.98, 0.95, 0.98] #Ions rejection rates based on
 Wrec = 0.7 # Water recovery based on membrane characteristics (units: -)
 n=0.8 #pump efficiency (units: -)
 dp=2 # pressure drop (units: bar)
-
-# Create molarity objects and calculate meq for each component
-molarity_objects = [molarity(MW, z, Ci) for MW, z, Ci in zip(MW_values, z_values, Ci_in)]
-meq_values = [m.calculate_meq() for m in molarity_objects]
 
 # Function to create NFMass objects for different components
 def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
@@ -419,7 +414,16 @@ m_salt_pr=5/1000#euro/kg
 d_naoh=1.04 #kg/l for 1M solution 
 d_hcl=1.0585#kg/l for 1M solution 
 
-#Assumptions 
+#Assumptions for CAPEX 
+inst_percent=0.25
+buildings_percent=0.2
+land_percent=0.06
+indirect_c_percent=0.15
+workinf_c_percent=0.2
+capex_assumptions=[inst_percent,buildings_percent, land_percent, indirect_c_percent, workinf_c_percent]
+
+
+#Assumptions for OPEX
 main_c_percent=0.03  # % of the fixed-capital investment
 oper_sup_c_percent=0.05  # % of maintenance 
 oper_lab_c_percent=0.15    # % of annual OPEX
@@ -432,15 +436,17 @@ norm_factor =(1 -oper_lab_c_percent-oper_lab_c_percent*super_c_percent- oper_lab
 economic_assumptions=[main_c_percent,oper_sup_c_percent, oper_lab_c_percent, super_c_percent, lab_c_percent, pat_c_percent, 
                       fix_char_percent, over_c_percent, norm_factor ]
 
+# Initialize values
 CAPEX=0
 OPEX=0
 CO2_c=0
-OPEX_with_ext=0
-eq_c=[constants.eq_c_nf, constants.eq_c_med, constants.eq_c_th_cr]   
-opex_list=[]
+
+ # Create list with capital cost for each unit.
 capex_list=[]
-Mf_basic_sc=[constants.eq_c_nf,constants.eq_c_med,constants.eq_c_th_cr]
-Mf_sce=[Qsw, Qperm,Qf_tcr]
+ # Create list with operating for each unit.
+opex_list=[]
+
+#summarise results for utilities 
 el_conc=[E_el_nf,E_el_med,E_el_th_Cr] 
 s_conc=[0,E_th_med,E_th_th_Cr]
 chem1_conc=[Qantsc_nf,Cchem_med,Cchem_tcr]
@@ -449,9 +455,18 @@ chem2_conc=[0,0,0]
 chem2_pr=[0,0,0]
 cw_conc=[0,Qcw_med, Qcw_tcr]
 wat_conc=[0,0, 0]
+
 if sum(wat_conc)==0:
     Q_w_in=0
+
+# Calculation of scale-up equipment cost 
+# Import equipment cost for reference scenario from constants function
+eq_c=[constants.eq_c_nf, constants.eq_c_med, constants.eq_c_th_cr]   
+    # Capacity of reference scenario
+Mf_basic_sc=[constants.eq_c_nf,constants.eq_c_med,constants.eq_c_th_cr]
+Mf_sce=[Qsw, Qperm,Qf_tcr]
     
+    # Calculation of the new equipment cost
 for i in range(len(eq_c)):
     if Mf_basic_sc[i]!=Mf_sce[i]:
         eq_c[i]=scaleup.scaleup_eq(eq_c[i],Mf_basic_sc[i],Mf_sce[i],tec_names[i])
@@ -459,13 +474,13 @@ for i in range(len(eq_c)):
 #Cost calculation 
 for i in range(len(eq_c)):
     total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
-    total_econom.capex_calc()
+    total_econom.capex_calc(capex_assumptions)
     total_econom.opex_calc(hr, el_pr, s_pr, cw_pr, w_pr, economic_assumptions)
     CAPEX=total_econom.t_capital_inv
     OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
     capex_list.append(total_econom.t_capital_inv)    
-print("Tottal operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
+print("Total operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
 print("Total investment cost (CAPEX) of system is " + str(round(CAPEX))+ " Euro")    
 print("-----------------------------------------")
 

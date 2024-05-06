@@ -15,41 +15,6 @@ MW_HCO3=constants.MW_HCO3
 MW_values = [MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4]
 
 #%%
-#molarity 
-class molarity:
-    """
-    A class used to represent Molarity
-
-    ...
-
-    Attributes
-    ----------
-    MW : float
-        Molecular weight of the solute (g/mol)
-    zi : int
-        Charge of ions in the solution
-    Ci : float
-        Initial concentration of the solute (g/L)
-    meq : float
-        Milliequivalent of the solute
-
-    Methods
-    -------
-    calculate_meq():
-        Calculates the milliequivalent of the solute
-    """
-
-    def __init__(self, MW, zi, Ci):
-        self.MW = MW
-        self.zi = zi
-        self.Ci = Ci
-        self.meq = self.calculate_meq()
-
-    def calculate_meq(self):
-        """Calculates the milliequivalent of the solute"""
-        return self.Ci * 1000 * self.zi / self.MW                      
-        
-#%%
 class NFMass:
     """
     A class used to represent Mass Balance for Nanofiltration Unit

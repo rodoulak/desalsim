@@ -1,6 +1,5 @@
 #Import functions 
 from nanofiltration_unit_f import OsmoticPressure
-from nanofiltration_unit_f import molarity
 from nanofiltration_unit_f import NFMass
 from nanofiltration_unit_f import NfEnergy
 
@@ -82,8 +81,7 @@ T=20+273 #Operating temperature (units: K)
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
 Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
 z_values = [1, -1, 1, 2, 2, -2]
-c_values = [Ci / 1000 for Ci in Ci_in]
-mg_in = sum(c_values)
+mg_in = sum(Ci_in )
 #Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
 
@@ -105,10 +103,6 @@ Wrec = 0.7 # Water recovery based on membrane characteristics (units: -)
 n=0.8 #pump efficiency (units: -)
 dp=2 # pressure drop (units: bar)
 
-# Create molarity objects and calculate meq for each component
-molarity_objects = [molarity(MW, z, Ci) for MW, z, Ci in zip(MW_values, z_values, Ci_in)]
-meq_values = [m.calculate_meq() for m in molarity_objects]
-
 # Function to create NFMass objects for different components
 def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
     return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
@@ -116,9 +110,13 @@ def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
 # Create NFMass objects for different components
 nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_nf)
 
+# Components concentrattion in concentrate stream 
 Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
+# Components concentrattion in permeate stream 
 Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
+# Permeate stream mass flow rate
 Qperm = nfmass_objects[0].Qperm  # kg/hr
+# Concentrate stream mass flow rate
 Qconc = nfmass_objects[0].Qconc  # kg/hr
 print("Permeate stream flow rate is "+str(round(Qperm,2))+"kg/hr")
 print("Permeate stream total concentration is "+str(round(sum(Cperm),2))+"g/l")
@@ -345,9 +343,7 @@ for j in range(1, N):
     #Calculate net salt flux 
     Js[j] = (ElectrodialysisCalc.Ts_cp(Sd[j - 1]) * Ij / F - 
              (ElectrodialysisCalc.Ls_cp(Sc[j - 1], Sd[j - 1])) * concentration_diff)
-    print(f"Ts_cp={ElectrodialysisCalc.Ts_cp(Sd[j - 1])}, Ij={Ij}, F={F}, "
-          f"Ls_cp={ElectrodialysisCalc.Ls_cp(Sc[j - 1], Sd[j - 1])}, Sc[j-1]={Sc[j - 1]}, Sd[j-1]={Sd[j - 1]}")
-    print("Js is " + str(Js[j]))
+
     #calculate net water flux 
     Jw[j] = (ElectrodialysisCalc.Tw_cp(Sc[j - 1], Sd[j - 1]) * Ij / F +
              ElectrodialysisCalc.Lw_cp(Sc[j - 1]) * (ElectrodialysisCalc.p_osmo(Sc[j - 1], T, MWs) - 
@@ -363,7 +359,6 @@ for j in range(1, N):
     # Update the flow rates of the concentrate and dilute streams
     Q_c[j] = Nw_c[j] * MWw / (rho_w * (1 - Sc[j] / 1000))
     Q_d[j] = Nw_d[j] * MWw / (rho_w * (1 - Sd[j] / 1000))
-    print("sd for j " + str(j) + " is " + str(Sd[j]))
 
 
 Cc_na_f=Sc[N-1]/MWs*constants.MW_Na
@@ -722,7 +717,16 @@ m_salt_pr=5/1000#euro/kg
 d_naoh=1.04 #kg/l for 1M solution 
 d_hcl=1.0585#kg/l for 1M solution 
 
-#Assumptions 
+#Assumptions for CAPEX 
+inst_percent=0.25
+buildings_percent=0.2
+land_percent=0.06
+indirect_c_percent=0.15
+workinf_c_percent=0.2
+capex_assumptions=[inst_percent,buildings_percent, land_percent, indirect_c_percent, workinf_c_percent]
+
+
+#Assumptions for  OPEX
 main_c_percent=0.03  # % of the fixed-capital investment
 oper_sup_c_percent=0.05  # % of maintenance 
 oper_lab_c_percent=0.15    # % of annual OPEX
@@ -735,14 +739,17 @@ norm_factor =(1 -oper_lab_c_percent-oper_lab_c_percent*super_c_percent- oper_lab
 economic_assumptions=[main_c_percent,oper_sup_c_percent, oper_lab_c_percent, super_c_percent, lab_c_percent, pat_c_percent, 
                       fix_char_percent, over_c_percent, norm_factor ]
 
+# Initialize values
 CAPEX=0
 OPEX=0
 CO2_c=0
-OPEX_with_ext=0
-Mf_basic_sc=[]
+
+ # Create list with capital cost for each unit.
 capex_list=[]
+ # Create list with operating for each unit.
 opex_list=[]
-eq_c=[constants.eq_c_nf, constants.eq_c_ed, constants.eq_c_mfpfr, constants.eq_c_edbm]   
+
+#summarise results for utilities 
 el_conc=E_el_all
 s_conc=E_th_all
 chem1_conc=[Qantsc_nf,0,Mnaoh_need,0]
@@ -751,8 +758,15 @@ chem2_conc=[0,0,Mhcl_need,0]
 chem2_pr=[0.002,0,constants.hcl_pr_s,0]
 wat_conc=[0,0, Qnaoh_need, Q_w_in]
 cw_conc=[0,0, 0, 0]
-Mf_basic_sc=[constants.Mf_basic_sc[0],constants.Mf_basic_sc[8], constants.Mf_basic_sc[3], constants.Mf_basic_sc[6]]
 
+# Calculation of scale-up equipment cost 
+# Import equipment cost for reference scenario from constants function
+eq_c=[constants.eq_c_nf, constants.eq_c_ed, constants.eq_c_mfpfr, constants.eq_c_edbm]  
+    # Capacity of reference scenario
+Mf_basic_sc=[]
+Mf_basic_sc=[constants.Mf_basic_sc[0],constants.Mf_basic_sc[7], constants.Mf_basic_sc[3], constants.Mf_basic_sc[6]]
+
+    # Calculation of the new equipment cost
 Mf_sce=[Qsw,   Qed_in, Qin_mfpfr, Q_in_edbm]
 for i in range(len(eq_c)):
     if Mf_basic_sc[i]!=Mf_sce[i]:
@@ -761,13 +775,13 @@ for i in range(len(eq_c)):
 #Cost calculation 
 for i in range(len(eq_c)):
     total_econom=econom(eq_c[i], el_conc[i], s_conc[i], chem1_conc[i], chem1_pr[i],chem2_conc[i], chem2_pr[i], cw_conc[i], wat_conc[i])
-    total_econom.capex_calc()
+    total_econom.capex_calc(capex_assumptions)
     total_econom.opex_calc(hr, el_pr, s_pr, cw_pr, w_pr, economic_assumptions)
     CAPEX=total_econom.t_capital_inv
     OPEX=total_econom.opex
     opex_list.append(total_econom.opex)
     capex_list.append(total_econom.t_capital_inv)    
-print("Tottal operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
+print("Total operating cost (OPEX) is "+str(OPEX)+ " Euro/year") 
 print("Total investment cost (CAPEX) of system is " + str(round(CAPEX))+ " Euro")    
 print("-----------------------------------------")
 
@@ -778,8 +792,8 @@ a=(constants.r*(1+constants.r)**constants.lf)/((1+constants.r)**constants.lf-1)
 #Input data 
 reve_t=0
 reve_list=[]
-prd=[10,2,3,0,0,0]    
-prd_name= ["Water", "NaCl", "Mg(OH)2", "Na2SO4", "NaOH", "HCl"]   
+prd=[Qw_tot, M_MgOH2_1, Q_b_out, Q_a_out]    
+prd_name= ["Water",  "Mg(OH)2", "NaOH", "HCl"]   
 
 #Revenue calculation
 for i in range(len(prd)):
@@ -861,13 +875,14 @@ fig = go.Figure(data=[go.Sankey(
       target = [3,4,5,6,12,6,9,10,7,8,12,5,6],
       value = [Qsw, Qperm, Qconc,Mc, Md,M_mfpfr_out, M_MgOH2_1,M_CaOH2,Q_a_out, Q_b_out,Q_s_out, QNAOH+QHCl,Q_w_in ]
   ))])
-color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "maroon"]
+color_for_nodes = ["lightsteelblue","darkcyan","maroon", "midnightblue", "midnightblue", "midnightblue", "midnightblue", "gold", "gold", "gold", "gold", "gold","grey"]
 fig.update_traces(node_color = color_for_nodes)
 fig.update_layout(title_text="Sankey diagram for Example: Mass flow rates ", font_size=15)
 fig.show()
 plot(fig)
 
 #%% Results to excel 
+# Create dataframes 
 dfel=pd.DataFrame(E_el_all ,tec_names)
 dfeth=pd.DataFrame(E_th_all, tec_names)
 dfind=(Qw_tot, abs_Qw, rec, Tot_el, Tot_th, emis_t, Q_w_in,  OPEX, CAPEX)
@@ -879,6 +894,8 @@ ind=np.array(["Water production", "absolute water production", "water recovery",
 units=pd.DataFrame(["kg/hr", "kg/hr", "%","KWh", "KWh"," kg co2/year","kg/hr","€/year", "€"])
 dfind_t=pd.DataFrame(data=dfind, index=ind)
 dfprodn=pd.DataFrame(data=dfprod, index=dfprodn)
+
+  # Write results in excel document
 with pd.ExcelWriter('results_example.xlsx') as writer:
     sum_table_f.to_excel(writer,sheet_name="example")
     sum_table_C.to_excel(writer,sheet_name="example", startcol=0, startrow=6, header=True)

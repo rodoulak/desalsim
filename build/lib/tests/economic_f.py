@@ -42,7 +42,7 @@ class econom:
         self.cw_conc=cw_conc
         self.wat_conc=wat_conc
         
-    def capex_calc(self):
+    def capex_calc(self, capex_assumptions):
         """
         Calculate the capital expenditure (CAPEX) of the unit.
         
@@ -62,13 +62,13 @@ class econom:
             
         """
         #Calculate Installation cost in euros
-        self.inst_c=0.25*self.eq_c  
+        self.inst_c=capex_assumptions[0]*self.eq_c  
         
         #Calculate Building, process and auxillary cost in euros
-        self.buil_c=0.2*self.eq_c   
+        self.buil_c=capex_assumptions[1]*self.eq_c   
         
         #Calculate Land cost in euros
-        self.land_c=0.06*self.eq_c   
+        self.land_c=capex_assumptions[2]*self.eq_c   
         
         #Calculate Hardware costs in euro 
         self.hard_c=self.eq_c+self.inst_c 
@@ -77,13 +77,13 @@ class econom:
         self.dir_c= self.hard_c+self.buil_c+ self.land_c 
         
         #Calculate Indirect costs in euro
-        self.ind_c=0.15*self.dir_c 
+        self.ind_c=capex_assumptions[3]*self.dir_c 
         
         #Calculate fixed-capital investment in euro
         self.fix_c=self.dir_c+self.ind_c 
         
         #Calculate working capital in euro
-        self.work_c=0.2*self.fix_c
+        self.work_c=capex_assumptions[4]*self.fix_c
         
         #Calculate total capital investment in euro
         self.t_capital_inv=self.fix_c+self.work_c 
