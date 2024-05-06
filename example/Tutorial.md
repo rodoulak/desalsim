@@ -1,7 +1,12 @@
 # Tutorial 
-## Introduction 
+## 1. Introduction 
+This tutorial provides a comprehensive overview and guide to utilizing a simulation package tailored for analyzing desalination and brine treatment technologies. Here's what you'll find:  
+**2. Usage:** Instructions on how to use the simulation models, including input parameters and result interpretation.  
+**3. Technical Process Models:** Detailed descriptions of each technology model, including input-output relationships and simulation steps.  
+**4. Economic Models:** Explanation of economic models for evaluating operating and investment costs.  
+**5. Treatment Chains Comparison:** Guidance on comparing different treatment chains using provided tools.  
 
-## Usage 
+## 2. Usage 
 Each simulation model serves as a standalone tool for analyzing the performance of a specific desalination or brine treatment technology. Before running the simulation, ensure that you have provided the necessary input parameters, such as feed flow rates, salinity levels, membrane properties, heat sources, and operating conditions.
 
 The simulation results, including salt concentration profiles, ion fluxes, energy consumption, chemical consumption, and operational costs, will be generated based on the specified inputs and displayed in the console output or saved to output files for further analysis.
@@ -18,7 +23,7 @@ Step 4: Call function of each process unit, creat objects for each calculation.<
 Step 5: Results interpretation. <br>
 <br>
 
-### Technical process models 
+### 3. Technical process models 
 For more detailed steps and instructions see [Tutorial for Example 1](example/Example_1_Tutorial.md).  
 The mathematical description of each technology is given in  [Mathematical description](paper/Mathematical_description.pdf).  
 
@@ -57,7 +62,7 @@ The mathematical description of each technology is given in  [Mathematical descr
 |                                        | Electric density                            | Electricity requirements [kWhel]                          |
 
 
-### Economic models 
+### 4. Economic models 
 
 For more detailed steps and instructions see [Tutorial for Economic model](example/Economic_Tutorial.md).  
 The mathematical description of economic model is given also in [Mathematical description](paper/Mathematical_description.pdf).  
@@ -90,7 +95,7 @@ For the economic analysis of a full-scale desalination plant, the equipment cost
 |                                   | Plant overhead costs: 5% of annual OPEX                           |
 
 
-### Treatment chains comparison 
+### 5. Treatment chains comparison 
 In comparison file, results from different treatment chains are summarised. Indicators are formulated to compare the treatment chains. 
 For example, the two examples are compared based on the operating costs (OPEX). 
 <figure>
