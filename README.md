@@ -53,7 +53,7 @@ Here is a brief overview of each file in the project:
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install DesalSim==0.3
+pip install DesalSim==0.5
 ```
 
 If you want to install the latest GitHub verstion:
