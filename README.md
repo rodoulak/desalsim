@@ -48,9 +48,13 @@ Here is a brief overview of each file in the project:
 - `scaleup.py`: This file contains the main script for scaling-up a technology with known capacity using the six-tenths factor rule (m=0.6).
 - `LICENSE`: License file containing the MIT License terms.
 
-## Installation 
+## Installation  
+The easiest way is through pip, in command-line interface:   
+```
+pip install desalination-and-brine-treatment==0.2
+```
 
-To run the simulation models, follow these steps:
+If you want to install the latest GitHub verstion:
 1. Clone the repository to your local machine:
 ```
 git clone https://github.com/your-username/desalination-brine-treatment-simulation.git
@@ -71,26 +75,16 @@ Additionally, two example files are provided to demonstrate the usage of the sim
 
 Furthermore, a [comparison file](example/comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 
-The mathematical description of each technology is given in  [Mathematical description](paper/Mathematical_description.pdf). 
+For more details on input/output parameters and assumption see [Link to Tutorial File](example/Tutorial.md).
 
-### Example 1
-**Figure 1** presents the process flow diagram of example 1 which consists of four technologies: Nanofiltration (NF), Multiple Feed Plug Flow Reactor (MF-PFR), Electrodialysis (ED), Electrodialysis With Bipolar Membranes (EDBM). The treatment chain represents an MLD system aiming to maximize valuable resources recovery from brine, such as Mg(OH)<sub>2</sub>, Ca(OH)<sub>2</sub>, HCl, and NaOH. The seawater stream or concentrate stream from a Reverse Osmosis plant (RO) first goes to the NF unit. The NF unit is separated into two different streams: one that is high in monovalent ions and one that is high in multi-valent ions. The latter stream from NF, high in monovalent ions, is directed to ED, in which the NaCl stream is concentrated further, and a dilute stream is also recovered. The former is directed to a treatment line comprising selective MF-PFR and EDBM units. In particular, the retentate is sent to the MF-PFR, in which magnesium and calcium are recovered in the form of hydroxide precipitates via a chemical reaction between the NF retentate and an alkaline reactant. Then, the brine stream is free from Mg<sup>2+</sup> and Ca<sup>2+</sup> mixed with the ED concentrate stream. The mixed solution (NaCl rich) is fed to EDBM. EDBM unit recovers, and the saline solution (low concentration) can be recycled back into the treatment chain. 
-<figure>
-  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/55cc6b6f-dde8-4b12-ae61-fa23665c288e" alt="Image" style="width:600px;">
-</figure>
-
-**Figure 1**. Process flow diagram of example 1.
-<br>
-
-**<u>Followed steps:</u>**<br>
-Step 1: Import required fucntions for process units in the treatment chain.<br>
-Step 2: Set input data like feed flow rate, ion concentration, relevant ions for the feed solution.<br>
-Step 3: Set input parameters for each process unit.<br>
-Step 4: Call function of each process unit, creat objects for each calculation.<br>
-Step 5: Results interpretation. <br>
-<br>
-
-For more details on input/output parameters and assumption see [Link to Tutorial File](example/Tutorial.md)
+### Documentation 
+You can find Tutorials and documents at: 
+1. [Tutorial File](example/Tutorial.md)
+2. [Tutorial for Example 1](example/Example_1_Tutorial.md)
+3. [Economic Tutorial](example/Economic_Tutorial.md)
+4. The mathematical description of each technology is given in [Mathematical description](paper/Mathematical_description.pdf)
+5. [Example 1](example/example_1.py)
+6. [Example 2](example/example_2.py)
 
 
 ## Contributing
