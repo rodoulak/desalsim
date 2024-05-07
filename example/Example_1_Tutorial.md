@@ -17,8 +17,21 @@ Each section guides you through setting up the simulation environment, running t
 **Figure 1**. Process flow diagram of example 1.
 <br>
 
-## 2. Installation
-Instructions on how to install the required dependencies or software.
+## 2. Installation 
+The easiest way is through pip, in command-line interface:   
+```
+pip install desalination-and-brine-treatment==0.2
+```
+
+If you want to install the latest GitHub verstion:
+1. Clone the repository to your local machine:
+```
+git clone https://github.com/your-username/desalination-brine-treatment-simulation.git
+```
+2. Install the required dependencies:
+ ```
+pip install -r requirements.txt
+ ```
 
 ## 3. Running the Simulation models
 

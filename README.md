@@ -1,10 +1,12 @@
-# Desalination and Brine Treatment simulation model
+# DesalSim: Desalination and Brine Treatment simulation model
 
  
 ## Overview 
 This project comprises a package of simulation models for desalination and brine treatment technologies, including reverse osmosis, nanofiltration, multi-effect distillation, chemical precipitation, eutectic freeze crystallization, electrodialysis, and thermal crystallization. These technologies are utilized for desalination, ion separation, and salt recovery processes in various industrial and environmental applications.
 
 The simulation models implemented here calculate various parameters such as salt concentration profiles, ion fluxes, energy consumption, chemical consumption, and operational costs. They provide insights into the performance and economics of the technologies under different operating conditions and input parameters. Additionally, the models allow for the integration of different technologies in various configurations to optimize process efficiency and resource utilization.
+
+![system description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/bb10e07d-b878-45c8-878a-0c56222546cf)
 
 ## Table of contents
 * [Purpose](#purpose)
@@ -51,7 +53,7 @@ Here is a brief overview of each file in the project:
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install desalination-and-brine-treatment==0.2
+pip install DesalSim==0.2
 ```
 
 If you want to install the latest GitHub verstion:
@@ -85,6 +87,7 @@ You can find Tutorials and documents at:
 4. The mathematical description of each technology is given in [Mathematical description](paper/Mathematical_description.pdf)
 5. [Example 1](example/example_1.py)
 6. [Example 2](example/example_2.py)
+7. [Scenarios comparison](example/comparison.py)
 
 
 ## Contributing
