@@ -85,6 +85,7 @@ You can find Tutorials and documents at:
 4. The mathematical description of each technology is given in [Mathematical description](paper/Mathematical_description.pdf)
 5. [Example 1](example/example_1.py)
 6. [Example 2](example/example_2.py)
+7. [Scenarios comparison](example/comparison.py)
 
 
 ## Contributing
