@@ -24,9 +24,9 @@ pip install DesalSim==0.5
 ```
 
 If you want to install the latest GitHub verstion:
-1. Clone the repository to your local machine:
+1. Download the repository to your local machine:
 ```
-git clone https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
+https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
 ```
 2. Install the required dependencies:
  ```
