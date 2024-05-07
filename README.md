@@ -6,6 +6,8 @@ This project comprises a package of simulation models for desalination and brine
 
 The simulation models implemented here calculate various parameters such as salt concentration profiles, ion fluxes, energy consumption, chemical consumption, and operational costs. They provide insights into the performance and economics of the technologies under different operating conditions and input parameters. Additionally, the models allow for the integration of different technologies in various configurations to optimize process efficiency and resource utilization.
 
+![system description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/bb10e07d-b878-45c8-878a-0c56222546cf)
+
 ## Table of contents
 * [Purpose](#purpose)
 * [Key features](#key-features)
