@@ -53,7 +53,7 @@ Here is a brief overview of each file in the project:
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install desalination-and-brine-treatment==0.2
+pip install DesalSim==0.2
 ```
 
 If you want to install the latest GitHub verstion:
