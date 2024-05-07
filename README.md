@@ -59,7 +59,7 @@ pip install DesalSim==0.2
 If you want to install the latest GitHub verstion:
 1. Clone the repository to your local machine:
 ```
-git clone https://github.com/your-username/desalination-brine-treatment-simulation.git
+git clone https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main
 ```
 2. Install the required dependencies:
  ```
@@ -73,21 +73,21 @@ The simulation results, including salt concentration profiles, ion fluxes, energ
 
 However, simulation models of more than one technology can be combined to simulate and evaluate the performance of a treatment chain (desalination and brine treatment system). In this case, the output flow rates and stream concentrate are the input data for the next technology. 
 
-Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example Folder](example), [Example 1](example/example_1.py) and [Example 2](example/example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. The economic evaluation of the treatment chain is given in [Example 1](example/example_1.py) and in the [Economic Tutorial](example/Economic_Tutorial.md). 
+Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example Folder](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example), [Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_1.py) and [Example 2](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. The economic evaluation of the treatment chain is given in [Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_1.py) and in the [Economic Tutorial](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Economic_Tutorial.md). 
 
-Furthermore, a [comparison file](example/comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
+Furthermore, a [comparison file](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 
-For more details on input/output parameters and assumption see [Link to Tutorial File](example/Tutorial.md).
+For more details on input/output parameters and assumption see [Link to Tutorial File](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Tutorial.md).
 
 ### Documentation 
 You can find Tutorials and documents at: 
-1. [Tutorial File](example/Tutorial.md)
-2. [Tutorial for Example 1](example/Example_1_Tutorial.md)
-3. [Economic Tutorial](example/Economic_Tutorial.md)
-4. The mathematical description of each technology is given in [Mathematical description](paper/Mathematical_description.pdf)
-5. [Example 1](example/example_1.py)
-6. [Example 2](example/example_2.py)
-7. [Scenarios comparison](example/comparison.py)
+1. [Tutorial File](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Tutorial.md)
+2. [Tutorial for Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Example_1_Tutorial.md)
+3. [Economic Tutorial](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Economic_Tutorial.md)
+4. The mathematical description of each technology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf)
+5. [Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_1.py)
+6. [Example 2](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_2.py)
+7. [Scenarios comparison](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/comparison.py)
 
 
 ## Contributing

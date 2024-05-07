@@ -7,7 +7,7 @@ with open("README.md", "r") as f:
 
 setup(
       name='DesalSim',
-      version='0.1',
+      version='0.5',
       packages=find_packages(),
       url="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-",
       author="rodoulak",
