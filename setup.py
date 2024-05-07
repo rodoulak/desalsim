@@ -6,8 +6,8 @@ with open("README.md", "r") as f:
     description =f.read()
 
 setup(
-      name='desalination_and_brine_treatment',
-      version='0.2',
+      name='DesalSim',
+      version='0.1',
       packages=find_packages(),
       url="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-",
       author="rodoulak",
