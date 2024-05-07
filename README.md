@@ -1,4 +1,4 @@
-# Desalination and Brine Treatment simulation model
+# DesalSim: Desalination and Brine Treatment simulation model
 
  
 ## Overview 
