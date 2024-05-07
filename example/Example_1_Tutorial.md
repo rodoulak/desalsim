@@ -26,7 +26,7 @@ pip install DesalSim==0.5
 If you want to install the latest GitHub verstion:
 1. Clone the repository to your local machine:
 ```
-git clone https://github.com/your-username/desalination-brine-treatment-simulation.git
+git clone https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
 ```
 2. Install the required dependencies:
  ```
@@ -44,9 +44,10 @@ For **Example 1** which consists of four technologies:
 - Electrodialysis With Bipolar Membranes (EDBM)
 their functions are imported:
 ```python
-import nanofiltration_unit_f
+import Desalsim
+from Desalsim import nanofiltration_unit_f
 ```
-or
+Then:  
 ```python
 from nanofiltration_unit_f import OsmoticPressure
 from nanofiltration_unit_f import NFMass
