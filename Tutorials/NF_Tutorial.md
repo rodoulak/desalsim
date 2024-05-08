@@ -1,47 +1,41 @@
 # Tutotrial: Nanofiltration (NF) unit
 
 Nanofiltration (NF) is a membrane liquid-separation technology sharing many characteristics with reverse osmosis (RO). Unlike RO, which has high rejection of virtually all dissolved solutes, 
-NF provides high rejection of multivalent ions, such as calcium, and low rejection of monovalent ions, such as chloride.
+NF provides high rejection of multivalent ions, such as calcium, and low rejection of monovalent ions, such as chloride [@dupontwebsite]. 
+![nf](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/1d41d6eb-90a7-4b68-ab1b-0ae31f83eb78)
 
 
-
-The Nanofiltration unit is used to model the operation of a nanofiltration (or a membrane-based) technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the applied pressure, and the energy requirements.
-The nanofiltration function consists of three classes: _NFMass_, _OsmoticPressure_, and _NfEnergy_.  
+In DesalSim package, the Nanofiltration unit is used to model the operation of a nanofiltration (or a membrane-based) technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the applied pressure, and the energy requirements.
+The nanofiltration function consists of three classes: [NFMass](#use-nfmass-class), [OsmoticPressure](#use-osmoticpressure-class) , and [NfEnergy](#use-nfenergy-class).  
 In this tutorial, we will focus on how to use the three classes. 
-NFMass is a class used to represent Mass Balance for Nanofiltration Unit. In particular, it calculates the permeate and concentrate flow rates, and their ion concentrations. 
-## 2. Installation 
-The easiest way is through pip, in command-line interface:   
-```
-pip install DesalSim==1.0.1
-```
 
-If you want to install the latest GitHub verstion:
-1. Download the repository to your local machine:
-```
-https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
-```
-2. Install the required dependencies:
- ```
-pip install -r requirements.txt
- ```
+**Table 1** gives an overview of the main inputs and outputs for each process unit of Nanofiltration. 
+| Process                                   | Input                                       | Output                                                |
+|-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
+| Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
+|                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
+|                                           | Water recovery [%]                         | Electrical requirements [kWhel]                       |
+|                                           |  Ion rejection [-]                         | Osmotic pressure [bar]                                    |
 
+
+
+## 1. Getting started 
+### 1.1. Import classes 
 ```python
 import Desalsim
 ```
-Then:  
+Then import the three classes:  
 ```python
 from Desalsim.nanofiltration_unit_f import OsmoticPressure
 from Desalsim.nanofiltration_unit_f import NFMass
 from Desalsim.nanofiltration_unit_f import NfEnergy
 ```
-Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
+Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
 from Desalsim.density_calc import density_calc
 import Desalsim.constants
-import Desalsim.scaleup
 ```
-
-### 3.1.1. Define feed characteristics
+### 1.2. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 
 ```python
     # Feed concentration
@@ -62,23 +56,7 @@ T=20+273 #Operating temperature (units: K)
     # Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
 ```
-
-## 3.2. Use process unit model
-
-### 3.2.1. Nanofiltration 
-
-To run simulation model for Nanofiltration unit, you need to implement the following steps. 
-
-**Table 1** gives an overview of the main inputs and outputs for each process unit of Nanofiltration. 
-| Process                                   | Input                                       | Output                                                |
-|-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
-| Nanofiltration                            | Feed flow rate [m³/h]                       | Permeate flow rate and composition [g/L]              |
-|                                           | Ion concentration [g/L]                     | Concentrate flow rate and composition [g/L]           |
-|                                           | Water recovery [%]                         | Electrical requirements [kWhel]                       |
-|                                           |  Ion rejection [-]                         | Osmotic pressure [bar]                                    |
-
-
-##### Setting Membrane Characteristics
+### 1.3. Set Membrane Characteristics  
 You can set membrane characteristics, ion rejection rates and Water recovery. 
 ```python
     # Ions rejection rates based on membrane characteristics (units: -)
@@ -86,11 +64,31 @@ rjr_values = [0.16, 0.29, 0.21, 0.98, 0.95, 0.98]
     # Water recovery based on membrane characteristics (units: -)
 Wrec = 0.7 
 ```
-##### Create NFMass Objects
 After setting all the required inputs, then you can create the functions' objectives. 
+
+## 2. Use NFMass class   
 NFMass is a class used to represent Mass Balance for Nanofiltration Unit. In particular, it calculates the permeate and concentrate flow rates, and their ion concentrations. 
 NFMass takes as input the names of components (_comp_), the ion concentration in the feed (_C_in_), the rejection rates of the ions (_rjr_values_), the % of water recovery (_Wrec_) and the feed flow rate (_Qf_).  
+### 2.1. Overview 
+The following attributes are available within the NFMass class:  
+- `comp`: (str) Component name  
+- `Cfeedi`: (float) Ion concentration in the feed (g/L)  
+- `rjr`: (float) Rejection of the ion by the membrane 
+- `Wrec`: (float) Water recovery in the first pass  
+- `Qf`: (float) Feed flow rate (kg/h)  
+- `Qperm`: (float) Permeate flow rate (kg/h)  
+- `Qconc`: (float) Concentrate flow rate (kg/h)  
+- `Cpermi`: (float) Ion concentration in the permeate (g/L)  
+- `Cconci`: (float) Ion concentration in the concentrate (g/L) 
 
+The NFMass class provides the following method:
+```python
+calculate_perm()
+```
+This method calculates the permeate and concentrate flow rates, as well as their corresponding ion concentrations based on the provided attributes. It is automatically called upon initialization of the class instance.
+
+### 2.2. Create NFMass objects
+NFMass takes as input the names of components (_comp_), the ion concentration in the feed (_C_in_), the rejection rates of the ions (_rjr_values_), the % of water recovery (_Wrec_) and the feed flow rate (_Qf_).
 ```python
     # Function to create NFMass objects for different components
 def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
@@ -99,8 +97,9 @@ def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
     # Create NFMass objects for different components
 nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_nf)
 ```
-Assigned the results to output parameters 
 
+### 2.3. Assigned the results to output parameters 
+After the calculation of the permeate and concentrate flow rates, as well as their corresponding ion concentrations based on the provided attributes, you can assigned the results to output parameters: 
 ```python
     # Components concentrattion in concentrate stream 
 Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
@@ -111,6 +110,8 @@ Qperm = nfmass_objects[0].Qperm  # kg/hr
     # Concentrate stream mass flow rate
 Qconc = nfmass_objects[0].Qconc  # kg/hr
 ```
+
+### 2.4. Print results 
 You can print results from mass calculations 
 ```python
 print("Permeate stream flow rate is "+str(round(Qperm,2))+"kg/hr")
@@ -124,29 +125,68 @@ Permeate stream total concentration is 26.21g/l
 Concentrate stream flow rate is 38560.54kg/hr
 Concentrate stream total concentration is 70.73g/l
 
-##### Calculate Osmotic Pressure
-For the calculation of the energy consumption, first the Osmotic pressure for the three streams (feed, concentrate, permeate) need to be calculated. For this calculation, you need to use the ion concentration of the stream (_Ci_in_, _Cperm_, _Cconc_) the ionelectric charge (_z_values_), and the stream temperature (_T_).
+## 3. Use OsmoticPressure class 
+OsmoticPressure is a class used to represent the calculation of osmotic pressure for Nanofiltration Unit. For the calculation of the energy consumption, first the Osmotic pressure for the three streams (feed, concentrate, permeate) need to be calculated. For this calculation, you need to use the ion concentration of the stream (_Ci_in_, _Cperm_, _Cconc_) the ionelectric charge (_z_values_), and the stream temperature (_T_). The class _returns the Osmotic pressure_ of the solution.   
+### 3.1. Oveview
+The following attributes are available within the OsmoticPressure class:  
+-  `C1, C2 C3, C4, C5, C6 `: (float) Concentration of ions in the solution (mol/L).
+-  `z1, z2,z3, z4, z5, z6`: (int) Charge of ions in the solution.
+
+The OsmoticPressure class provides the following method:
 ```python
-    # Calculate Osmotic Pressure
+osmotic_pressure_calculation()
+```
+This method calculates the osmotic pressure of a solution.
+
+### 3.2. Create OsmoticPressure objectives and calculate Osmotic Pressure
+
+```python
+    # Calculate Osmotic Pressure for the three streams 
 P_osmo_f = OsmoticPressure(Ci_in, z_values, T).osmotic_pressure_calculation()
 P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
 P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 ```
+## 4. Use NfEnergy class
+NfEnergy is a class used to represent the calculation of energy consumption and the specific energy consumption for Nanofiltration Unit. For this calculation, takes the Osmotic pressure for the three streams (feed, concentrate, permeate). In addition, the NfEnergy takes as input the expected pressure drop in each stream (_dp_, d_p_, d_in_) and the pump efficiency (_n). The class _returns the Applied pressure, power for applied pressure, the total energy consumption_ and the _specific energy consumption per m<sup>3</sup> permeate_ and _m<sup>3</sup> feed_.
+### 4.1. Oveview 
+The following attributes are available within the NfEnergy class:  
+- `P_osmo_c`: (float) Osmotic pressure of concentrate stream (bar).
+- `P_osmo_f`: (float) Osmotic pressure of feed stream (bar).
+- `P_osmo_p`: (float) Osmotic pressure of permeate stream (bar).
+- `dp`: (float) Pressure drop (bar).
+- `d_p`: (float) Permeate stream density (kg/m³).
+- `Qperm`: (float) Permeate flow rate (kg/h).
+- `Qf`: (float) Concentrate flow rate (kg/h).
+- `d_in`: (float) Feed stream density (kg/m³).
+- `n`: (float) Pump efficiency (-).
 
-##### Calculate Energy Consumption
+The  NfEnergy class provides the following method:
+```python
+calculate_energy_consumption()
+```
+This method calculates the the Applied pressure, power for applied pressure, the total energy consumption and the specific energy consumption per m<sup>3</sup> permeate and _m<sup>3</sup> feed
+
+### 4.2. Create nf_energy objectives and calculate Energy Consumption
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
+
 ```python
 nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf_nf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
 result=nf_energy.calculate_energy_consumption()
+```
+### 4.3. Assigned the results to output parameters 
+```python
 E_el_nf = nf_energy.E_el_nf
 ```
+### 4.4. Print results 
 You can print results from energy calculations. The specific energy consumption is also calculated so you can validate easier the results. 
 ```python
 for key, value in result.items():
         print(f"{key}: {value}")
 ```
-
 Applied pressure (Bar): 24.45  
 Power for pump (KW): 60.01  
 E_el_nf (KW): 75.02  
 Specific Energy Consumption (KWh/m3 of permeate): 0.85
+
+## References 
+
