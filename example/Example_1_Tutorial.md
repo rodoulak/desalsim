@@ -107,6 +107,9 @@ Wrec = 0.7
 ```
 ##### Create NFMass Objects
 After setting all the required inputs, then you can create the functions' objectives. 
+NFMass is a class used to represent Mass Balance for Nanofiltration Unit. In particular, it calculates the permeate and concentrate flow rates, and their ion concentrations. 
+NFMass takes as input the names of components (_comp_), the ion concentration in the feed (_C_in_), the rejection rates of the ions (_rjr_values_), the % of water recovery (_Wrec_) and the feed flow rate (_Qf_).  
+
 ```python
     # Function to create NFMass objects for different components
 def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
