@@ -45,19 +45,18 @@ For **Example 1** which consists of four technologies:
 their functions are imported:
 ```python
 import Desalsim
-from Desalsim import nanofiltration_unit_f
 ```
 Then:  
 ```python
-from nanofiltration_unit_f import OsmoticPressure
-from nanofiltration_unit_f import NFMass
-from nanofiltration_unit_f import NfEnergy
+from Desalsim.nanofiltration_unit_f import OsmoticPressure
+from Desalsim.nanofiltration_unit_f import NFMass
+from Desalsim.nanofiltration_unit_f import NfEnergy
 ```
 Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
-from density_calc import density_calc
-import constants
-import scaleup
+from Desalsim.density_calc import density_calc
+import Desalsim.constants
+import Desalsim.scaleup
 ```
 
 ### 3.1.1. Define feed characteristics
