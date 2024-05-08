@@ -123,7 +123,6 @@ MEDCalculator takes as input the feed volumetric flow rate (_Qf_med_) and mass f
 ```python
 # Create an instance of the MEDCalculator class
 med_dat = MEDCalculator(Qf_med, Mf_med, Cin_med[0], Cin_med[1], Cin_med[2], Cin_med[3], Cin_med[4], Cin_med[5], T_in)
-
 ```
 
 ### 2.3. Use 'salinity_calc' method 
