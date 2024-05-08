@@ -2,7 +2,7 @@
 
 Nanofiltration (NF) is a membrane liquid-separation technology sharing many characteristics with reverse osmosis (RO). Unlike RO, which has high rejection of virtually all dissolved solutes, 
 NF provides high rejection of multivalent ions, such as calcium, and low rejection of monovalent ions, such as chloride [@dupontwebsite]. 
-![nf](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/1d41d6eb-90a7-4b68-ab1b-0ae31f83eb78)
+
 
 
 In DesalSim package, the MF-PFR unit is used to model the operation of a chemical precipitation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the chemical requirements, and the energy requirements.
