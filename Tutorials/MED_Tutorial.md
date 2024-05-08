@@ -126,68 +126,130 @@ med_dat = MEDCalculator(Qf_med, Mf_med, Cin_med[0], Cin_med[1], Cin_med[2], Cin_
 ```
 
 ### 2.3. Use 'salinity_calc' method 
+This method calculates the inflow salinity. 
 ```python
-
+med_dat.salinity_calc()
 ```
-```python
+It doesn't take additional inputs. 
 
-```
-```python
-
-```
-### 2.3.1. Assigned the results to output parameters 
-```python
-
-```
 ### 2.4. Use 'mass_balance_med' method 
+This method performs mass balance calculations. In particular, it calculates the brine flow rate of leaving effect n (_Bn_, _Qb_), and the total distillate flow rate (_Mdist_, Qdist_). 
 
 ```python
-
+ med_dat.mass_balance_med(Cb_out)
 ```
 
 ### 2.4.1. Assigned the results to output parameters 
+After the mass calculation, you can assigned the results to output parameters: 
 ```python
+#Brine flow rate 
+Qout_med=med_dat.Qb
 
+#Distillate water flow rate 
+Qprod_med=med_dat.Qdist
+
+#Calculate circulation flow rate 
+Qr=Xr*Qf_med
 ```
 
 ### 2.5. Use 'temperature_calc' method 
+This method calculate temperature-related parameters and it takes as input the temperature difference (_DT_loss_), temperature in the last effect (_T_N_), and steam temperature (_T_s). 
 ```python
-
-```
-
-### 2.5.1. Assigned the results to output parameters 
-```python
-
+med_dat.temperature_calc(DT_loss, T_N, T_s)
 ```
 
 ### 2.6. Use 'performance_parameters' method 
+It calculates the performance parameters _Gain Output Ratio (GOR)_, _Condenser thermal load (Qc)_, _Cooling water flow rate (Qw)_, _Performance ratio (PR)_, _Condenser thermal load (Qsen)_, _Total thermal load_. 
+It takes as input the latent heat of motive steam (_lh_s_) and the intake cooling water temperature (_T_cw_in_). 
 ```python
-
+med_dat.performance_parameters(lh_s,  T_cw_in)
 ```
 
 ### 2.6.1. Assigned the results to output parameters 
+You can assigned the results to output parameters: 
 ```python
+# Calculate required cooling water 
+Qcw = med_dat.QCW * 3600 #units: kg/hr
 
+# Calculate thermal energy consumption
+E_th_med = med_dat.Q_Tot
 ```
 
+Then the Energy consumption of the technology and the specific energy consumption can be calculated: 
+```python
+# Calculate energy consumption
+# Electrical energy consumption
+E_el_med = ((Qf_med * 3.5 + med_dat.QCW * 3600 * 2 + (Qr + med_dat.Qb) * 3.5 + med_dat.Qdist * 1) / (1000 * npump)) * 1e5 / 3600 / 1000  # kWh
+
+# Specific energy consumption (electrical) per m3 feed
+SEC_el = E_el_med / (Qf_med / d)  # kWh/m3 feed
+
+# Specific energy consumption (electrical) per m3 product (distilled water)
+SEC_el_prod = E_el_med / (med_dat.Qdist / 1000)  # kWh/m3 dist water
+ 
+# Total thermal energy consumption
+E_th_med = med_dat.Q_Tot
+# Specific thermal energy consumption  per m3 feed (kWh_th/m3)
+SEC_th = E_th_med / (Qf_med / d) 
+```
 ### 2.7. Use 'output_concentration' method 
+It calculates the ion concentration in the output, g/l. 
 ```python
-
+med_dat.output_concentration()
 ```
+It doesn't take additional inputs. 
+
 ### 2.7.1. Assigned the results to output parameters 
-
+You can assigned the results to output parameters: 
 ```python
-
+#Concentration of brine stream 
+Cconc_med = [med_dat.CNa_out, med_dat.CCl_out, med_dat.CK_out, med_dat.CMg_out, med_dat.CCa_out, med_dat.CSO4_out]
 ```
-After the calculation of , you can assigned the results to output parameters: 
+and calculate the density for brine stream 
 ```python
-
+# Calculate density for output concentration
+d_b = density_calc(45, sum(Cconc_med))
 ```
 
 ### 2.8. Print results 
 You can print results from mass calculations 
 ```python
+# Flow rates and concentration 
+print("Brine flow rate: "+ str(round(Qout_med,2))+"kg/hr")
+print("Total distillate flow rate: "+ str(round(Qprod_med,2))+"kg/hr") 
+print("Sum of output concentrations: " + str(round(sum(Cconc_med),2))+"g/l")
+print("-----------------------------------------")
 
+# Calculate energy consumption
+print("Electrical energy consumption: " + str(round(E_el_med,2)) + " kWh")
+print("Specific energy consumption (electrical) per m3 feed: " + str(round(SEC_el,2)) + " kWh/m3")
+print("Specific energy consumption (electrical) per m3 product (distilled water): " + str(round(SEC_el_prod,2)) + " kWh/m3")
+print("-----------------------------------------")
+
+
+print("Total thermal energy consumption: " + str(round(E_th_med,2)) + " kW")
+print("Specific energy consumption (thermal) per m3 feed: " + str(round(SEC_th,2)) + " kWh_th/m3")
+print("-----------------------------------------")
+
+#Calculate required cooling water 
+print("Cooling water flow rate: " + str(round(Qcw,2)) + " kg/hr")
+print("-----------------------------------------")
+
+# Chemical consumption
+print("Total Chemical Consumption: " + str(round(Cchem,2))+"kg/hr")
 ```
 
+Brine flow rate: 131.99kg/hr  
+Total distillate flow rate: 886.12kg/hr  
+Sum of output concentrations: 202.3g/l  
 
+Electrical energy consumption: 1.97 kWh  
+Specific energy consumption (electrical) per m3 feed: 2.0 kWh/m3  
+Specific energy consumption (electrical) per m3 product (distilled water): 2.22 kWh/m3  
+
+Total thermal energy consumption: 318.96 kW  
+Specific energy consumption (thermal) per m3 feed: 324.73 kWh_th/m3  
+
+Cooling water flow rate: 16267.76 kg/hr  
+
+Total Chemical Consumption: 0kg/hr  
