@@ -18,7 +18,7 @@ In this tutorial, we will focus on how to use the three classes.
 |                                           |  Ion rejection [-]                         | Osmotic pressure [bar]                                    |
 
 
-
+The mathematical description of Nanofiltration technology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf), see Section A.1. 
 ## 1. Getting started 
 ### 1.1. Import classes 
 ```python
