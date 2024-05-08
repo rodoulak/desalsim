@@ -1,7 +1,7 @@
 import math
-import density_calc
-import constants
-import scaleup
+from  Desalsim.density_calc import density_calc
+from Desalsim import constants
+from Desalsim import scaleup
 
 #%%
     #Molecular weight 
@@ -72,7 +72,7 @@ class thermal_calc:
         self.T_in = T_in
         self.Cf_in = Cf_in
         self.nacl_sat_wt = salt_mois
-        self.d_sol=density_calc.density_calc(T_in, Cf_s)
+        self.d_sol=density_calc(T_in, Cf_s)
         self.LHV_v=LHV_v
         self.LHV_s =LHV_s 
         self.T_cw_o=T_cw_o

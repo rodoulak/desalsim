@@ -1,5 +1,5 @@
 #costs calculations functions 
-import constants
+from Desalsim import constants
 #%%
 #symbols:
 #hr-> hours
@@ -187,7 +187,7 @@ class revenue:
         # Density
         d_naoh = 1.04  # kg/l for 1M solution
         d_hcl = 1.0585  # kg/l for 1M solution
-    
+
         if self.prd_name == "Water":
             self.rev_prd = self.prd * w_pr * hr  # euro/year
         elif self.prd_name == "NaCl":

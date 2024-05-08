@@ -1,8 +1,8 @@
 import math 
 import numpy as np
-import scaleup 
-import density_calc
-import constants
+from  Desalsim.density_calc import density_calc
+from Desalsim import constants
+from Desalsim import scaleup
 
 #%%
 #Molecular weight 
@@ -104,9 +104,9 @@ class EDBMCalc:
         self.CH_s_in=CH/MW_H
         self.PM_i=[MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4, MW_HCO3, MW_H, MW_OH]
         
-        self.d_a=density_calc.density_calc(self.T,sum(C_a_in) )/1000
-        self.d_b=density_calc.density_calc(self.T,sum(C_b_in) )/1000
-        self.d_s=density_calc.density_calc(self.T,sum(C_s_in) )/1000
+        self.d_a=density_calc(self.T,sum(C_a_in) )/1000
+        self.d_b=density_calc(self.T,sum(C_b_in) )/1000
+        self.d_s=density_calc(self.T,sum(C_s_in) )/1000
         
         #Create lists for initial concentration in each channel 
         self.Ci_s_in=[self.CNa_s_in,self.CCl_s_in,self.CK_s_in,self.CMg_s_in,self.CCa_s_in,self.CSO4_s_in,self.CHCO3_s_in, self.CH_s_in,self.COH_s_in]
@@ -210,7 +210,7 @@ class EDBMCalc:
             self.M_b_out[i]=self.M_b_in[i]  
             self.M_b_out_t=self.M_b_out_t+self.M_b_out[i]
             
-        d_s_new=density_calc.density_calc(25, self.M_b_out_t)/1000
+        d_s_new=density_calc(25, self.M_b_out_t)/1000
         #Calculate of volumetric outlet flow rate
         self.Q1_b_out=self.M_b_out_t/d_s_new #assume density is 1kg/l
         

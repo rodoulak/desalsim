@@ -1,4 +1,4 @@
-from density_calc import density_calc
+from Desalsim.density_calc import density_calc 
 #%%calculations 
 class MEDCalculator:
     """

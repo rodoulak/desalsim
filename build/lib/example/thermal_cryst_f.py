@@ -1,7 +1,7 @@
 import math
-import density_calc
-import constants
-import scaleup
+from Desalsim.density_calc import density_calc 
+from Desalsim import constants 
+from Desalsim import scaleup
 
 #%%
     #Molecular weight 
@@ -72,7 +72,7 @@ class thermal_calc:
         self.T_in = T_in
         self.Cf_in = Cf_in
         self.nacl_sat_wt = salt_mois
-        self.d_sol=density_calc.density_calc(T_in, Cf_s)
+        self.d_sol=density_calc(T_in, Cf_s)
         self.LHV_v=LHV_v
         self.LHV_s =LHV_s 
         self.T_cw_o=T_cw_o
@@ -144,7 +144,7 @@ class conc_cal:
         self.Cc5=Cc5
         self.Cc6=Cc6
         # Calculate the density of the feed solution at T_in 
-        self.d_sol=density_calc.density_calc(T_in, self.cf_in) 
+        self.d_sol=density_calc(T_in, self.cf_in) 
     
     
     def molarity(self):        
@@ -289,7 +289,7 @@ Qf=1000 #kg/h
 
 Cf_tcr_in=[80.42, 116.69, 2.29, 0.01, 0.04, 0.54] #[Na, Cl, K, Mg, Ca, SO4 ]
 Cf_s=sum(Cf_tcr_in) #total salt concentration (g/L)
-d_sol=density_calc.density_calc(T_in, Cf_s)/1000 #density of feed
+d_sol=density_calc(T_in, Cf_s)/1000 #density of feed
 Cf_caso4=Cf_tcr_in[4]*MW_Caso4/MW_Ca #CaSO4 concentration in feed solution (g/L)
 
 #Calculation 

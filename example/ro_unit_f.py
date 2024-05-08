@@ -1,6 +1,6 @@
 import math
-import constants
-import density_calc
+from Desalsim.density_calc import density_calc 
+from Desalsim import constants 
 #%%
 #%%constants
 R=8.31446261815324 #gas constant

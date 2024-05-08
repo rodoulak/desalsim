@@ -1,4 +1,6 @@
 # __init__.py
+from Desalsim import density_calc
+from Desalsim import constants
 from Desalsim.nanofiltration_unit_f import NFMass
 from Desalsim.nanofiltration_unit_f import OsmoticPressure
 from Desalsim.nanofiltration_unit_f import NfEnergy
@@ -20,8 +22,7 @@ from Desalsim.edbm_unit_f import EDBMCalc
 from Desalsim.economic_f import econom
 from Desalsim.economic_f import revenue
 
-from Desalsim.density_calc import density_calc
-from Desalsim import constants
+
 
 
 

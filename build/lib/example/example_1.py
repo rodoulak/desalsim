@@ -1,22 +1,22 @@
 #Import functions 
-from nanofiltration_unit_f import OsmoticPressure
-from nanofiltration_unit_f import NFMass
-from nanofiltration_unit_f import NfEnergy
+from Desalsim.nanofiltration_unit_f import OsmoticPressure
+from Desalsim.nanofiltration_unit_f import NFMass
+from Desalsim.nanofiltration_unit_f import NfEnergy
 
-from mfpfr_unit_f import MFPFRCALC
-from mfpfr_unit_f import HClAddition
-from mfpfr_unit_f import energycons
+from Desalsim.mfpfr_unit_f import MFPFRCALC
+from Desalsim.mfpfr_unit_f import HClAddition
+from Desalsim.mfpfr_unit_f import energycons
 
-from ed_unit_f import ElectrodialysisCalc
+from Desalsim.ed_unit_f import ElectrodialysisCalc
 
-from edbm_unit_f import EDBMCalc
+from Desalsim.edbm_unit_f import EDBMCalc
 
-from economic_f import revenue
-from economic_f import econom
+from Desalsim.economic_f import revenue
+from Desalsim.economic_f import econom
 
-from density_calc import density_calc
-import constants
-import scaleup
+from Desalsim.density_calc import density_calc
+from Desalsim import constants
+from Desalsim import scaleup
 import numpy as np
 import pandas as pd
 import math

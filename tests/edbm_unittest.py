@@ -1,5 +1,5 @@
 import unittest
-from edbm_unit_f import EDBMCalc  
+from Desalsim.edbm_unit_f import EDBMCalc  
 
 class TestEDBMCalc(unittest.TestCase):
     def setUp(self):

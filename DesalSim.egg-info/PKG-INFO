@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: DesalSim
-Version: 0.5
+Version: 1.0.1
 Home-page: https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
 Author: rodoulak
 Author-email: r.ktori@tudelft.nl
@@ -9,6 +9,11 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: numpy>=1.0
 Requires-Dist: pandas>=1.0
+Requires-Dist: scipy>=1.0
+Requires-Dist: matplotlib>=1.0
+Requires-Dist: scikit-learn>=1.0
+Requires-Dist: plotly>=1.0
+Requires-Dist: openpyxl>=1.0
 
 # DesalSim: Desalination and Brine Treatment simulation model
 
@@ -65,13 +70,13 @@ Here is a brief overview of each file in the project:
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install DesalSim==0.2
+pip install DesalSim==1.0.1
 ```
 
 If you want to install the latest GitHub verstion:
-1. Clone the repository to your local machine:
+1. Download the repository to your local machine:
 ```
-git clone https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main
+https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
 ```
 2. Install the required dependencies:
  ```
@@ -100,6 +105,8 @@ You can find Tutorials and documents at:
 5. [Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_1.py)
 6. [Example 2](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_2.py)
 7. [Scenarios comparison](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/comparison.py)
+
+Additionally, you can find tests for every process unit and the economic model in the [tests folder](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/tests) that verify that the code is running properly. 
 
 
 ## Contributing

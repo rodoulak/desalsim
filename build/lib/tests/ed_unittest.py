@@ -1,24 +1,24 @@
 import unittest
-import constants
-from ed_unit_f import ElectrodialysisCalc
+from Desalsim import constants
+from Desalsim.ed_unit_f import ElectrodialysisCalc
+
+# Define the input parameters for testing
+C_feed = [10.36, 15.39, 0.36, 0.028, 0.02, 0.07]  # Feed concentrations in g/L
+Q_feed = 1000  # Feed flow rate in L/hr
+T_feed = 40  # Feed temperature in °C
+T_dial = 25  # Dialysate temperature in °C
+A_membrane = 10  # Membrane area in m^2
+V_cell = 100  # Voltage across the cell in V
+I_current = 50  # Current passing through the cell in A
 
 class TestElectrodialysisCalc(unittest.TestCase):
-    def setUp(self):
-        # Define the input parameters for testing
-        C_feed = [10.36, 15.39, 0.36, 0.028, 0.02, 0.07]  # Feed concentrations in g/L
-        Q_feed = 1000  # Feed flow rate in L/hr
-        T_feed = 40  # Feed temperature in °C
-        T_dial = 25  # Dialysate temperature in °C
-        A_membrane = 10  # Membrane area in m^2
-        V_cell = 100  # Voltage across the cell in V
-        I_current = 50  # Current passing through the cell in A
-        
+    def setUp(self):        
         # Create an instance of the ElectrodialysisCalc class with the defined parameters
-        self.ed_calc = ElectrodialysisCalc(C_feed, Q_feed, T_feed, T_dial, A_membrane, V_cell, I_current)
+        self.ed_calc = ElectrodialysisCalc()
         
     def test_Ts_cp(self):
         # Call the Ts_cp method
-        result = self.ed_calc.Ts_cp(10)
+        result = ElectrodialysisCalc.Ts_cp(10)
         
         # Define the expected value
         expected_result = 0.9676  # Expected result for S=10
@@ -30,7 +30,7 @@ class TestElectrodialysisCalc(unittest.TestCase):
         # Call the Tw_cp method
         Sc=43
         Sd=43
-        result = self.ed_calc.Tw_cp(Sc, Sd)
+        result = ElectrodialysisCalc.Tw_cp(Sc, Sd)
         
         # Define the expected value
         expected_result = 10.3  
@@ -41,7 +41,7 @@ class TestElectrodialysisCalc(unittest.TestCase):
     def test_Lw_cp(self):
         # Call the Lw_cp method
         S = 43
-        result = self.ed_calc.Lw_cp(S)
+        result = ElectrodialysisCalc.Lw_cp(S)
         
         # Define the expected value
         expected_result = 5 * S ** (-0.416)
@@ -55,7 +55,7 @@ class TestElectrodialysisCalc(unittest.TestCase):
         T = 25
         MWs = constants.MW_NaCl
         
-        result = self.ed_calc.p_osmo(S, T, MWs)
+        result = ElectrodialysisCalc.p_osmo(S, T, MWs)
         
         # Define the expected value
         C1 = S / MWs * constants.MW_Na / constants.MW_Na
@@ -77,7 +77,7 @@ class TestElectrodialysisCalc(unittest.TestCase):
 
         
         # Call the dC method
-        result = self.ed_calc.dC(Ts_cp, tcu, D, Ij, h, Sh)
+        result = ElectrodialysisCalc.dC(Ts_cp, tcu, D, Ij, h, Sh)
         
         # Define the expected value
         F = 96485.3329  # Faraday constant (C/mol)

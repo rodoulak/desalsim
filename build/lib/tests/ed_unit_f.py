@@ -1,8 +1,8 @@
 import numpy as np
-import scaleup
-import constants
 import math
-import density_calc
+from  Desalsim.density_calc import density_calc
+from Desalsim import constants
+from Desalsim import scaleup
 
 #%% Calculations 
 """
@@ -72,14 +72,9 @@ Methods
         Change in concentration
 """
 class ElectrodialysisCalc:
-    def __init__(self, C_feed, Q_feed, T_feed, T_dial, A_membrane, V_cell, I_current):
-        self.C_feed = C_feed
-        self.Q_feed = Q_feed
-        self.T_feed = T_feed
-        self.T_dial = T_dial
-        self.A_membrane = A_membrane
-        self.V_cell = V_cell
-        self.I_current = I_current
+    def __init__(self):
+        pass
+
 
     def Ts_cp(self,S):
         """Transport number for salt in concentrate compartment"""

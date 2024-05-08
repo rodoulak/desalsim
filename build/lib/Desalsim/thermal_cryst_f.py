@@ -1,7 +1,7 @@
 import math
-import density_calc
-import constants
-import scaleup
+from Desalsim.density_calc import density_calc 
+from Desalsim import constants 
+from Desalsim import scaleup
 
 #%%
     #Molecular weight 

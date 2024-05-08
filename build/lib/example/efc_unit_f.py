@@ -31,10 +31,10 @@ from scipy import interpolate
 import scipy.interpolate as interpolate
 from sklearn.linear_model import LinearRegression
 from collections import namedtuple
-import scaleup
-import density_calc
+from Desalsim import scaleup
+from Desalsim.density_calc import density_calc 
 # import pitzer_model_3phases_w
-import constants
+from Desalsim import constants 
 #Set initial time to calculate the elapsed time of the calculations
 time0=time.time()
 MW_so4=32.064+4*15.999
@@ -44,7 +44,7 @@ Qf=100 #m3/hr
 C_i_in=[20.16, 27.87, 0.50, 0.0, 0.12, 14.66]
 
 T_initial =273+25
-d_in=density_calc.density_calc(25, sum(C_i_in))
+d_in=density_calc(25, sum(C_i_in))
 #%%
 
 #Declaration of constant process parameters - Part 1: Process Parameters
@@ -244,9 +244,22 @@ def Compounds():
     T_Na2SO4_sol_line=[]
     C_Na2SO4_sol_line=[]
     #Interpolation/Extrapolation of the Na2SO4 solubility line with a cubic spline 
-     
+    import os
+    import pandas as pd
+
+    # Get the directory where the script is located
+    current_directory = os.path.dirname(__file__)
+
+    #   Define the filename 
+    filename = "efc_results.xlsx"
+
+    # Combine the directory path with the filename
+    file_path = os.path.join(current_directory, filename)
+
+    # Read the Excel file
+    df = pd.read_excel(file_path, sheet_name="C_Na2SO4_sol_line")
+
     #Sodium sulfate (Mirabilite) Solubility Line, Data from source: The solution ref on dropbox (1100-1200; P.1120)
-    df = pd.read_excel('C:\\Users\\rodoulaktori\\surfdrive\\PhD\\Process_modelling\\python\\efc_results.xlsx', sheet_name="C_Na2SO4_sol_line")
     T_Na2SO4_sol_line= df.iloc[:, 1].tolist()
     C_Na2SO4_sol_line=df.iloc[:, 0].tolist()
     C_Na2SO4_sol_line=np.array(C_Na2SO4_sol_line)
@@ -260,7 +273,7 @@ def Compounds():
     print("tck is " +str(tck))
 
     #Interpolation/Extrapolation of the ice line using linear regression
-    df2 = pd.read_excel('C:\\Users\\rodoulaktori\\surfdrive\\PhD\\Process_modelling\\python\\efc_results.xlsx', sheet_name="ICE_sol_line")
+    df2 = pd.read_excel(file_path, sheet_name="ICE_sol_line")
 
     Fr_point_depr_Na2SO4= np.array(df2.iloc[:, 1].tolist())
     C_Na2SO4_ice_line=df2.iloc[:, 0].tolist()    
@@ -830,11 +843,10 @@ sec_eff=E_t/(Mout/1020)
 sec_product=E_t/M_compound1_cr
 w_in_cryst=M_compound1_cr*10*18.01528/MW_Na2SO4_10H2O
 print(w_in_cryst)
-bal=Qf-M_ice*res-Mout*res-M_compound1_cr*res
 print("M_ice*res is "+str(M_ice*res))
 print("Mout*res is "+str(Mout*res))
 print("M_compound1_cr*res is "+str(M_compound1_cr*res))
-print("bal is "+str(bal))
+
 M_efc_out=Var.M_liquid_tot.item()
 M_compound1_cr=M_compound1_cr*res+bal
 M_ice=M_ice*res

@@ -32,6 +32,7 @@ example/example_2.py
 example/med_unit_f.py
 example/mfpfr_unit_f.py
 example/nanofiltration_unit_f.py
+example/ro_unit.py
 example/ro_unit_f.py
 example/scaleup.py
 example/thermal_cryst_f.py

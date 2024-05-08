@@ -1,5 +1,5 @@
 import unittest
-from mfpfr_unit_f import MFPFRCALC, HClAddition
+from Desalsim.mfpfr_unit_f import MFPFRCALC, HClAddition
 
 class TestMFPFRCALC(unittest.TestCase):
     def setUp(self):

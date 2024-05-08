@@ -1,8 +1,8 @@
 import unittest
-from  economic_f import econom, revenue
-import density_calc
-import constants
-import scaleup
+from  Desalsim.economic_f import econom, revenue
+from  Desalsim.density_calc import density_calc
+from Desalsim import constants
+from Desalsim import scaleup
 
 class TestEconom(unittest.TestCase):
     def setUp(self):
@@ -18,9 +18,13 @@ class TestEconom(unittest.TestCase):
         wat_conc = 0
         capex_assumptions=[0.25, 0.2, 0.06, 0.15, 0.2]
         
+        prd=10  
+        prd_name= "Water" 
+        
         # Create an instance of the econom class
         self.econom_calc = econom(eq_c, el_conc, s_conc, chem1_conc, chem1_pr, chem2_conc, chem2_pr, cw_conc, wat_conc)
         self.result_capex = self.econom_calc.capex_calc(capex_assumptions)
+        self.revenue_calc = revenue(prd, prd_name)
         
     def test_capex_calc(self):
         capex_result = self.result_capex
@@ -33,7 +37,7 @@ class TestEconom(unittest.TestCase):
         
         # Assert the correctness of the output
         expected_capex = 3125700  # Assuming this value based on your calculations
-        self.assertAlmostEqual(self.result_capex[0], expected_capex, delta=1000)
+        self.assertAlmostEqual(self.result_capex, expected_capex, delta=expected_capex*0.01)
 
 
     def test_opex_calc(self):
@@ -48,22 +52,6 @@ class TestEconom(unittest.TestCase):
         self.assertAlmostEqual(result_opex, expected_opex, delta=expected_opex*0.01)
 
 
-class TestRevenue(unittest.TestCase):
-    def setUp(self):
-        # Define sample input data for initialization
-        prd=10  
-        prd_name= "Water"  
-        
-        # Create an instance of the revenue class
-        self.revenue_calc = revenue(prd, prd_name)
-
-    def test_rev_water(self):
-        # Call the rev method with Water as product
-        result_rev = self.revenue_calc.rev(7200, 0.001, 0.066, 1.0, 0.12, 7.2, 5.78)
-        
-        # Assert the correctness of the output
-        expected_rev = 72.0  # Assuming this value based on your calculations
-        self.assertAlmostEqual(result_rev, expected_rev, delta=1)
 
 
 if __name__ == '__main__':

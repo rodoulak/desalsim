@@ -1,8 +1,8 @@
 import numpy as np
-import scaleup
-import constants
 import math
-import density_calc
+from Desalsim.density_calc import density_calc 
+from Desalsim import constants 
+from Desalsim import scaleup
 
 #%% Calculations 
 """
@@ -144,7 +144,7 @@ Mem_eff=0.64 #Membrane efficiency
 Ncp=1 #Number of identical parallel cell-pairs 
 
 #Feed flow rate L/h
-d_in_ed=(density_calc.density_calc(T-273, Sc_i)/1000)
+d_in_ed=(density_calc(T-273, Sc_i)/1000)
 Qed_in=1000/d_in_ed
 Qed_in_c=Qed_in/17/Ncp
 Qed_in_d=Qed_in*16/17/Ncp
@@ -235,7 +235,7 @@ Sc_out=[Cc_na_f, Cc_cl_f]
 Mc=(Ns_c[N-1]*MWs/1000+Nw_c[N-1]*MWw/1000) #(kg/hr)
 print("Mass flowrate concentrate stream is "+str(round(Mc,2))+ " kg/hr")
 
-dc_out=density_calc.density_calc(T-273, Sc[N-1])/1000 #(kg/l)
+dc_out=density_calc(T-273, Sc[N-1])/1000 #(kg/l)
 Qc=Mc/dc_out #concnetrate stream volume flow rate (l/hr)
 i=2
 
@@ -253,7 +253,7 @@ print("Mass flowrate of diluate stream is "+str(round(Md,2))+" kg/hr")
 Sd_f=Sd[N-1]
 Cd_na_f=Sd_f/MWs*constants.MW_Na
 Cd_cl_f=Sd_f/MWs*constants.MW_cl
-dd_out=density_calc.density_calc(T-273, Sd[N-1])/1000 #density of diluate stream
+dd_out=density_calc(T-273, Sd[N-1])/1000 #density of diluate stream
 Qd=Md/dd_out #diluate stream volume flow rate (l/hr)
 
 print("volume flowrate diluate stream is "+str(round(Qd,2))+" l/hr")

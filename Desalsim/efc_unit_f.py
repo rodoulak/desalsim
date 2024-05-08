@@ -31,10 +31,10 @@ from scipy import interpolate
 import scipy.interpolate as interpolate
 from sklearn.linear_model import LinearRegression
 from collections import namedtuple
-import scaleup
-import density_calc
+from Desalsim import scaleup
+from Desalsim.density_calc import density_calc 
 # import pitzer_model_3phases_w
-import constants
+from Desalsim import constants 
 #Set initial time to calculate the elapsed time of the calculations
 time0=time.time()
 MW_so4=32.064+4*15.999
@@ -44,7 +44,7 @@ Qf=100 #m3/hr
 C_i_in=[20.16, 27.87, 0.50, 0.0, 0.12, 14.66]
 
 T_initial =273+25
-d_in=density_calc.density_calc(25, sum(C_i_in))
+d_in=density_calc(25, sum(C_i_in))
 #%%
 
 #Declaration of constant process parameters - Part 1: Process Parameters
@@ -244,9 +244,22 @@ def Compounds():
     T_Na2SO4_sol_line=[]
     C_Na2SO4_sol_line=[]
     #Interpolation/Extrapolation of the Na2SO4 solubility line with a cubic spline 
-     
+    import os
+    import pandas as pd
+
+    # Get the directory where the script is located
+    current_directory = os.path.dirname(__file__)
+
+    #   Define the filename 
+    filename = "efc_results.xlsx"
+
+    # Combine the directory path with the filename
+    file_path = os.path.join(current_directory, filename)
+
+    # Read the Excel file
+    df = pd.read_excel(file_path, sheet_name="C_Na2SO4_sol_line")
+
     #Sodium sulfate (Mirabilite) Solubility Line, Data from source: The solution ref on dropbox (1100-1200; P.1120)
-    df = pd.read_excel('C:\\Users\\rodoulaktori\\surfdrive\\PhD\\Process_modelling\\python\\efc_results.xlsx', sheet_name="C_Na2SO4_sol_line")
     T_Na2SO4_sol_line= df.iloc[:, 1].tolist()
     C_Na2SO4_sol_line=df.iloc[:, 0].tolist()
     C_Na2SO4_sol_line=np.array(C_Na2SO4_sol_line)
@@ -260,7 +273,7 @@ def Compounds():
     print("tck is " +str(tck))
 
     #Interpolation/Extrapolation of the ice line using linear regression
-    df2 = pd.read_excel('C:\\Users\\rodoulaktori\\surfdrive\\PhD\\Process_modelling\\python\\efc_results.xlsx', sheet_name="ICE_sol_line")
+    df2 = pd.read_excel(file_path, sheet_name="ICE_sol_line")
 
     Fr_point_depr_Na2SO4= np.array(df2.iloc[:, 1].tolist())
     C_Na2SO4_ice_line=df2.iloc[:, 0].tolist()    
@@ -768,75 +781,3 @@ print("Var.solids_weight_percentage is " +str(Var.solids_weight_percentage))
 
 #Calculate and print the elapsed time after the calculations
 elapsed=time.time()-time0
-print('Time elapsed : ',elapsed)#Calculate and print the elapsed time after the calculations
-Residence_time=Var.t/3600
-res=Residence_time#Vreactor/(Qf)
-print(res)
-print('Residence Time : ', Residence_time,'hours')
-print('Volume reactor : ', Vreactor*1000,'liters')
-Flow_rate=Qf/(d_in)/Residence_time
-print('Continous Flow Rate : ', Flow_rate,'liters/hour')
-Min=Qf#Residence_time #kg/hr 
-#mass flowrate of na2so4 
-M_compound1_cr=Var.M_compound1_cr*MW_Na2SO4_10H2O/MW_Na2SO4/res#Residence_time
-print("mass flowrate of na2so4 "+ str(M_compound1_cr)+"kg/hr")
-#mass flow rate of ice 
-M_ice= Var.M_ice/res#Residence_time
-print("ice mass flow rate " + str(M_ice)+ "kg/hr")
-#Mass flow rate for effluent
-
-Mout = Var.M_liquid_tot.item() / res # Residence_time
-print("Mass flow rate for effluent is "+ str(Mout)+"kg/hr")
-
-
-conc_f_in=conc_f(C_i_in[0],C_i_in[1], C_i_in[2], C_i_in[3], C_i_in[4], C_i_in[5],Qf/d_in, Qf, Var.M_liquid_tot.item(), M_compound1_cr)
-
-dens=1.02
-conc_f_in.calc_f_c()
-Cout= Var.C_compound1_mliq #out concentration for na2so4. only na, so4 change 
-Cout_so4= Cout.item()
-Cout_cl=Var.C_compound2
-Cout_cl= Cout_cl.item()
-Cout_na= conc_f_in.Cna_out
-Cout_so4= conc_f_in.Cso4_out
-Cout_efc_g=[Cout_na+conc_f_in.Ccl_out/constants.MW_cl*constants.MW_Na, conc_f_in.Ccl_out, conc_f_in.Ck_out, 0, 0, Cout_so4] #g/l 
-print("Cout_efc is "+str(Cout_efc_g))
-
-
-M_solids_tot=Var.M_solids_tot/res#Residence_time
-print("M_solids_tot is "+str(M_solids_tot))
-Mtot=Var.Mtot/res#Residence_time
-print("Mtot is " + str(Mtot))
-M_ice=Var.M_ice/res#Residence_time
-print("M_ice is "+str(M_ice))
-
-V_compound1=Var.V_compound1/res
-print("V_compound1 is "+str(V_compound1))
-
-#operating temperature 
-Treactor=Var.Treactor-273
-print("operating temperature is "+str(*Treactor[0])+"oC")
-
-#required energy 
-E_el=Qtot/1000*res # KW 
-Q_t=abs(Qtot/1000)
-print("Q_t"+str(Q_t))
-E_p=(Min*dp+Mout*dp+(M_ice+M_compound1_cr)*dp_slurry)*1e5/3600/(1000*npump)/1000 #kwh
-E_fil=scaleup.scaleup(0.5, 0.3*1000, Qf)
-E_t=Q_t+E_p+E_fil
-print("E_t"+str(E_t))
-sec_f=E_t/Qf
-sec_eff=E_t/(Mout/1020)
-sec_product=E_t/M_compound1_cr
-w_in_cryst=M_compound1_cr*10*18.01528/MW_Na2SO4_10H2O
-print(w_in_cryst)
-bal=Qf-M_ice*res-Mout*res-M_compound1_cr*res
-print("M_ice*res is "+str(M_ice*res))
-print("Mout*res is "+str(Mout*res))
-print("M_compound1_cr*res is "+str(M_compound1_cr*res))
-print("bal is "+str(bal))
-M_efc_out=Var.M_liquid_tot.item()
-M_compound1_cr=M_compound1_cr*res+bal
-M_ice=M_ice*res
-bal=Qf-M_ice -Var.M_liquid_tot.item() -M_compound1_cr
-print("bal is "+str(bal))

@@ -1,5 +1,5 @@
 import unittest
-from nanofiltration_unit_f import NFMass, OsmoticPressure, NfEnergy
+from Desalsim.nanofiltration_unit_f import NFMass, OsmoticPressure, NfEnergy
 
 class TestNanofiltrationUnit(unittest.TestCase):
 
