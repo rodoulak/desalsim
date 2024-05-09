@@ -1,12 +1,11 @@
 # Tutotrial: Multi-plug flow reactor (MF-PFR) unit
 
-Nanofiltration (NF) is a membrane liquid-separation technology sharing many characteristics with reverse osmosis (RO). Unlike RO, which has high rejection of virtually all dissolved solutes, 
-NF provides high rejection of multivalent ions, such as calcium, and low rejection of monovalent ions, such as chloride [@dupontwebsite]. 
+Multi-plug flow reactor (MF-PFR) is a chemical precipitation technology focusing on the precipitation of magnesium hydroxide and calcium hydroxide with the addition of an alkaline solution. It is a two-step technology, and a chemical reaction takes place between the hydroxyl ions present in the alkaline solution and magnesium ions in the brine, promoting the precipitation of magnesium and calcium hydroxide crystals.
 
-
+![mfpfr](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/65a5fccb-e2ac-4d27-9c66-69dca9157656)
 
 In DesalSim package, the MF-PFR unit is used to model the operation of a chemical precipitation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the chemical requirements, and the energy requirements.
-The MF-PFR function consists of three classes: [NFMass](#use-nfmass-class), [energycons](#use-energycons-class) and [HClAddition](#use-hcladdition-class).  
+The MF-PFR function consists of three classes: [MFPFRCALC](#use-mfpfrcalc-class), [energycons](#use-energycons-class) and [HClAddition](#use-hcladdition-class).  
 In this tutorial, we will focus on how to use the three classes. 
 
 **Table 2** gives an overview of the main inputs and outputs for each process unit of Multi-plug flow reactor. 
@@ -44,6 +43,7 @@ You can initialize the feed solution by setting the flow rate, specifying the fo
     # Feed concentration
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
 Cin_mfpfr = [17.3, 38.6, 0.6, 4.3, 1.2, 9.9]  
+MW = [MW_Na, MW_Ca, MW_Cl, MW_K, MW_Mg, MW_SO4]
 
     # Feed flowrate
 Qin_mfpfr = 1000  # Flow rate in l/hr
@@ -58,19 +58,39 @@ T=20+273 #Operating temperature (units: K)
     # Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
 ```
-### 1.3. Set Membrane Characteristics  
-You can set membrane characteristics, ion rejection rates and Water recovery. 
+### 1.3. Set Porducts Characteristics  
+You need to set product characteristics such as product solubility and density. 
 ```python
-    # Ions rejection rates based on membrane characteristics (units: -)
-rjr_values = [0.16, 0.29, 0.21, 0.98, 0.95, 0.98]
-    # Water recovery based on membrane characteristics (units: -)
-Wrec = 0.7 
+# Product solublity of Mg(OH)2
+kps_MgOH=5.61*0.000000000001
+# Product solublity of Ca(OH)2
+kps_CaOH=5.5*0.000001
+
+# Mg(OH)2 density (units: kg/l)
+d_mgoh_2=2.34
+# Ca(OH)2 density (units: kg/l)
+d_caoh_2=2.211 
 ```
 After setting all the required inputs, then you can create the functions' objectives. 
+### 1.3. Set opearional characteristics 
+You need to set operational characteristics such as conversion rate for every step (_conv_) based on literature or experimental work and the concentration of the alkaline solution (_C_NaOH_). 
+```python
+# Concentration of NaOH solution for step 1 and step 2 in MOL/L
+C_NaOH = [1, 1]
+
+# Conversion rate for step 1 and step 2
+conv = [95, 93]  
+```
+Additionally, you need to set assumptions related to pumping like pressure drop (_dp_) and pump efficiency (_npump_). 
+```python
+dp=0.5 # pressure drop (units: bar)
+dp_HCl=0.3# pressure drop HCl solution (units: bar)
+npump=0.8 #pump efficiency (units: -)
+```
 
 ## 2. Use MFPFRCALC class   
-MFPFRCALC is a class used to represent Mass Balance for MF-PFR Unit. In particular, it calculates the permeate and concentrate flow rates, and their ion concentrations. 
-MFPFRCALC takes as input the names of components (_comp_), the ion concentration in the feed (_C_in_), the rejection rates of the ions (_rjr_values_), the % of water recovery (_Wrec_) and the feed flow rate (_Qf_).  
+'MFPFRCALC' is a class used to represent Mass Balance for MF-PFR Unit. In particular, it calculates the flowrates, the concentration of the streams and the requirements of alkaline solution in the two steps. 
+MFPFRCALC takes as input the feed flow rate (_Qin_mfpfr_), the ion concentration in the feed (_Cin_mfpfr_), the concentration of NaOH solution for step 1 and step 2 (_C_NaOH_), the Conversion rate (_conv_).  
 ### 2.1. Overview 
 The following attributes are available within the NFMass class:  
 - `MW`: (float) Molecular weight of the solute (g/mol)
@@ -97,35 +117,78 @@ The following attributes are available within the NFMass class:
 - `Ci_out_2`: (float) The outlet ion concentration from step 2 (mol/L)
  
 
-
-TheMFPFRCALC class provides the following method:
+TheMFPFRCALC class provides the following methods:
 ```python
-calculate_perm()
+# Calculation for the 1st step 
+calc_step1()
+
+# Calculation for the 2nd step 
+calc_step2():
 ```
-This method calculates the permeate and concentrate flow rates, as well as their corresponding ion concentrations based on the provided attributes. It is automatically called upon initialization of the class instance.
+The two methods calculate the flowrates, the concentration of the streams and the requirements of alkaline solution in the two steps. It is automatically called upon initialization of the class instance.
 
 ### 2.2. Create MFPFRCALC objects
-MFPFRCALC takes as input the names of components (_comp_), the ion concentration in the feed (_C_in_), the rejection rates of the ions (_rjr_values_), the % of water recovery (_Wrec_) and the feed flow rate (_Qf_).
+'MFPFRCALC' takes as input the feed flow rate (_Qin_mfpfr_), the ion concentration in the feed (_Cin_mfpfr_), the concentration of NaOH solution for step 1 and step 2 (_C_NaOH_), the Conversion rate (_conv_).
 ```python
+# Create an instance of the inputpar class with the defined parameters
+mfpfr_dat = MFPFRCALC(Qin_mfpfr, Cin_mfpfr, *C_NaOH, *conv)
+```
+Then the first method for step 1 is called. It takes as input the product solublity of Mg(OH)2 (_kps_MgOH_) and the Mg(OH)2 density (_ d_mgoh_2_). 
+```python
+# Call the calc_step1 method to calculate the necessary values
+mfpfr_dat.calc_step1(kps_MgOH, d_mgoh_2)
+```
 
+Finally, the second method for step 2 is called. It takes as input the Mg(OH)2 density (_ d_mgoh_2_) and the Ca(OH)2 density (_ d_caoh_2_). 
+```python
+# Call the calc_step2 method to calculate the necessary values
+mfpfr_dat.calc_step2(d_mgoh_2, d_caoh_2 )
 ```
 
 ### 2.3. Assigned the results to output parameters 
-After the calculation of the permeate and concentrate flow rates, as well as their corresponding ion concentrations based on the provided attributes, you can assigned the results to output parameters: 
+After the calculation for the two precipitation steps, you can assigned the results to output parameters: 
 ```python
+ph_2=mfpfr_dat.ph_2
 
+# Calculate the total outlet concentration and the concentration of sulfate ions
+Cour_mfpfr = sum([mfpfr_dat.CNa_out_2, mfpfr_dat.CCa_out_2, mfpfr_dat.CCl_out_2, mfpfr_dat.CK_out_2, mfpfr_dat.CMg_out_2, mfpfr_dat.CSO4_out_2]) # mol/l
+CSO4_out_2 = mfpfr_dat.CSO4_out_2 # mol/l
+
+# Calculate the concentration of sodium chloride ions
+CNa_out_2 = mfpfr_dat.CNa_out_2
+Cnacl_out = CNa_out_2 - 2 * CSO4_out_2
+
+# Get the molar masses of the compounds
+M_MgOH2_1 = mfpfr_dat.M_MgOH2_1
+M_CaOH2 = mfpfr_dat.M_CaOH2_2
+M_MgOH2 = mfpfr_dat.M_MgOH2_2
+
+# Create a list of the outlet concentrations in mol/l
+Cout_all_m = [mfpfr_dat.CNa_out_2, mfpfr_dat.CCl_out_2, mfpfr_dat.CK_out_2, mfpfr_dat.CMg_out_2, mfpfr_dat.CCa_out_2, mfpfr_dat.CSO4_out_2]
+
+#Outlet flow rate 
+Qout_2 = mfpfr_dat.Qout_2
+
+# Calculate the chemical consumption of NaOH
+QNAOH = mfpfr_dat.QNaOH_1 + mfpfr_dat.QNaOH_2_add + mfpfr_dat.QNaOH_2_st # convert to kg
+```
+You can calculate the outlet concentration in g/l 
+```python
+# Calculate the outlet concentrations in g/l
+Cout_mfpfr_g = [Cout_all_m[i] * MW[i] for i in range(len(Cout_all_m))] # g/l
 ```
 
 ### 2.4. Print results 
 You can print results from mass calculations 
 ```python
-
+print("Mg(OH)2 mass flow rate is "+str(round(M_MgOH2_1,2))+"kg/hr")
+print("Ca(OH)2 mass flow rate is "+str(round(M_CaOH2,2))+"kg/hr")
 ```
-
-
+Mg(OH)2 mass flow rate is 9.8kg/hr        
+Ca(OH)2 mass flow rate is 2.06kg/hr     
 
 ## 3. Use HClAddition class 
-HClAddition is a class used to represent the calculation of osmotic pressure for Nanofiltration Unit. For the calculation of the energy consumption, first the Osmotic pressure for the three streams (feed, concentrate, permeate) need to be calculated. For this calculation, you need to use the ion concentration of the stream (_Ci_in_, _Cperm_, _Cconc_) the ionelectric charge (_z_values_), and the stream temperature (_T_). The class _returns the Osmotic pressure_ of the solution.   
+'HClAddition' is a class used to represent the calculation of HCl addition in MF-PFR Unit. It calculates amount of HCl for pH neutralization and the final outlet concentration from MF-PFR unit after pH neutralization. For this calculation, you need to use the outlet flow rate from step 2 (_Qout_2_), the molar concentration of the the outlet flow rate from step 2 (_Cout_all_m), Cl molacular weight (_MW_Cl_), the pH of the solution after the 2nd precipitation step (_ph_2_), and the concentration of the acid solution used for the pH neutralization (_HCl_conc_). The class _returns the flow rate of the required acid solution (_QHCl_) and the new ion concentration in g/l after the pH neutralization (_Cout_mfpfr_g_).   
 ### 3.1. Oveview
 The following attributes are available within theHClAddition class:  
 -  `C1, C2 C3, C4, C5, C6 `: (float) Concentration of ions in the solution (mol/L).
@@ -133,9 +196,8 @@ The following attributes are available within theHClAddition class:
 
 The OsmoticPressure class provides the following method:
 ```python
-osmotic_pressure_calculation()
+calculate_HCl_addition()
 ```
-This method calculates the osmotic pressure of a solution.
 
 ### 3.2. Create HClAddition objectives and calculate the amount of HCl added and the new outlet concentration 
 
@@ -147,13 +209,22 @@ QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition(Cout_mfpfr_g)
 The above line assigns also the results to output parameters.
 
 ### 3.4. Print results 
-You can print results from mass calculations 
+You can print results from HCl addition and the new effluent flow rate.  
 ```python
 # Print the volume of HCl added and the outlet concentration of chloride ions
 print(f"HCl flow rate is {round(QHCl,2)} l/hr")
+
+print("Total effluent flow rate is "+str(round(Mout_f,2))+"kg/hr")
+print("Total effluent flow rate is "+str(round(Qout_f,2))+"kg/hr")
 ```
+HCl flow rate is 152.66 l/hr  
+NaOH flow rate is 531.95 l/hr  
+
+Total effluent flow rate is 1737.65kg/hr   
+Total effluent flow rate is 1679.27kg/hr   
+
 ## 4. Use energycons class
-energycons is a class used to represent the calculation of energy consumption and the specific energy consumption for MF-PFR Unit. For this calculation, takes the Osmotic pressure for the three streams (feed, concentrate, permeate). In addition, the NfEnergy takes as input the expected pressure drop in each stream (_dp_, d_p_, d_in_) and the pump efficiency (_n). The class _returns the Applied pressure, power for applied pressure, the total energy consumption_ and the _specific energy consumption per m<sup>3</sup> permeate_ and _m<sup>3</sup> feed_.
+'energycons' is a class used to represent the calculation of energy consumption and the specific energy consumption for MF-PFR Unit. The takes as input  Qtot, QNaOH, Qin, QNaOH_1, QNaOH_2_add, QNaOH_2_st,  , the expected pressure drop (_dp_) and the pump efficiency (_npump_). The class _returns the Applied pressure, power for applied pressure, the total energy consumption_ and the _specific energy consumption per m<sup>3</sup> permeate_ and _m<sup>3</sup> feed_.
 ### 4.1. Oveview 
 The following attributes are available within the NfEnergy class:  
 - `P_osmo_c`: (float) Osmotic pressure of concentrate stream (bar).
@@ -172,27 +243,35 @@ calculate_energy_consumption()
 ```
 This method calculates the the Applied pressure, power for applied pressure, the total energy consumption and the specific energy consumption per m<sup>3</sup> permeate and _m<sup>3</sup> feed
 
-### 4.2. Create nf_energy objectives and calculate Energy Consumption
+### 4.2. Create nf_energy objectives and assign the results to output parameters
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
 
 ```python
-nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf_nf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
-result=nf_energy.calculate_energy_consumption()
+   # Create an instance of the inputpar class with the defined parameters
+Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr_dat.QNaOH_1, mfpfr_dat.QNaOH_2_add, mfpfr_dat.QNaOH_2_st, dp, npump)
 ```
-### 4.3. Assigned the results to output parameters 
+You can calculate total energy consumption for pumping and the Specific energy consumptions. 
 ```python
-E_el_nf = nf_energy.E_el_nf
+    #Electricity consumption for pumping , KWh
+E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
+
+    #Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
+SEC_el_prod=(E_el_mfpf)/(M_MgOH2)
+
+    #Specific energy consumption per feed, KWh/m3 of feed
+SEC_el_feed=(E_el_mfpf)/(Qin_mfpfr/1000)
 ```
+You can add calculation for the filtration unit, if there are available data and equations. 
 ### 4.4. Print results 
 You can print results from energy calculations. The specific energy consumption is also calculated so you can validate easier the results. 
 ```python
-for key, value in result.items():
-        print(f"{key}: {value}")
+print("Total electricity energy consumption is "+str(round(E_el_mfpf,2))+ " KW")
+print("Specific energy consumption per product is "+str(round(SEC_el_prod,2))+" KWh/kg product ")
+print("Specific energy consumption per brine intake is "+str(round(SEC_el_feed,2))+" KWh/m3 of feed ")
 ```
-Applied pressure (Bar): 24.45  
-Power for pump (KW): 60.01  
-E_el_nf (KW): 75.02  
-Specific Energy Consumption (KWh/m3 of permeate): 0.85
+Total electricity energy consumption is 0.05 KW  
+Specific energy consumption per product is 2.88 KWh/kg product  
+Specific energy consumption per brine intake is 1.49 KWh/m3 of feed  
 
 
 
