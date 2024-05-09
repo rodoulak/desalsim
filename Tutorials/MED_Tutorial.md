@@ -5,7 +5,7 @@ MED is a thermal based process that is used to desalinate water. In this work, M
 
 
 In **DesalSim** package, the MED unit is used to model the operation of a Multi-effect distillation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the cooling water, and the energy requirements.
-The MED function consists of one classes: [MEDCalculator](#use-medalculator-class) that constsis.  
+The MED function consists of one class: [MEDCalculator](#use-medalculator-class) that constsis.  
 In this tutorial, we will focus on how to use the the class and their methods. 
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of Multi-effect distillation. 
