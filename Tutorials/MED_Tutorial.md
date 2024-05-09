@@ -87,7 +87,7 @@ Cb_out=200 #Brine Concentration leaving effect n (unit: g/l)
 Xr=5.5 # brine circulation flow rate (units: -)
 N=2 #Number of effects (-)
 ```
-Finally, you need to set assumptions related to pumping like pressure drop (_dp_) and pump efficiency (_npump_. 
+Finally, you need to set assumptions related to pumping like pressure drop (_dp_) and pump efficiency (_npump_). 
 ```python
 dp=0.1  # pressure drop (units: bar)
 dp_slurry=1 # pressure drop (units: bar)
