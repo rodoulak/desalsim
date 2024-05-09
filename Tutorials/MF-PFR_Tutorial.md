@@ -132,13 +132,15 @@ The two methods calculate the flowrates, the concentration of the streams and th
 # Create an instance of the inputpar class with the defined parameters
 mfpfr_dat = MFPFRCALC(Qin_mfpfr, Cin_mfpfr, *C_NaOH, *conv)
 ```
-Then the first method for step 1 is called. It takes as input the product solublity of Mg(OH)2 (_kps_MgOH_) and the Mg(OH)2 density (_ d_mgoh_2_). 
+Then the first method for step 1 is called. It takes as input the product solublity of Mg(OH)2 (_kps_MgOH_) and the Mg(OH)2 density (_ d_mgoh_2_). It calculates the flowrates, the concentration of the streams and the requirements of alkaline solution in the 1st step. 
+First, it calculate the molar flow rate of magnesium in the reactor during the 1° stepin and then based on the concentration it clculate the volumetric flow rate of sodium hydroxide. Then it calculates magma density: the quantity of solids produced per volume of slurry and based on the outlet solution it calculates the pH ouf step 1. 
 ```python
 # Call the calc_step1 method to calculate the necessary values
 mfpfr_dat.calc_step1(kps_MgOH, d_mgoh_2)
 ```
 
-Finally, the second method for step 2 is called. It takes as input the Mg(OH)2 density (_ d_mgoh_2_) and the Ca(OH)2 density (_ d_caoh_2_). 
+Finally, the second method for step 2 is called. It takes as input the Mg(OH)2 density (_ d_mgoh_2_) and the Ca(OH)2 density (_ d_caoh_2_).  It calculates the flowrates, the concentration of the streams and the requirements of alkaline solution in the 2nd step. 
+First, it calculatethe molar flow rate of calcium in the reactor during the 2nd stepin and then based on the concentration, it clculatethe stoichiometric volumetric flow rate of sodium hydroxide for the second step (_QNaOH_2_st_). Then it calculates concentration of the hydroxide ion in mol/L for a ph=13 solution and the added volumetric flow rate of sodium hydroxide needed to reach a pH = 13 (_QNaOH_2_add_). Finally, the the total outlet volumetric flow rate from 2nd step (_Qtot_out_2_), the outlet mass flow rate of calcium and magnesium hydroxide produced during the 2nd step (__M_CaOH2_2, M_MgOH2_2_), the ph of solution during the second step (_ph_2_), and the total outlet volumetric flow rate for 2nd step (_Qout_2_) and its concentration are calculated. 
 ```python
 # Call the calc_step2 method to calculate the necessary values
 mfpfr_dat.calc_step2(d_mgoh_2, d_caoh_2 )
@@ -223,24 +225,24 @@ Total effluent flow rate is 1737.65kg/hr
 Total effluent flow rate is 1679.27kg/hr   
 
 ## 4. Use energycons class
-'energycons' is a class used to represent the calculation of energy consumption and the specific energy consumption for MF-PFR Unit. The takes as input  Qtot, QNaOH, Qin, QNaOH_1, QNaOH_2_add, QNaOH_2_st,  , the expected pressure drop (_dp_) and the pump efficiency (_npump_). The class _returns the Applied pressure, power for applied pressure, the total energy consumption_ and the _specific energy consumption per m<sup>3</sup> permeate_ and _m<sup>3</sup> feed_.
+'energycons' is a class used to represent the calculation of energy consumption and the specific energy consumption for MF-PFR Unit. The takes as input the total volumetric flow rate (_Qtot_), the volumetric flow rate of sodium hydroxide (_QNaOH_), the volumetric flow rate of input (_Qin_), the volumetric flow rate of sodium hydroxide in the first step (_QNaOH_1_), the Added volumetric flow rate of sodium hydroxide needed to reach a pH of 13 (_QNaOH_2_add_), the stoichiometric volumetric flow rate of sodium hydroxide for the second step (_QNaOH_2_st_), the expected pressure drop (_dp_) and the pump efficiency (_npump_). The class 'energycons' _returns the energy consumption for pumping in the two steps (_Epump_1, Epump_2_)_.
+
 ### 4.1. Oveview 
-The following attributes are available within the NfEnergy class:  
-- `P_osmo_c`: (float) Osmotic pressure of concentrate stream (bar).
-- `P_osmo_f`: (float) Osmotic pressure of feed stream (bar).
-- `P_osmo_p`: (float) Osmotic pressure of permeate stream (bar).
-- `dp`: (float) Pressure drop (bar).
-- `d_p`: (float) Permeate stream density (kg/m³).
-- `Qperm`: (float) Permeate flow rate (kg/h).
-- `Qf`: (float) Concentrate flow rate (kg/h).
-- `d_in`: (float) Feed stream density (kg/m³).
-- `n`: (float) Pump efficiency (-).
+The following attributes are available within the 'energycons' class:  
+- `Qtot`: Total volumetric flow rate (L/h)
+- `QNaOH`: Volumetric flow rate of sodium hydroxide (L/h)
+- `Qin`: Volumetric flow rate of input (L/h)
+- `QNaOH_1`: Volumetric flow rate of sodium hydroxide in the first step (L/h)
+- `QNaOH_2_add`: Added volumetric flow rate of sodium hydroxide needed to reach a pH of 13 (L/h)
+- `QNaOH_2_st`: Stoichiometric volumetric flow rate of sodium hydroxide for the second step (L/h)
+- `dp`: Pressure drop (bar)
+- `npump`: Pump efficiency (-)
 
 The  energycons class provides the following method:
 ```python
 calculate_energy_consumption()
 ```
-This method calculates the the Applied pressure, power for applied pressure, the total energy consumption and the specific energy consumption per m<sup>3</sup> permeate and _m<sup>3</sup> feed
+This method calculates the  the energy consumption for pumping in the two steps (_Epump_1, Epump_2_).
 
 ### 4.2. Create nf_energy objectives and assign the results to output parameters
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
