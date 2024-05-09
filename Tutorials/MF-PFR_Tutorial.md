@@ -91,7 +91,7 @@ npump=0.8 #pump efficiency (units: -)
 'MFPFRCALC' is a class used to represent Mass Balance for MF-PFR Unit. In particular, it calculates the flowrates, the concentration of the streams and the requirements of alkaline solution in the two steps. 
 MFPFRCALC takes as input the feed flow rate (_Qin_mfpfr_), the ion concentration in the feed (_Cin_mfpfr_), the concentration of NaOH solution for step 1 and step 2 (_C_NaOH_), the Conversion rate (_conv_).  
 ### 2.1. Overview 
-The following attributes are available within the NFMass class:  
+The following attributes are available within the MFPFRCALC class:  
 - `MW`: (float) Molecular weight of the solute (g/mol)
 - `Ci_in`: (float) Initial concentration of the solute (g/L)
 - `conv_1`: (float) Conversion rate for Magnesium precipitation in the first step 
@@ -116,7 +116,7 @@ The following attributes are available within the NFMass class:
 - `Ci_out_2`: (float) The outlet ion concentration from step 2 (mol/L)
  
 
-TheMFPFRCALC class provides the following methods:
+The MFPFRCALC class provides the following methods:
 ```python
 # Calculation for the 1st step 
 calc_step1()
@@ -191,11 +191,14 @@ Ca(OH)2 mass flow rate is 2.06kg/hr
 ## 3. Use HClAddition class 
 'HClAddition' is a class used to represent the calculation of HCl addition in MF-PFR Unit. It calculates amount of HCl for pH neutralization and the final outlet concentration from MF-PFR unit after pH neutralization. For this calculation, you need to use the outlet flow rate from step 2 (_Qout_2_), the molar concentration of the the outlet flow rate from step 2 (_Cout_all_m), Cl molacular weight (_MW_Cl_), the pH of the solution after the 2nd precipitation step (_ph_2_), and the concentration of the acid solution used for the pH neutralization (_HCl_conc_). The class _returns the flow rate of the required acid solution (_QHCl_) and the new ion concentration in g/l after the pH neutralization (_Cout_mfpfr_g_).   
 ### 3.1. Oveview
-The following attributes are available within theHClAddition class:  
--  `C1, C2 C3, C4, C5, C6 `: (float) Concentration of ions in the solution (mol/L).
--  `z1, z2,z3, z4, z5, z6`: (int) Charge of ions in the solution.
+The following attributes are available within the HClAddition class:  
+- `Qout_2`: Outlet volumetric flow rate for the second step (L/h)
+- `Cout_all_m`: Outlet concentrations of various components (mol/L)
+- `MW_cl`: Molecular weight of chloride ions (g/mol)
+- `ph_2`: pH of solution during the second step
+- `HCl_conc`: Concentration of hydrochloric acid (HCl) (mol/L)
 
-The OsmoticPressure class provides the following method:
+The HClAddition class provides the following method:
 ```python
 calculate_HCl_addition()
 ```
@@ -244,7 +247,7 @@ calculate_energy_consumption()
 ```
 This method calculates the  the energy consumption for pumping in the two steps (_Epump_1, Epump_2_).
 
-### 4.2. Create nf_energy objectives and assign the results to output parameters
+### 4.2. Create 'energycons' objectives and assign the results to output parameters
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
 
 ```python
