@@ -5,8 +5,7 @@ Multi-plug flow reactor (MF-PFR) is a chemical precipitation technology focusing
 ![mfpfr](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/65a5fccb-e2ac-4d27-9c66-69dca9157656)
 
 In DesalSim package, the MF-PFR unit is used to model the operation of a chemical precipitation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the chemical requirements, and the energy requirements.
-The MF-PFR function consists of three classes: [MFPFRCALC](#use-mfpfrcalc-class), [energycons](#use-energycons-class) and [HClAddition](#use-hcladdition-class).  
-In this tutorial, we will focus on how to use the three classes. 
+The MF-PFR function consists of three classes: [MFPFRCALC](#use-mfpfrcalc-class), [energycons](#use-energycons-class) and [HClAddition](#use-hcladdition-class).  In this tutorial, we will focus on how to use the three classes.   
 
 **Table 2** gives an overview of the main inputs and outputs for each process unit of Multi-plug flow reactor. 
 | Process                                   | Input                                       | Output                                                |
