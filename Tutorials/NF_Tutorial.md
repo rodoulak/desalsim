@@ -147,7 +147,7 @@ P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
 P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 ```
 ## 4. Use NfEnergy class
-NfEnergy is a class used to represent the calculation of energy consumption and the specific energy consumption for Nanofiltration Unit. For this calculation, takes the Osmotic pressure for the three streams (feed, concentrate, permeate). In addition, the NfEnergy takes as input the expected pressure drop in each stream (_dp_, d_p_, d_in_) and the pump efficiency (_n). The class _returns the Applied pressure, power for applied pressure, the total energy consumption_ and the _specific energy consumption per m<sup>3</sup> permeate_ and _m<sup>3</sup> feed_.
+NfEnergy is a class used to represent the calculation of energy consumption and the specific energy consumption for Nanofiltration Unit. For this calculation, the Osmotic pressure for the three streams (feed, concentrate, permeate) is used. In addition, the NfEnergy takes as input the expected pressure drop in each stream (_dp_, d_p_, d_in_) and the pump efficiency (_n_). The class _returns the Applied pressure, power for applied pressure, the total energy consumption_ and the _specific energy consumption per m<sup>3</sup> permeate_ and _m<sup>3</sup> feed_.
 ### 4.1. Oveview 
 The following attributes are available within the NfEnergy class:  
 - `P_osmo_c`: (float) Osmotic pressure of concentrate stream (bar).

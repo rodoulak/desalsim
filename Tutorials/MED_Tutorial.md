@@ -5,7 +5,7 @@ MED is a thermal based process that is used to desalinate water. In this work, M
 
 
 In **DesalSim** package, the MED unit is used to model the operation of a Multi-effect distillation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the cooling water, and the energy requirements.
-The MED function consists of one classes: [MEDCalculator](#use-medalculator-class) that constsis.  
+The MED function consists of one class: [MEDCalculator](#use-medalculator-class) that constsis.  
 In this tutorial, we will focus on how to use the the class and their methods. 
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of Multi-effect distillation. 
@@ -16,7 +16,7 @@ In this tutorial, we will focus on how to use the the class and their methods.
 |                                        | Feed temperature [°C]                        | Electrical [kWhel] and thermal [kWhth] requirements        |
 |                                        | Steam temperature [°C]                       | Cooling water flow rate [m3/h]                             |
 
-The mathematical description of Nanofiltration technology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf), see Section A.2. 
+The mathematical description of Multi-effect distillation technology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf), see Section A.2. 
 
 ## 1. Getting started 
 ### 1.1. Import class
@@ -87,7 +87,7 @@ Cb_out=200 #Brine Concentration leaving effect n (unit: g/l)
 Xr=5.5 # brine circulation flow rate (units: -)
 N=2 #Number of effects (-)
 ```
-Finally, you need to set assumptions related to pumping like pressure drop (_dp_) and pump efficiency (_npump_. 
+Finally, you need to set assumptions related to pumping like pressure drop (_dp_) and pump efficiency (_npump_). 
 ```python
 dp=0.1  # pressure drop (units: bar)
 dp_slurry=1 # pressure drop (units: bar)
@@ -102,10 +102,10 @@ cp_sol=4184 # specific heat capacity of solution (j/kgC)
 After setting all the required inputs, then you can create the functions' objectives. 
 
 ## 2. Use MEDCalculator class   
-MEDCalculator is a class used to represent Mass Balance for Nanofiltration Unit. In particular, it calculates the permeate and concentrate flow rates, and their ion concentrations. 
+MEDCalculator is a class used to represent Mass Balance for MED Unit. In particular, it calculates the permeate and concentrate flow rates, and their ion concentrations. 
 MEDCalculator takes as input the names of components (_comp_), the ion concentration in the feed (_C_in_), the rejection rates of the ions (_rjr_values_), the % of water recovery (_Wrec_) and the feed flow rate (_Qf_).  
 ### 2.1. Overview 
-The following attributes are available within the NFMass class:  
+The following attributes are available within the MEDCalculator class:  
 - `Qf`: (float) Flow rate (m^3/s).
 - `CNa_in, CCl_in, CK_in, CMg_in, CCa_in, CSO4_in` : float
         Initial concentrations of various ions (g/l).
