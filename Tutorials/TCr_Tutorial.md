@@ -192,7 +192,7 @@ conc_cal is a class used to calculate the concentration of different ions in a s
 The following attributes are available within the conc_cal class:  
 - `Qf`: Flow rate (units: m³/h)
 - `solid_mass`: Mass of solid stream (units: kg)
-- - `C1`, `C2`, `C3`, `C4`, `C5`, `C6`: Names of six different ions
+- `C1`, `C2`, `C3`, `C4`, `C5`, `C6`: Names of six different ions
 - `Cc1`, `Cc2`, `Cc3`, `Cc4`, `Cc5`, `Cc6`: Concentrations of six different ions (units: ppm)
 - `d_sol`: Density of the solution at 40°C (units: kg/m³)
 
