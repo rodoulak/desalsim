@@ -1,27 +1,27 @@
 # __init__.py
-from Desalsim import density_calc
-from Desalsim import constants
+from desalsim import density_calc
+from desalsim import constants
 
-from Desalsim.nanofiltration_unit_f import NFMass
-from Desalsim.nanofiltration_unit_f import OsmoticPressure
-from Desalsim.nanofiltration_unit_f import NfEnergy
+from desalsim.nanofiltration_unit_f import NFMass
+from desalsim.nanofiltration_unit_f import OsmoticPressure
+from desalsim.nanofiltration_unit_f import NfEnergy
 
-from Desalsim.med_unit_f import MEDCalculator
+from desalsim.med_unit_f import MEDCalculator
 
-from Desalsim.thermal_cryst_f import thermal_calc
-from Desalsim.thermal_cryst_f import conc_cal
-from Desalsim.thermal_cryst_f import calculate_energy
+from desalsim.thermal_cryst_f import thermal_calc
+from desalsim.thermal_cryst_f import conc_cal
+from desalsim.thermal_cryst_f import calculate_energy
 
-from Desalsim.mfpfr_unit_f import MFPFRCALC
-from Desalsim.mfpfr_unit_f import HClAddition
-from Desalsim.mfpfr_unit_f import energycons
+from desalsim.mfpfr_unit_f import MFPFRCALC
+from desalsim.mfpfr_unit_f import HClAddition
+from desalsim.mfpfr_unit_f import energycons
 
-from Desalsim.ed_unit_f import ElectrodialysisCalc
+from desalsim.ed_unit_f import ElectrodialysisCalc
 
-from Desalsim.edbm_unit_f import EDBMCalc
+from desalsim.edbm_unit_f import EDBMCalc
 
-from Desalsim.economic_f import econom
-from Desalsim.economic_f import revenue
+from desalsim.economic_f import econom
+from desalsim.economic_f import revenue
 
 
 

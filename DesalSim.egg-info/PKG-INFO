@@ -1,19 +1,19 @@
 Metadata-Version: 2.1
 Name: desalsim
-Version: 1.0.2
-Home-page: https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
+Version: 1.0.4
+Home-page: https://github.com/rodoulak/desalsim.git
 Author: rodoulak
 Author-email: r.ktori@tudelft.nl
 License: MIT
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: numpy==1.21.5
-Requires-Dist: pandas==1.4.4
-Requires-Dist: scipy==1.9.1
-Requires-Dist: matplotlib==3.5.2
-Requires-Dist: scikit-learn==1.0.2
-Requires-Dist: plotly>=5.9.0
-Requires-Dist: openpyxl==3.0.10
+Requires-Dist: numpy==1.26.4
+Requires-Dist: pandas==2.2.2
+Requires-Dist: scipy==1.13.0
+Requires-Dist: matplotlib==3.8.4
+Requires-Dist: scikit-learn==1.4.2
+Requires-Dist: plotly==5.22.0
+Requires-Dist: openpyxl==3.1.2
 
 # DesalSim: Desalination and Brine Treatment simulation model
 
@@ -27,8 +27,8 @@ The simulation models implemented here calculate various parameters such as salt
 
 ## Table of contents
 * [Purpose](#purpose)
-* [Key features](#key-features)
 * [Installation](#installation)
+* [Key features](#key-features)
 * [Usage](#usage)
 * [Contributing](#contributing)
 * [Authors and Acknowledgements](#authors-and-acknowledgements)
@@ -41,7 +41,7 @@ The purpose of this software suite is to provide researchers, engineers, and pol
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install desalsim==1.0.2
+pip install desalsim==1.0.4
 ```
 
 If you want to install the latest GitHub verstion:
@@ -62,7 +62,7 @@ pip install -r requirements.txt
 
 ### File Descriptions
 
-A brief overview of each file in the project can be found in (https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/file-description). 
+A brief overview of each file in the project can be found in [File description file](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/File_description.md). 
 
 ## Usage 
 Each simulation model serves as a standalone tool for analyzing the performance of a specific desalination or brine treatment technology. Before running the simulation, ensure that you have provided the necessary input parameters, such as feed flow rates, salinity levels, membrane properties, heat sources, and operating conditions.

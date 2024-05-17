@@ -1,23 +1,23 @@
 #Scenario 2
 ##treatment train: NF-> MED-> THERMAL CRYST                 
-from Desalsim.nanofiltration_unit_f import OsmoticPressure
-from Desalsim.nanofiltration_unit_f import NFMass
-from Desalsim.nanofiltration_unit_f import NfEnergy
+from desalsim.nanofiltration_unit_f import OsmoticPressure
+from desalsim.nanofiltration_unit_f import NFMass
+from desalsim.nanofiltration_unit_f import NfEnergy
 
-from Desalsim.med_unit_f import MEDCalculator
+from desalsim.med_unit_f import MEDCalculator
 
-from Desalsim.thermal_cryst_f import thermal_calc
-from Desalsim.thermal_cryst_f import conc_cal
-from Desalsim.thermal_cryst_f import calculate_energy
+from desalsim.thermal_cryst_f import thermal_calc
+from desalsim.thermal_cryst_f import conc_cal
+from desalsim.thermal_cryst_f import calculate_energy
 
 
-from Desalsim import constants
+from desalsim import constants
 
-from Desalsim.economic_f import revenue
-from Desalsim.economic_f import econom
+from desalsim.economic_f import revenue
+from desalsim.economic_f import econom
 
-from Desalsim import scaleup
-from Desalsim.density_calc import density_calc
+from desalsim import scaleup
+from desalsim.density_calc import density_calc
 import numpy as np
 import pandas as pd
 #%%

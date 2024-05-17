@@ -1,8 +1,8 @@
 import unittest
-from Desalsim.thermal_cryst_f import thermal_calc, conc_cal, calculate_energy
-from Desalsim.density_calc import density_calc
-from Desalsim import constants
-from Desalsim import scaleup
+from desalsim.thermal_cryst_f import thermal_calc, conc_cal, calculate_energy
+from desalsim.density_calc import density_calc
+from desalsim import constants
+from desalsim import scaleup
 
 class TestThermalCrystalUnit(unittest.TestCase):
     def setUp(self):

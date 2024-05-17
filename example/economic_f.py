@@ -1,5 +1,5 @@
 #costs calculations functions 
-from Desalsim import constants 
+from desalsim import constants 
 
 #%%
 #symbols:

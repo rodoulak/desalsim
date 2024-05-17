@@ -1,8 +1,8 @@
 import math 
 import numpy as np
-from Desalsim.density_calc import density_calc 
-from Desalsim import constants 
-from Desalsim import scaleup
+from desalsim.density_calc import density_calc 
+from desalsim import constants 
+from desalsim import scaleup
 
 #%%
 #Molecular weight 

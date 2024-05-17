@@ -24,7 +24,7 @@ The purpose of this software suite is to provide researchers, engineers, and pol
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install desalsim==1.0.2
+pip install desalsim==1.0.4
 ```
 
 If you want to install the latest GitHub verstion:

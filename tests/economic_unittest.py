@@ -1,8 +1,8 @@
 import unittest
-from  Desalsim.economic_f import econom, revenue
-from  Desalsim.density_calc import density_calc
-from Desalsim import constants
-from Desalsim import scaleup
+from desalsim.economic_f import econom, revenue
+from desalsim.density_calc import density_calc
+from desalsim import constants
+from desalsim import scaleup
 
 class TestEconom(unittest.TestCase):
     def setUp(self):

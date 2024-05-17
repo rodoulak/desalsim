@@ -1,8 +1,8 @@
 import math 
 import numpy as np
-from Desalsim.density_calc import density_calc 
-from Desalsim import constants 
-from Desalsim import scaleup
+from desalsim.density_calc import density_calc 
+from desalsim import constants 
+from desalsim import scaleup
 
 #%%
 #Molecular weight 
@@ -235,7 +235,7 @@ class EDBMCalc:
         #Calculation of outlet mass flow rate for water 
         self.M_h2o_s_out=self.M_h2o_s_in
         #Calculation total outlet mass flow rate 
-        self.M_s_out_t=self.M_s_out[0]+self.M_s_out[1]+self.M_h2o_s_out+self.M_s_out[8]+self.M_s_out[7]
+        self.M_s_out_t=self.M_s_out[0]+self.M_s_out[1]+self.M_h2o_s_out#+self.M_s_out[8]+self.M_s_out[7]
         #Calculation of outlet mass flow rate for other ionic species in channel 
         for i in range(2,7):
             self.M_s_out[i]=self.M_s_in[i]

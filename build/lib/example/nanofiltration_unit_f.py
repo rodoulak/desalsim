@@ -1,7 +1,7 @@
 import math
 import numpy as np
-from Desalsim.density_calc import density_calc 
-from Desalsim import constants 
+from desalsim.density_calc import density_calc 
+from desalsim import constants 
 import math
 #
     #molecular weight

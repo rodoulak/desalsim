@@ -1,5 +1,5 @@
 import unittest
-from Desalsim.med_unit_f import MEDCalculator, density_calc
+from desalsim.med_unit_f import MEDCalculator, density_calc
 
 class TestMEDCalculator(unittest.TestCase):
     def setUp(self):

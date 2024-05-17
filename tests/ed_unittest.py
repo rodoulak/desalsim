@@ -1,6 +1,6 @@
 import unittest
-from Desalsim import constants
-from Desalsim.ed_unit_f import ElectrodialysisCalc
+from desalsim import constants
+from desalsim.ed_unit_f import ElectrodialysisCalc
 
 # Define the input parameters for testing
 C_feed = [10.36, 15.39, 0.36, 0.028, 0.02, 0.07]  # Feed concentrations in g/L
