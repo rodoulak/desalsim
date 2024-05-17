@@ -28,12 +28,8 @@ In this tutorial, we provide step-by-step instructions on how to [use economic m
 ### 2.1. Import economic model functions 
 First, import the required functions from `economic_f.py`.  
 ```python
-from economic_f import revenue
-from economic_f import econom
-```
-or 
-```python
-import economic_f
+from desalsim.economic_f import econom
+from desalsim.economic_f import revenue
 ```
 
 ### 2.2. Set constant values 

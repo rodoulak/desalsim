@@ -4,7 +4,7 @@ Multi-plug flow reactor (MF-PFR) is a chemical precipitation technology focusing
 
 ![mfpfr](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/65a5fccb-e2ac-4d27-9c66-69dca9157656)
 
-In DesalSim package, the MF-PFR unit is used to model the operation of a chemical precipitation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the chemical requirements, and the energy requirements.
+In desalsim package, the MF-PFR unit is used to model the operation of a chemical precipitation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the chemical requirements, and the energy requirements.
 The MF-PFR function consists of three classes: [MFPFRCALC](#use-mfpfrcalc-class), [energycons](#use-energycons-class) and [HClAddition](#use-hcladdition-class).  In this tutorial, we will focus on how to use the three classes.   
 
 **Table 2** gives an overview of the main inputs and outputs for each process unit of Multi-plug flow reactor. 
@@ -21,19 +21,19 @@ The mathematical description of MF-PFR technology is given in [Mathematical desc
 ## 1. Getting started 
 ### 1.1. Import classes 
 ```python
-import Desalsim
+import desalsim
 ```
 Then import the three classes:  
 ```python
-from Desalsim.mfpfr_unit_f import MFPFRCALC
-from Desalsim.mfpfr_unit_f import HClAddition
-from Desalsim.mfpfr_unit_f import energycons
+from desalsim.mfpfr_unit_f import MFPFRCALC
+from desalsim.mfpfr_unit_f import HClAddition
+from desalsim.mfpfr_unit_f import energycons
 ```
 Additionally, function for calculating density (`density_calc.py`), constants (`comparison.py`) where user can add constant values like MW, prices etc, scaleup ('scaleup.py') need to be imported. 
 ```python
-from Desalsim.density_calc import density_calc 
-from Desalsim import constants 
-from Desalsim import scaleup
+from desalsim.density_calc import density_calc 
+from desalsim import constants 
+from desalsim import scaleup
 import math
 ```
 ### 1.2. Define feed characteristics

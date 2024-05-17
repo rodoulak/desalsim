@@ -20,7 +20,7 @@ Each section guides you through setting up the simulation environment, running t
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
-pip install DesalSim==1.0.1
+pip install desalsim==1.0.2
 ```
 
 If you want to install the latest GitHub verstion:
@@ -44,19 +44,19 @@ For **Example 1** which consists of four technologies:
 - Electrodialysis With Bipolar Membranes (EDBM)
 their functions are imported:
 ```python
-import Desalsim
+import desalsim
 ```
 Then:  
 ```python
-from Desalsim.nanofiltration_unit_f import OsmoticPressure
-from Desalsim.nanofiltration_unit_f import NFMass
-from Desalsim.nanofiltration_unit_f import NfEnergy
+from desalsim.nanofiltration_unit_f import OsmoticPressure
+from desalsim.nanofiltration_unit_f import NFMass
+from desalsim.nanofiltration_unit_f import NfEnergy
 ```
 Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
-from Desalsim.density_calc import density_calc
-import Desalsim.constants
-import Desalsim.scaleup
+from desalsim.density_calc import density_calc
+import desalsim.constants
+import desalsim.scaleup
 ```
 
 ### 3.1.1. Define feed characteristics

@@ -4,7 +4,7 @@ TCr is a thermal based process that is used to crystallize salt. In this work, T
 ![tcr](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/1cd7f730-e4fa-4a0c-b332-822899e02433)
 
 
-In **DesalSim** package, the TCr unit is used to model the operation of a Thermal crystallizer  technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the cooling water, and the energy requirements.
+In **desalsim** package, the TCr unit is used to model the operation of a Thermal crystallizer  technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the cooling water, and the energy requirements.
 The TCr function consists of three classes: ['thermal_calc'](#use-thermal_calc-class), ['conc_cal'](#use-conc_cal-class), ['calculate_energy'](#use-calculate_energy-class).  
 In this tutorial, we will focus on how to use the the classes and their methods. 
 
@@ -21,19 +21,19 @@ The mathematical description of Thermal Crystallizer technology is given in [Mat
 ## 1. Getting started 
 ### 1.1. Import class
 ```python
-import Desalsim
+import desalsim
 ```
 Then import the class:  
 ```python
-from Desalsim.thermal_cryst_f import thermal_calc
-from Desalsim.thermal_cryst_f import conc_cal
-from Desalsim.thermal_cryst_f import calculate_energy
+from desalsim.thermal_cryst_f import thermal_calc
+from desalsim.thermal_cryst_f import conc_cal
+from desalsim.thermal_cryst_f import calculate_energy
 ```
 Additionally, function for calculating density (`density_calc.py`) need to be imported or constants (comparison.py) where user can add constant values like MW, prices etc, need to be imported.
 ```python
-from Desalsim.density_calc import density_calc 
-from Desalsim import constants 
-from Desalsim import scaleup
+from desalsim.density_calc import density_calc 
+from desalsim import constants 
+from desalsim import scaleup
 ```
 ### 1.2. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 

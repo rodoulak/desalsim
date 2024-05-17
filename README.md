@@ -21,39 +21,10 @@ The simulation models implemented here calculate various parameters such as salt
 The purpose of this software suite is to provide researchers, engineers, and policymakers with a powerful tool for evaluating the performance and economics of desalination and brine treatment systems. By integrating technical process models with economic and environmental analyses, the suite enables users to make informed decisions about technology integration, process optimization, and resource management.
 
 
-## Key features 
-- Simulation models for various desalination and brine treatment technologies
-- Analysis of salt concentration profiles, ion fluxes, energy consumption, and chemical usage
-- Integration of different technologies to optimize process efficiency and resource utilization
-- Economic models for technologies and integrated systems 
-- Output visualization and data export for further analysis 
-
-### File Descriptions
-
-Here is a brief overview of each file in the project:
-
-- `README.md`: This README file providing an overview of the project, usage instructions, and other details.
-- `nanofiltration_unit_f.py`: This file contains the main script for running the simulation model of Nanofiltration (NF) unit.
-- `ro_unit.py`: This file contains the main script for running the simulation model of Reverse Osmosis (RO) unit.
-- `med_unit_f.py`: This file contains the main script for running the simulation model of Multi-effect distillation (MED) unit.
-- `mfpfr_unit.py`: This file contains the main script for running the simulation model of Multiple Feed Plug Flow Reactor (MF-PFR) unit.
-- `economic_f.py`: This file contains the main script for running the economic model of a technology or a system of technologies.
-- `ed_unit_f.py`: This file contains the main script for running the simulation model of Electrodialysis (ED) unit.
-- `edbm_unit_f.py`: This file contains the main script for running the simulation model of Electrodialysis With Bipolar Membranes (EDBM) unit.
-- `efc_unit_f.py`: This file contains the main script for running the simulation model of Eutectic freeze crystallization (EFC) unit.
-- `thermal_cryst_unit_f.py`: This file contains the main script for running the simulation model of Thermal crystallizer (Tcr) unit.
-- `example1.py`: Example script demonstrating the usage of the simulation suite for a specific treatment chain.
-- `example2.py`: Another example script showcasing a different treatment chain simulation.
-- `comparison.py`: Script for results intrepetation. It compares the results of example1 and example2 simulations.
-- `constants.py`: This file contains the main script for input contant parameters.
-- `density_calc.py`: This file contains the main script for calculating density of a solution based on the tempretaure and the concentration of the solution.
-- `scaleup.py`: This file contains the main script for scaling-up a technology with known capacity using the six-tenths factor rule (m=0.6).
-- `LICENSE`: License file containing the MIT License terms.
-
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install DesalSim==1.0.1
+pip install desalsim==1.0.2
 ```
 
 If you want to install the latest GitHub verstion:
@@ -65,6 +36,16 @@ https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-
  ```
 pip install -r requirements.txt
  ```
+## Key features 
+- Simulation models for various desalination and brine treatment technologies
+- Analysis of salt concentration profiles, ion fluxes, energy consumption, and chemical usage
+- Integration of different technologies to optimize process efficiency and resource utilization
+- Economic models for technologies and integrated systems 
+- Output visualization and data export for further analysis 
+
+### File Descriptions
+
+A brief overview of each file in the project can be found in (https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/file-description). 
 
 ## Usage 
 Each simulation model serves as a standalone tool for analyzing the performance of a specific desalination or brine treatment technology. Before running the simulation, ensure that you have provided the necessary input parameters, such as feed flow rates, salinity levels, membrane properties, heat sources, and operating conditions.
@@ -80,16 +61,7 @@ Furthermore, a [comparison file](https://github.com/rodoulak/Desalination-and-Br
 For more details on input/output parameters and assumption see [Link to Tutorial File](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Tutorial.md).
 
 ### Documentation 
-You can find Tutorials and documents at: 
-1. [Tutorial File](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Tutorial.md)
-2. [Tutorial for Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Example_1_Tutorial.md)
-3. [Economic Tutorial](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Economic_Tutorial.md)
-4. The mathematical description of each technology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf)
-5. [Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_1.py)
-6. [Example 2](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_2.py)
-7. [Scenarios comparison](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/comparison.py)
-
-Additionally, you can find tests for every process unit and the economic model in the [tests folder](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/tests) that verify that the code is running properly. 
+You can find Tutorials and documents at [Tutorial File](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Tutorial.md). Additionally, you can find tests for every process unit and the economic model in the [tests folder](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/tests) that verify that the code is running properly. 
 
 
 ## Contributing

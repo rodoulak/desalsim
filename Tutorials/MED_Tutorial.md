@@ -4,7 +4,7 @@ MED is a thermal based process that is used to desalinate water. In this work, M
 ![med](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/54c49681-d70f-4cf4-ab5f-4a5d7d8791b7)
 
 
-In **DesalSim** package, the MED unit is used to model the operation of a Multi-effect distillation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the cooling water, and the energy requirements.
+In **desalsim** package, the MED unit is used to model the operation of a Multi-effect distillation technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the cooling water, and the energy requirements.
 The MED function consists of one class: [MEDCalculator](#use-medalculator-class) that constsis.  
 In this tutorial, we will focus on how to use the the class and their methods. 
 
@@ -21,15 +21,15 @@ The mathematical description of Multi-effect distillation technology is given in
 ## 1. Getting started 
 ### 1.1. Import class
 ```python
-import Desalsim
+import desalsim
 ```
 Then import the class:  
 ```python
-from Desalsim.med_unit_f import MEDCalculator
+from desalsim.med_unit_f import MEDCalculator
 ```
 Additionally, function for calculating density (`density_calc.py`) need to be imported. 
 ```python
-from Desalsim.density_calc import density_calc
+from desalsim.density_calc import density_calc
 ```
 ### 1.2. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 

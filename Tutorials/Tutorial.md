@@ -9,7 +9,7 @@ This tutorial provides a comprehensive overview and guide to utilizing a simulat
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
-pip install DesalSim==1.0.1
+pip install DesalSim==1.0.2
 ```
 
 If you want to install the latest GitHub verstion:
@@ -38,6 +38,15 @@ Step 3: Set input parameters for each process unit as shown in **Table 1** and f
 Step 4: Call function of each process unit, creat objects for each calculation.<br>
 Step 5: Results interpretation. <br>
 <br>
+
+### Documentation  
+You can find Tutorials and documents at: 
+1. [Tutorial for Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Example_1_Tutorial.md)
+2. [Economic Tutorial](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Economic_Tutorial.md)
+3. The mathematical description of each technology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf)
+4. [Example 1](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_1.py)
+5. [Example 2](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/example_2.py)
+6. [Scenarios comparison](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/comparison.py)
 
 ### 4. Technical process models 
 For more detailed steps and instructions see [Tutorial for Example 1](Example_1_Tutorial.md).  

@@ -4,7 +4,7 @@ EDBM is a membrane-based technology that allows the production of acidic and alk
 ![edbm](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/2580e05b-73f2-4fa4-8d52-71762088fc17)
 
 
-In **DesalSim** package, the EDBM unit is used to model the operation of a Electrodialysis with Bipolar membranestechnology. Upon simulation,  it calculates the flow rate of the acid, base and salt solutions, their ion concentration, and the electricity requirements of the unit.
+In **desalsim** package, the EDBM unit is used to model the operation of a Electrodialysis with Bipolar membranestechnology. Upon simulation,  it calculates the flow rate of the acid, base and salt solutions, their ion concentration, and the electricity requirements of the unit.
 The EDBM function consists of one class: [EDBMCalc](#use-edbmcalc-class) that constsis.  
 In this tutorial, we will focus on how to use the the class and their methods. 
 
@@ -21,17 +21,17 @@ The mathematical description of Electrodialysis with Bipolar membranestechnology
 ## 1. Getting started 
 ### 1.1. Import class
 ```python
-import Desalsim
+import desalsim
 ```
 Then import the class:  
 ```python
-from Desalsim.edbm_unit_f import EDBMCalc
+from desalsim.edbm_unit_f import EDBMCalc
 ```
 Additionally, function for calculating density (`density_calc.py`) or constants ('comparison.py') where user can add constant values like MW, prices etc, need to be imported.
 ```python
-from Desalsim.density_calc import density_calc 
-from Desalsim import constants
-from Desalsim import scaleup
+from desalsim.density_calc import density_calc 
+from desalsim import constants
+from desalsim import scaleup
 ```
 ### 1.2. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 

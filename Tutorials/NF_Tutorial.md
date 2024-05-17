@@ -5,7 +5,7 @@ NF provides high rejection of multivalent ions, such as calcium, and low rejecti
 ![nf](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/1d41d6eb-90a7-4b68-ab1b-0ae31f83eb78)
 
 
-In DesalSim package, the Nanofiltration unit is used to model the operation of a nanofiltration (or a membrane-based) technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the applied pressure, and the energy requirements.
+In desalsim package, the Nanofiltration unit is used to model the operation of a nanofiltration (or a membrane-based) technology. Upon simulation, it will generate the influent/effluent mass flows and their concentrations, the applied pressure, and the energy requirements.
 The nanofiltration function consists of three classes: [NFMass](#use-nfmass-class), [OsmoticPressure](#use-osmoticpressure-class) , and [NfEnergy](#use-nfenergy-class).  
 In this tutorial, we will focus on how to use the three classes. 
 
@@ -22,18 +22,18 @@ The mathematical description of Nanofiltration technology is given in [Mathemati
 ## 1. Getting started 
 ### 1.1. Import classes 
 ```python
-import Desalsim
+import desalsim
 ```
 Then import the three classes:  
 ```python
-from Desalsim.nanofiltration_unit_f import OsmoticPressure
-from Desalsim.nanofiltration_unit_f import NFMass
-from Desalsim.nanofiltration_unit_f import NfEnergy
+from desalsim.nanofiltration_unit_f import OsmoticPressure
+from desalsim.nanofiltration_unit_f import NFMass
+from desalsim.nanofiltration_unit_f import NfEnergy
 ```
 Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
-from Desalsim.density_calc import density_calc
-import Desalsim.constants
+from desalsim.density_calc import density_calc
+import desalsim.constants
 ```
 ### 1.2. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 
