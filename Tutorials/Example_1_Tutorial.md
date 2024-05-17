@@ -20,7 +20,7 @@ Each section guides you through setting up the simulation environment, running t
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
-pip install desalsim==1.0.2
+pip install desalsim
 ```
 
 If you want to install the latest GitHub verstion:

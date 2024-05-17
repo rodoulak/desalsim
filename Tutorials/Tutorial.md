@@ -9,7 +9,7 @@ This tutorial provides a comprehensive overview and guide to utilizing a simulat
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
-pip install DesalSim==1.0.2
+pip install DesalSim
 ```
 
 If you want to install the latest GitHub verstion:
