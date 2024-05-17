@@ -45,7 +45,7 @@ pip install -r requirements.txt
 
 ### File Descriptions
 
-A brief overview of each file in the project can be found in (https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/file-description). 
+A brief overview of each file in the project can be found in (https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/File-description). 
 
 ## Usage 
 Each simulation model serves as a standalone tool for analyzing the performance of a specific desalination or brine treatment technology. Before running the simulation, ensure that you have provided the necessary input parameters, such as feed flow rates, salinity levels, membrane properties, heat sources, and operating conditions.
