@@ -63,6 +63,7 @@ For more details on input/output parameters and assumption see [Link to Tutorial
 ### Documentation 
 You can find Tutorials and documents at [Tutorial File](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Tutorial.md). Additionally, you can find tests for every process unit and the economic model in the [tests folder](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/tests) that verify that the code is running properly. 
 
+Beside GitHub environment, you can find Tutorial and documents at file:///C:/Users/rodoulaktori/DesalSim/build/html/index.html
 
 ## Contributing
 Contributions to the project are welcome! If you'd like to contribute, please follow the standard GitHub workflow:
