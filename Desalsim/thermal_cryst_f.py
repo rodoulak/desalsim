@@ -144,7 +144,7 @@ class conc_cal:
         self.Cc5=Cc5
         self.Cc6=Cc6
         # Calculate the density of the feed solution at T_in 
-        self.d_sol=density_calc.density_calc(T_in, self.cf_in) 
+        self.d_sol=density_calc(T_in, self.cf_in) 
     
     
     def molarity(self):        
