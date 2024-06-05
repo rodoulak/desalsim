@@ -36,17 +36,17 @@ from desalsim import scaleup
 ### 1.2. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 
 ```python
+# Input conditions
+ph_s=4.71 #pH salt channel (units: -)
+ph_b=7#pH base channel (units: -)
+ph_a=7#pH acid channel (units: -)
+
   # Feed concentration
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4', 'HCO3', 'H', 'OH']
 Cin_edbm=[13.44, 20.725, 1.146, 0, 0, 0.18, 0, 10**(-ph_s), 3.01551E-11]
 
 #Feed flow rate L/h
 Q_in_edbm=47000
-
-# Input conditions
-ph_s=4.71 #pH salt channel (units: -)
-ph_b=7#pH base channel (units: -)
-ph_a=7#pH acid channel (units: -)
 
 # Feed concentration for base and acid channels 
 C_b_in=[0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b))]
@@ -151,7 +151,7 @@ edbm_dat=EDBMCalc(Q_in_edbm, A, I_d, N_trip, Cin_edbm, C_b_in, C_a_in, T )
 ### 2.3. Use 'flowrate' method 
 This method calculates the flowrate in each channel (_Q1_s_in_, _Q1_a_in_,_Q1_b_in_). 
 ```python
-flowrate()
+edbm_dat.flowrate()
 ```
 It doesn't take additional inputs. 
 
@@ -160,7 +160,7 @@ This method calculates the inlet mass flow rates. In particular, it calculates t
 Additionally, it calculate inlet ionic water product in each channel (_KW_s_in_, _KW_a_in_,_KW_b_in_).
 
 ```python
-in_mass_flow_rates(ph_s)
+edbm_dat.in_mass_flow_rates(ph_s)
 ```
 It takes the initial pH in the salt channel as input. The results are used in the following calculations.  
 
@@ -168,7 +168,7 @@ It takes the initial pH in the salt channel as input. The results are used in th
 It calculates the mass balance calculations for Acid channel. In particular, it calculates the outlet mass flow rate for all ionic species in channel (_M_a_out_) and water (_M_h2o_a_out_), the total outlet mass flow rate (_M_a_out_t_),
 volumetric outlet flow rate (_Q1_a_out_) and the outlet concentration of single ions in channel (_Ci_a_out_). 
 ```python
-acid_channel()
+edbm_dat.acid_channel()
 ```
 It doesn't take additional inputs. 
 ### 2.5.1. Assigned the results to output parameters 
@@ -192,7 +192,7 @@ M_HCl_out=Q_a_out*constants.MW_HCl/1000 #kg/hr
 It calculates the mass balance calculations for Base channel. In particular, it calculates the outlet mass flow rate for all ionic species in channel (_M_b_out_) and water (_M_h2o_b_out_), the total outlet mass flow rate (_M_b_out_t_),
 volumetric outlet flow rate (_Q1_b_out_) and the outlet concentration of single ions in channel (_Ci_b_out_). 
 ```python
-base_channel()
+edbm_dat.base_channel()
 ```
 It doesn't take additional inputs. 
 ### 2.6.1. Assigned the results to output parameters 
@@ -218,7 +218,7 @@ M_NaOH_out=Q_b_out*edbm_dat.Ci_b_out[0]*constants.MW_NaOH/1000 #kg/hr
 It calculates the mass balance calculations for Salt channel and the Voltage (_V_ext_) and Power (_P_) needed. In particular, it calculates the outlet mass flow rate for all ionic species in channel (_M_s_out_) and water (_M_h2o_s_out_), the total outlet mass flow rate (_M_s_out_t_),
 volumetric outlet flow rate (_Q1_s_out_) and the outlet concentration of single ions in channel (_Ci_s_out_). 
 ```python
-salt_channel(Cm_bp_H, Cm_bp_OH)
+edbm_dat.salt_channel(Cm_bp_H, Cm_bp_OH)
 ```
 It takes additional inputs Cm_bp_H, Cm_bp_OH, membrane characteristics. 
 

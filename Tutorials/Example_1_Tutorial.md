@@ -279,6 +279,7 @@ NaOH flow rate is 21918.92 l/hr
 ##### Calculate amount of HCl for pH neutralization and the final outlet concentration from MF-PFR unit after pH neutralization
 ```python
     # Create an instance of the HCladdition class
+HCl_conc=1 # Concentration of HCl: 1M
 unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2, HCl_conc)
 
     # Call the calculate_HCladdition method

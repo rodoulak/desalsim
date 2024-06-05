@@ -132,7 +132,13 @@ med_dat.salinity_calc()
 ```
 It doesn't take additional inputs. 
 
-### 2.4. Use 'mass_balance_med' method 
+### 2.4. Use 'temperature_calc' method 
+This method calculate temperature-related parameters and it takes as input the temperature difference (_DT_loss_), temperature in the last effect (_T_N_), and steam temperature (_T_s). 
+```python
+med_dat.temperature_calc(DT_loss, T_N, T_s)
+```
+
+### 2.5. Use 'mass_balance_med' method 
 This method performs mass balance calculations. In particular, it calculates the brine flow rate of leaving effect n (_Bn_, _Qb_), and the total distillate flow rate (_Mdist_, Qdist_). 
 
 ```python
@@ -152,11 +158,7 @@ Qprod_med=med_dat.Qdist
 Qr=Xr*Qf_med
 ```
 
-### 2.5. Use 'temperature_calc' method 
-This method calculate temperature-related parameters and it takes as input the temperature difference (_DT_loss_), temperature in the last effect (_T_N_), and steam temperature (_T_s). 
-```python
-med_dat.temperature_calc(DT_loss, T_N, T_s)
-```
+
 
 ### 2.6. Use 'performance_parameters' method 
 It calculates the performance parameters _Gain Output Ratio (GOR)_, _Condenser thermal load (Qc)_, _Cooling water flow rate (Qw)_, _Performance ratio (PR)_, _Condenser thermal load (Qsen)_, _Total thermal load_. 
@@ -234,9 +236,6 @@ print("-----------------------------------------")
 #Calculate required cooling water 
 print("Cooling water flow rate: " + str(round(Qcw,2)) + " kg/hr")
 print("-----------------------------------------")
-
-# Chemical consumption
-print("Total Chemical Consumption: " + str(round(Cchem,2))+"kg/hr")
 ```
 
 Brine flow rate: 131.99kg/hr  
@@ -252,4 +251,3 @@ Specific energy consumption (thermal) per m3 feed: 324.73 kWh_th/m3
 
 Cooling water flow rate: 16267.76 kg/hr  
 
-Total Chemical Consumption: 0kg/hr  

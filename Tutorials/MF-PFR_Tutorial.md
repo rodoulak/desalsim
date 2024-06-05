@@ -57,7 +57,7 @@ T=20+273 #Operating temperature (units: K)
     # Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
 ```
-### 1.3. Set Porducts Characteristics  
+### 1.3. Set Products Characteristics  
 You need to set product characteristics such as product solubility and density. 
 ```python
 # Product solublity of Mg(OH)2
@@ -132,6 +132,7 @@ The two methods calculate the flowrates, the concentration of the streams and th
 # Create an instance of the inputpar class with the defined parameters
 mfpfr_dat = MFPFRCALC(Qin_mfpfr, Cin_mfpfr, *C_NaOH, *conv)
 ```
+
 Then the first method for step 1 is called. It takes as input the product solublity of Mg(OH)2 (_kps_MgOH_) and the Mg(OH)2 density (_ d_mgoh_2_). It calculates the flowrates, the concentration of the streams and the requirements of alkaline solution in the 1st step. 
 First, it calculate the molar flow rate of magnesium in the reactor during the 1° stepin and then based on the concentration it clculate the volumetric flow rate of sodium hydroxide. Then it calculates magma density: the quantity of solids produced per volume of slurry and based on the outlet solution it calculates the pH ouf step 1. 
 ```python
@@ -206,7 +207,8 @@ calculate_HCl_addition()
 ### 3.2. Create HClAddition objectives and calculate the amount of HCl added and the new outlet concentration 
 
 ```python
-    # Calculate HClAdditione for  
+    # Calculate HClAdditione for pH=7
+HCl_conc=1 #l of HCl 1M
 unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2, HCl_conc)
 QHCl, Cout_mfpfr_g = unit.calculate_HCl_addition(Cout_mfpfr_g)
 ```

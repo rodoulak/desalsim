@@ -42,9 +42,6 @@ You can initialize the feed solution by setting the flow rate, specifying the fo
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
 Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
 z_values = [1, -1, 1, 2, 2, -2]
-
-    # Feed flowrate
-Qsw = 3000 / 24 * d_in #m3/d
 ```
 Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
 
@@ -55,6 +52,10 @@ T=20+273 #Operating temperature (units: K)
 
     # Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
+```
+```python
+    # Feed flowrate
+Qf_nf = 3000 / 24 * d_in #m3/d
 ```
 ### 1.3. Set Membrane Characteristics  
 You can set membrane characteristics, ion rejection rates and Water recovery. 
