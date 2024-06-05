@@ -26,6 +26,7 @@ The easiest way is through pip, in command-line interface:
 ```
 pip install desalsim
 ```
+You can find the last version: https://pypi.org/project/desalsim/
 
 If you want to install the latest GitHub verstion:
 1. Download the repository to your local machine:
