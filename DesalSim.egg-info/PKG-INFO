@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: desalsim
-Version: 1.0.4
+Version: 1.0.5
 Home-page: https://github.com/rodoulak/desalsim.git
 Author: rodoulak
 Author-email: r.ktori@tudelft.nl
@@ -41,7 +41,7 @@ The purpose of this software suite is to provide researchers, engineers, and pol
 ## Installation  
 The easiest way is through pip, in command-line interface:   
 ```
-pip install desalsim==1.0.4
+pip install desalsim
 ```
 
 If you want to install the latest GitHub verstion:
@@ -80,6 +80,7 @@ For more details on input/output parameters and assumption see [Link to Tutorial
 ### Documentation 
 You can find Tutorials and documents at [Tutorial File](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/example/Tutorial.md). Additionally, you can find tests for every process unit and the economic model in the [tests folder](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/tests) that verify that the code is running properly. 
 
+Beside GitHub environment, you can find Tutorial and documents at [Desalsim](https://desalsim-web.readthedocs.io/en/latest/). 
 
 ## Contributing
 Contributions to the project are welcome! If you'd like to contribute, please follow the standard GitHub workflow:

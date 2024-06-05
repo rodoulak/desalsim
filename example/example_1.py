@@ -1,5 +1,5 @@
 #Import functions 
-from desalsim import density_calc
+from desalsim.density_calc import density_calc
 from desalsim import constants
 from desalsim import scaleup
 

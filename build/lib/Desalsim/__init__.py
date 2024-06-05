@@ -1,5 +1,5 @@
 # __init__.py
-from desalsim import density_calc
+from desalsim.density_calc import density_calc
 from desalsim import constants
 from desalsim.nanofiltration_unit_f import NFMass
 from desalsim.nanofiltration_unit_f import OsmoticPressure
