@@ -67,7 +67,7 @@ You need to set operating assumptions related to temperatures such as the temper
 T_in=40 # (oC)
 T_cw_f=25 #intake cooling water temperature (oC)
 T_cw_o=40 #out cooling water temperature (oC)
-T_top=60 # Operating temperature (oC)
+T_op=60 # Operating temperature (oC)
 
 salt_mois=20 # % moinsture in salt stream (units: %)
 ```
