@@ -7,7 +7,7 @@ with open("README.md", "r") as f:
 
 setup(
       name='desalsim',
-      version='1.0.7',
+      version='1.0.8',
       packages=find_packages(),
       url="https://github.com/rodoulak/desalsim.git",
       author="rodoulak",

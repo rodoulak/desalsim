@@ -83,7 +83,7 @@ class thermal_calc:
         This method calculates the mass balance for thermal crystallization.
         """
         self.nacl_sol = self.Qf*self.Cf_in[0]/self.d_sol/1000*MW_NaCl/MW_Na
-        self.salt_solids = self.Qf*self.Cf_s/self.d_sol/1000 #kg/h
+        self.salt_solids = self.Qf*self.Cf_s/1000/self.d_sol #kg/h
         self.caso4_sol = self.Qf*self.Cf_caso4/100 #kg/h
         self.solid_mass = (self.salt_solids)/(1-self.nacl_sat_wt/100) #kg/h
         self.ev_mass = self.Qf-self.solid_mass #kg/h
