@@ -1,3 +1,0 @@
-desalsim
-example
-tests
