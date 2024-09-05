@@ -11,7 +11,7 @@ A_membrane = 10  # Membrane area in m^2
 V_cell = 100  # Voltage across the cell in V
 I_current = 50  # Current passing through the cell in A
 
-class TestElectrodialysisCalc(unittest.TestCase):
+class test_ElectrodialysisCalc(unittest.TestCase):
     def setUp(self):        
         # Create an instance of the ElectrodialysisCalc class with the defined parameters
         self.ed_calc = ElectrodialysisCalc()

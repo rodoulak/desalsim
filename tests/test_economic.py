@@ -4,7 +4,7 @@ from desalsim.density_calc import density_calc
 from desalsim import constants
 from desalsim import scaleup
 
-class TestEconom(unittest.TestCase):
+class test_Econom(unittest.TestCase):
     def setUp(self):
         # Define sample input data for initialization
         eq_c = 1500000
