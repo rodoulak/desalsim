@@ -68,7 +68,8 @@ Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
 z_values = [1, -1, 1, 2, 2, -2]
 
     # Feed flowrate
-Qsw = 3000 / 24 * d_in #m3/d
+Qsw = 3000 / 24 * d_in #kg/hr
+Qf = Qsw  # kg/hr
 ```
 Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
 
@@ -115,7 +116,7 @@ def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
     return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
 
     # Create NFMass objects for different components
-nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_nf)
+nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf)
 ```
 Assigned the results to output parameters 
 
@@ -154,7 +155,7 @@ P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 ##### Calculate Energy Consumption
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
 ```python
-nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf_nf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
+nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
 result=nf_energy.calculate_energy_consumption()
 E_el_nf = nf_energy.E_el_nf
 ```
@@ -392,7 +393,7 @@ class indic:
 ```
 Let's use Nanofiltration unit as example, here is how it can be used: 
 ```python
-tec1=indic("NF", Qconc, Qf_nf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
+tec1=indic("NF", Qconc, Qf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
 tec1.techn_indi()
 ```
 ##### Create lists with important results

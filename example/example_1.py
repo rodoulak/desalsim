@@ -94,7 +94,7 @@ Qsw = 3000 / 24 * d_in #m3/d
 #Calculations
 """--------Nanofiltration--------"""
 
-Qf_nf = Qsw  # kg/hr
+Qf = Qsw  # kg/hr
 #Constants
 R=8.314 #gas constant (units: J / mol·K)
 
@@ -109,7 +109,7 @@ def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
     return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
 
 # Create NFMass objects for different components
-nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_nf)
+nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf)
 
 # Components concentrattion in concentrate stream 
 Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
@@ -134,7 +134,7 @@ P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 d_p=density_calc(T-273, sum(Cperm))
 
 #Calculate Energy consumption 
-nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf_nf, d_in,n)
+nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf, d_in,n)
 result=nf_energy.calculate_energy_consumption()
 E_el_nf = nf_energy.E_el_nf
 for key, value in result.items():
@@ -606,7 +606,7 @@ class indic:
             print("no water production by " + self.tech)
         
 #%%Sumsummarize results  
-tec1=indic("NF", Qconc, Qf_nf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
+tec1=indic("NF", Qconc, Qf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
 tec1.techn_indi()
 
 tec2=indic("MF-PFR", Qout_2, Qconc, M_MgOH2_1,"Mg(OH)2", M_CaOH2, "Ca(OH)2", E_el_mfpf, 0, Cconc, Cout_mfpfr_g, QNAOH, QHCl)
@@ -839,7 +839,7 @@ sum_table_d=pd.DataFrame(sum_table_d, index=['density'])
 print(sum_table_d)
 
         #Table F: Flow rates  
-sum_table_f={'F1: Seawater': round(Qf_nf,2),
+sum_table_f={'F1: Seawater': round(Qf,2),
            'F2: NF permeate':round(Qperm,2), 
            'F3: NF concentrate': round(Qconc,2),
            'F4: ED diluate': round(  Md,2), 
