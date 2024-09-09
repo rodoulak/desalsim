@@ -18,7 +18,7 @@ class TestThermalCrystalUnit(unittest.TestCase):
         self.LHV_s = 2357.69  # Steam temperature (°C)
         self.T_cw_o = 40  # Cooling water inlet temperature (°C)
         self.T_cw_f = 25  # Cooling water outlet temperature (°C)
-        self.d_sol=density_calc(self.T_in, sum(Cf_in)) 
+        self.d_sol=density_calc(self.T_in, sum(Cf_in))/1000 
         
         # Create an instance of the thermal_calc class with the defined parameters
         self.thermal_calc_instance = thermal_calc(self.T_op, self.Qf, self.Cf_s, Cf_caso4,self.T_in, Cf_in, self.salt_mois, self.LHV_v, self.LHV_s,self.T_cw_o, self.T_cw_f)
