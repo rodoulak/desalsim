@@ -44,7 +44,8 @@ Qf_med =1000 #l/hr
 #input conditions
 T=20
 ```
-Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ciin_med_. 
+> [!NOTE]
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ciin_med_. 
 
 You can calculate the density of the feed solution and the mass flow rate:
 ```python
