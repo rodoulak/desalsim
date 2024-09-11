@@ -47,7 +47,7 @@ inf=0.02 #(-)
 Import 'constants.py' for more constant parameters like molecular weights (MW) etc.  
 
 ```python
-import constants
+import desalsim.constants
 ```
 
 ### 2.3. Set input data 
