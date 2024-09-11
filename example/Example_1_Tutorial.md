@@ -20,7 +20,7 @@ Each section guides you through setting up the simulation environment, running t
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
-pip install DesalSim==1.0.1
+pip install desalsim
 ```
 
 If you want to install the latest GitHub verstion:
@@ -49,9 +49,9 @@ import Desalsim
 Then:  
 ```python
 # Nanofiltration unit
-from Desalsim.nanofiltration_unit_f import OsmoticPressure
-from Desalsim.nanofiltration_unit_f import NFMass
-from Desalsim.nanofiltration_unit_f import NfEnergy
+from desalsim.nanofiltration_unit_f import OsmoticPressure
+from desalsim.nanofiltration_unit_f import NFMass
+from desalsim.nanofiltration_unit_f import NfEnergy
 
 # MF-PFR unit
 from desalsim.mfpfr_unit_f import MFPFRCALC
@@ -60,9 +60,9 @@ from desalsim.mfpfr_unit_f import energycons
 ```
 Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
-from Desalsim.density_calc import density_calc
-import Desalsim.constants
-import Desalsim.scaleup
+from desalsim.density_calc import density_calc
+import desalsim.constants
+import desalsim.scaleup
 ```
 For example: 
 ```python
