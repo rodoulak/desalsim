@@ -48,9 +48,15 @@ import Desalsim
 ```
 Then:  
 ```python
+# Nanofiltration unit
 from Desalsim.nanofiltration_unit_f import OsmoticPressure
 from Desalsim.nanofiltration_unit_f import NFMass
 from Desalsim.nanofiltration_unit_f import NfEnergy
+
+# MF-PFR unit
+from desalsim.mfpfr_unit_f import MFPFRCALC
+from desalsim.mfpfr_unit_f import HClAddition
+from desalsim.mfpfr_unit_f import energycons
 ```
 Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
@@ -58,7 +64,18 @@ from Desalsim.density_calc import density_calc
 import Desalsim.constants
 import Desalsim.scaleup
 ```
-
+For example: 
+```python
+#Molecular weight 
+    #molecular weight
+MW_Na=constants.MW_Na
+MW_Cl=constants.MW_cl
+MW_SO4=constants.MW_so4
+MW_K=constants.MW_K
+MW_Ca=constants.MW_Ca
+MW_Mg=constants.MW_Mg
+MW = [MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4]
+```
 ### 3.1.1. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 
 ```python
@@ -82,8 +99,7 @@ d_in = density_calc(T-273, mg_in)  # kg/m3
 Qsw = 3000 / 24 * d_in #kg/hr
 Qf = Qsw  # kg/hr
 ```
-> **Note:**
-> 
+> [!NOTE]
 > Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the `Ci_in`.
 
 ## 3.2. Use process unit model
@@ -129,6 +145,7 @@ Assigned the results to output parameters
 Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
     # Components concentrattion in permeate stream 
 Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
+d_p=density_calc(T-273, sum(Cperm))  # Permeate desnity kg/m3
     # Permeate stream mass flow rate
 Qperm = nfmass_objects[0].Qperm  # kg/hr
     # Concentrate stream mass flow rate
@@ -159,7 +176,12 @@ P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 ##### Calculate Energy Consumption
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
 ```python
-nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
+# Assumptions
+n=0.8 #pump efficiency (units: -)
+dp=2 # pressure drop (units: bar)
+
+# Calculation 
+nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf, d_in,n) 
 result=nf_energy.calculate_energy_consumption()
 E_el_nf = nf_energy.E_el_nf
 ```
