@@ -43,7 +43,8 @@ components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
 Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
 z_values = [1, -1, 1, 2, 2, -2]
 ```
-Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
+> [!NOTE]
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
 
 You can calculate the density of the feed solution:
 ```python

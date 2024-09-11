@@ -53,7 +53,8 @@ Qf=1000 #kg/h
 # input conditions 
 T_in=40 #oC
 ```
-Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Cf_tcr_in_. 
+> [!NOTE]
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Cf_tcr_in_. 
 
 You can calculate the density of the feed solution:
 ```python

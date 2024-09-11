@@ -47,7 +47,8 @@ MW = [MW_Na, MW_Ca, MW_Cl, MW_K, MW_Mg, MW_SO4]
     # Feed flowrate
 Qin_mfpfr = 1000  # Flow rate in l/hr
 ```
-Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
+> [!NOTE]
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
 
 You can calculate the density of the feed solution:
 ```python

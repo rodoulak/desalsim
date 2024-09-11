@@ -44,13 +44,19 @@ For **Example 1** which consists of four technologies:
 - Electrodialysis With Bipolar Membranes (EDBM)
 their functions are imported:
 ```python
-import desalsim
+import Desalsim
 ```
 Then:  
 ```python
+# Nanofiltration unit
 from desalsim.nanofiltration_unit_f import OsmoticPressure
 from desalsim.nanofiltration_unit_f import NFMass
 from desalsim.nanofiltration_unit_f import NfEnergy
+
+# MF-PFR unit
+from desalsim.mfpfr_unit_f import MFPFRCALC
+from desalsim.mfpfr_unit_f import HClAddition
+from desalsim.mfpfr_unit_f import energycons
 ```
 Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
@@ -58,7 +64,18 @@ from desalsim.density_calc import density_calc
 import desalsim.constants
 import desalsim.scaleup
 ```
-
+For example: 
+```python
+#Molecular weight 
+    #molecular weight
+MW_Na=constants.MW_Na
+MW_Cl=constants.MW_cl
+MW_SO4=constants.MW_so4
+MW_K=constants.MW_K
+MW_Ca=constants.MW_Ca
+MW_Mg=constants.MW_Mg
+MW = [MW_Na, MW_Cl, MW_K, MW_Mg, MW_Ca, MW_SO4]
+```
 ### 3.1.1. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 
 ```python
@@ -66,11 +83,7 @@ You can initialize the feed solution by setting the flow rate, specifying the fo
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
 Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
 z_values = [1, -1, 1, 2, 2, -2]
-
-    # Feed flowrate
-Qsw = 3000 / 24 * d_in #m3/d
 ```
-Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
 
 You can calculate the density of the feed solution:
 ```python
@@ -80,6 +93,14 @@ T=20+273 #Operating temperature (units: K)
     # Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
 ```
+
+```python
+    # Feed flowrate
+Qsw = 3000 / 24 * d_in #kg/hr
+Qf = Qsw  # kg/hr
+```
+> [!NOTE]
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the `Ci_in`.
 
 ## 3.2. Use process unit model
 
@@ -115,7 +136,7 @@ def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
     return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
 
     # Create NFMass objects for different components
-nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_nf)
+nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf)
 ```
 Assigned the results to output parameters 
 
@@ -124,6 +145,7 @@ Assigned the results to output parameters
 Cconc = [nf_mass.Cconci for nf_mass in nfmass_objects]
     # Components concentrattion in permeate stream 
 Cperm = [nf_mass.Cpermi for nf_mass in nfmass_objects]
+d_p=density_calc(T-273, sum(Cperm))  # Permeate desnity kg/m3
     # Permeate stream mass flow rate
 Qperm = nfmass_objects[0].Qperm  # kg/hr
     # Concentrate stream mass flow rate
@@ -154,7 +176,12 @@ P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 ##### Calculate Energy Consumption
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
 ```python
-nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf_nf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
+# Assumptions
+n=0.8 #pump efficiency (units: -)
+dp=2 # pressure drop (units: bar)
+
+# Calculation 
+nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp, d_p, Qperm, Qf, d_in,n) 
 result=nf_energy.calculate_energy_consumption()
 E_el_nf = nf_energy.E_el_nf
 ```
@@ -169,6 +196,11 @@ Power for pump (KW): 60.01
 E_el_nf (KW): 75.02  
 Specific Energy Consumption (KWh/m3 of permeate): 0.85
 
+##### Chemical consumption 
+```python
+QHCl_nf=0
+Qantsc_nf=0
+```
 
 ### 3.2.2.  Multi-plug flow reactor
 
@@ -198,7 +230,9 @@ d_in = density_calc(25, sum(Cin_mfpfr)) / 1000
 ##### Setting other input parameters
 Then the required input for MFPFR unit need to be added from unser. 
 
-First, the concentration of the alkaline solution (NaOH) and acid solution (HCl) are import. Note that different chemicals and concentrations can be used for the percicipation and the pH neutralization.
+First, the concentration of the alkaline solution (NaOH) and acid solution (HCl) are import. 
+> [!NOTE]
+> Note that different chemicals and concentrations can be used for the percicipation and the pH neutralization.
 
 ```python
     # Concentration of NaOH solution for step 1 and step 2 in MOL/L
@@ -279,7 +313,6 @@ NaOH flow rate is 21918.92 l/hr
 ##### Calculate amount of HCl for pH neutralization and the final outlet concentration from MF-PFR unit after pH neutralization
 ```python
     # Create an instance of the HCladdition class
-HCl_conc=1 # Concentration of HCl: 1M
 unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2, HCl_conc)
 
     # Call the calculate_HCladdition method
@@ -308,16 +341,24 @@ Total effluent flow rate is 66280.95kg/hr
 ##### Calculate Energy consumption 
 First, create an instance of the inputpar class with the defined parameters. 
 ```python
+# Assumptions
+npump=0.8 #pump efficiency (units: -)
+dp=2 # pressure drop (units: bar)
     # Create an instance of the inputpar class with the defined parameters
 Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr_dat.QNaOH_1, mfpfr_dat.QNaOH_2_add, mfpfr_dat.QNaOH_2_st, dp, npump)
 ```
 Calculate the total pumping energy including the HCl stream
 ```python
+# Assumptions
+dp_HCl=0.3 # pressure drop HCl solution (units: bar)
+
     # Electricity consumption for pumping , KWh
 E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
 print("Total electricity energy consumption is "+str(round(E_el_mfpf,2))+ " KW")
 ```
-Note that you can add a calculation for filtration unit and then sum the energy requirements. 
+> [!NOTE]
+> Note that you can add a calculation for filtration unit and then sum the energy requirements.
+> 
 Specific energy consumption can also be calculated: 
 ```python
     # Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
@@ -344,7 +385,8 @@ You need to follow similar steps for the other two processes.
 |                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
-_Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain._ 
+> [!NOTE]
+> Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain. 
 In this treatment chain, Electrodialysis with bipolar membrane has two streams as feed for the salt channel. The two streams are mixed. For this the following calculations are required to calculate the new flow rate and concentration after the mixing. 
 ```python
     # Feed flow rate L/h
@@ -363,48 +405,105 @@ After the simulation of the treatment chain, the performance of the process unit
 The following code can be used to summarise the most important results from each process unit. Note that more results can be added. 
 ```python
 class indic:
-    
-    def __init__(self, tech, Qout, Qin, Qprod_1, prod_1_name, Qprod_2, prod_2_name, E_el, E_th, Cin, Cout, chem1,chem2):
-        self.tech=tech
-        self.Qout=Qout
-        self.Qin=Qin
-        self.E_el=E_el
-        self.E_th=E_th
-        self.Cin=Cin
-        self.Cout=Cout
-        self.Qprod_1=Qprod_1
-        self.Qprod_2=Qprod_2
-        self.prod_1_name=prod_1_name
-        self.prod_2_name=prod_2_name
-        self.chem=chem1+chem2
+    """
+    A class to summarize the performance indicators of a given technology.
+
+    Attributes
+    ----------
+    tech : str
+        The name of the technology (e.g., "NF" for Nanofiltration).
+    Qout : float
+        The output flow rate (e.g., m³/h).
+    Qin : float
+        The input flow rate (e.g., m³/h).
+    Qprod_1 : float
+        The flow rate of the first product stream (e.g., m³/h).
+    prod_1_name : str
+        The name of the first product stream (e.g., "water").
+    Qprod_2 : float
+        The flow rate of the second product stream, if any (e.g., m³/h).
+    prod_2_name : str
+        The name of the second product stream, if any.
+    E_el : float
+        The electrical energy consumption (e.g., kWh).
+    E_th : float
+        The thermal energy consumption (e.g., kWh).
+    Cin : list
+        The concentration of components in the input stream.
+    Cout : list
+        The concentration of components in the output stream.
+    chem : float
+        The total chemical consumption (sum of chem1 and chem2).
+    """
+
+    def __init__(self, tech, Qout, Qin, Qprod_1, prod_1_name, Qprod_2, prod_2_name, E_el, E_th, Cin, Cout, chem1, chem2):
+        self.tech = tech
+        self.Qout = Qout
+        self.Qin = Qin
+        self.E_el = E_el
+        self.E_th = E_th
+        self.Cin = Cin
+        self.Cout = Cout
+        self.Qprod_1 = Qprod_1
+        self.Qprod_2 = Qprod_2
+        self.prod_1_name = prod_1_name
+        self.prod_2_name = prod_2_name
+        self.chem = chem1 + chem2
+
+    def techn_indi(self):
+        """
+        Calculate and return the technical indicators for the technology.
         
+        This method calculates the water recovery rate (if applicable) and
+        assigns it to the instance. It also handles cases where no water is produced.
         
-    def techn_indi(self):        
-        if self.prod_1_name=="water": 
-            self.Water_rr=self.Qprod_1/self.Qin*100 # %
-            self.Qwater=self.Qprod_1
-        elif self.prod_2_name=="water":
-            self.Water_rr=self.Qprod_2/self.Qin*100 # %
-            self.Qwater=self.Qprod_2
+        Returns
+        -------
+        None
+        """
+        if self.prod_1_name == "water":
+            self.Water_rr = self.Qprod_1 / self.Qin * 100  # Water recovery rate in %
+            self.Qwater = self.Qprod_1
+        elif self.prod_2_name == "water":
+            self.Water_rr = self.Qprod_2 / self.Qin * 100  # Water recovery rate in %
+            self.Qwater = self.Qprod_2
         else:
-            self.Qwater=0
-            self.Water_rr=0
-            print("no water production by " + self.tech)
+            self.Qwater = 0
+            self.Water_rr = 0
+            print("No water production by " + self.tech)
+
 ```
 Let's use Nanofiltration unit as example, here is how it can be used: 
 ```python
-tec1=indic("NF", Qconc, Qf_nf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
+# Example of summarizing performance indicators for a Nanofiltration (NF) process
+
+# Create an instance of the 'indic' class to summarize the NF results
+tec1=indic("NF", Qconc, Qf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)
+
+# Generate the summary of performance indicators
 tec1.techn_indi()
 ```
 ##### Create lists with important results
 After collecting all the important results, they can summarise in lists: 
 ```python
-    # List results 
+    # List results
+
+# List of technology names
 tec_names=[tec1.tech,tec2.tech, tec3.tech,  tec4.tech]
+
+# List of electrical energy consumption for each technology (in kWh)
 E_el_all=[tec1.E_el,tec2.E_el, tec3.E_el, tec4.E_el]
+
+# List of thermal energy consumption for each technology (in kWh)
 E_th_all=[tec1.E_th,tec2.E_th, tec3.E_th,  tec4.E_th]
+
+# List of output concentrations for each technology
 Cout_all=[tec1.Cout,tec2.Cout, tec3.Cout,  tec4.Cout]
+
+# List of output flow rates for each technology (in l/h)
 Qout_all=[tec1.Qout, tec2.Qout, tec3.Qout,  tec4.Qout]
+
+# List of total chemical consumption for each technology
 Qchem_all=[tec1.chem,tec2.chem,tec3.chem, tec4.chem]
 ```
 ### 4.2. Formulate performance indicators
@@ -475,7 +574,8 @@ for i in range(len(prd)):
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)
 ```
-**_Note that a detailed description of the economic model and more economic indicators can be found in ._** 
+> [!NOTE]
+> Note that a detailed description of the economic model and more economic indicators can be found in [Economic tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/Economic_Tutorial.md).  
 
 ### 4.2.3. Environmental indicators 
 A simple indicator to evaluate the environmental performance of the treatment chain is the **Carbon dioxide emissions**.  
