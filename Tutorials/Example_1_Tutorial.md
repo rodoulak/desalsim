@@ -44,7 +44,7 @@ For **Example 1** which consists of four technologies:
 - Electrodialysis With Bipolar Membranes (EDBM)
 their functions are imported:
 ```python
-import Desalsim
+import desalsim
 ```
 Then:  
 ```python
