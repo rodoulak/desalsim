@@ -626,7 +626,7 @@ with pd.ExcelWriter('results_example.xlsx') as writer:
     units.to_excel(writer,sheet_name="indicators",startcol=2, startrow=0, header=True)
 ```
 
-Additionally, table with flowrates and concentrations can be developed (see 'exmple_1.py) and printed in Excel. 
+Additionally, table with flowrates and concentrations can be developed (see `exmple_1.py`) and printed in Excel. 
 
 ### 4.3. Visualization 
 For the visualization of the treatment chain, a **Sankey** diagram is created. For this diagram, the mass flow rates are needed. 
