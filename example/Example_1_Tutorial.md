@@ -44,7 +44,7 @@ For **Example 1** which consists of four technologies:
 - Electrodialysis With Bipolar Membranes (EDBM)
 their functions are imported:
 ```python
-import Desalsim
+import desalsim
 ```
 Then:  
 ```python
@@ -66,8 +66,7 @@ import desalsim.scaleup
 ```
 For example: 
 ```python
-#Molecular weight 
-    #molecular weight
+# Molecular weights 
 MW_Na=constants.MW_Na
 MW_Cl=constants.MW_cl
 MW_SO4=constants.MW_so4
