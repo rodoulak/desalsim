@@ -16,7 +16,7 @@ Each section guides you through setting up the simulation environment, running t
 
 **Figure 1**. Process flow diagram of example 1.
 <br>
-</div>
+
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
