@@ -429,7 +429,11 @@ def CrystalSizeDistribution():
     #Calculation of the equilibrium values using interpolation/extrapolation of the solubility and ice lines
     C_compound1_eq=interpolate.splev(Var.Treactor, tck, der=0)
     
-    C_compound1_eq=float(C_compound1_eq)
+    if np.isscalar(C_compound1_eq):
+        C_compound1_eq = float(C_compound1_eq)
+    else:
+        C_compound1_eq = C_compound1_eq.astype(float)
+
     print("C_compound1_eq is "+str(C_compound1_eq))
           
     T_ice_eq_array=lm.predict(Var.C_compound1)
@@ -466,7 +470,8 @@ def CrystalSizeDistribution():
     Ng_compound1_cr=-(G_compound1_cr*Var.N_compound1_cr[0]*deltat)/deltal
     Nd_compound1_cr=-(D_compound1_cr*Var.N_compound1_cr[0]*deltat)/deltal
    
-    Var.N_compound1_cr[0]=Var.N_compound1_cr[0]+Nb_compound1_cr+Ng_compound1_cr+Nd_compound1_cr-(Fout_compound1_cr*deltat*Var.N_compound1_cr[0])/Var.M_compound1_cr
+    Var.N_compound1_cr[0] += Nb_compound1_cr + Ng_compound1_cr + Nd_compound1_cr - (Fout_compound1_cr * deltat * Var.N_compound1_cr[0]) / Var.M_compound1_cr
+
     Var.V_compound1_cr_distr[0]=Var.N_compound1_cr[0]*Compound1.kv*0.25*(deltal**4)/deltal
     atot_compound1_cr=atot_compound1_cr+Var.N_compound1_cr[0]*Compound1.ka*(deltal**2)*(0**2)
     
@@ -475,7 +480,7 @@ def CrystalSizeDistribution():
         Ng_compound1_cr=(G_compound1_cr*deltat*(Var.N_compound1_cr[i-1]-Var.N_compound1_cr[i]))/deltal
         Nd_compound1_cr=(D_compound1_cr*deltat*(Var.N_compound1_cr[i+1]-Var.N_compound1_cr[i]))/deltal
 
-        Var.N_compound1_cr[i]=Var.N_compound1_cr[i]+Ng_compound1_cr+Nd_compound1_cr-(Var.N_compound1_cr[i]*Fout_compound1_cr*deltat)/Var.M_compound1_cr
+        Var.N_compound1_cr[i] += Ng_compound1_cr + Nd_compound1_cr - (Var.N_compound1_cr[i] * Fout_compound1_cr * deltat) / Var.M_compound1_cr
         Var.V_compound1_cr_distr[i]=Var.N_compound1_cr[i]*Compound1.kv*0.25*((((i+1)*deltal)**4)-((i*deltal)**4))/deltal
         atot_compound1_cr=atot_compound1_cr+Var.N_compound1_cr[i]*Compound1.ka*(deltal**2)*(i**2)     
         
@@ -483,7 +488,7 @@ def CrystalSizeDistribution():
     Ng_compound1_cr=(G_compound1_cr*deltat*Var.N_compound1_cr[classes-2])/deltal
     Nd_compound1_cr=-(D_compound1_cr*deltat*Var.N_compound1_cr[classes-1])/deltal
     
-    Var.N_compound1_cr[classes-1]=Var.N_compound1_cr[classes-1]+Ng_compound1_cr+Nd_compound1_cr-(Var.N_compound1_cr[classes-1]*deltat*Fout_compound1_cr)/Var.M_compound1_cr
+    Var.N_compound1_cr[classes-1] += Ng_compound1_cr + Nd_compound1_cr - (Var.N_compound1_cr[classes-1] * deltat * Fout_compound1_cr) / Var.M_compound1_cr
     Var.V_compound1_cr_distr[classes-1]=Var.N_compound1_cr[classes-1]*Compound1.kv*0.25*(((classes*deltal)**4)-(((classes-1)*deltal)**4))/deltal
     atot_compound1_cr=atot_compound1_cr+Var.N_compound1_cr[classes-1]*Compound1.ka*(deltal**2)*((classes-1)**2)  
         
@@ -520,7 +525,7 @@ def CrystalSizeDistribution():
     Ng_ice=-(G_ice*Var.N_ice[0]*deltat)/deltal
     Nd_ice=-(D_ice*Var.N_ice[0]*deltat)/deltal
 
-    Var.N_ice[0]=Var.N_ice[0]+Nb_ice+Ng_ice+Nd_ice-(Fout_ice*deltat*Var.N_ice[0])/Var.M_ice
+    Var.N_ice[0] += Nb_ice + Ng_ice + Nd_ice - (Fout_ice * deltat * Var.N_ice[0]) / Var.M_ice
     Var.V_ice_distr[0]=Var.N_ice[0]*kv_ice*0.25*(deltal**4)/deltal
     atot_ice=atot_ice+Var.N_ice[0]*ka_ice*(deltal**2)*(0**2)
      
@@ -529,7 +534,7 @@ def CrystalSizeDistribution():
         Ng_ice=(G_ice*deltat*(Var.N_ice[i-1]-Var.N_ice[i]))/deltal
         Nd_ice=(D_ice*deltat*(Var.N_ice[i+1]-Var.N_ice[i]))/deltal
         
-        Var.N_ice[i]=Var.N_ice[i]+Ng_ice+Nd_ice-(Var.N_ice[i]*Fout_ice*deltat)/Var.M_ice
+        Var.N_ice[i] += Ng_ice + Nd_ice - (Var.N_ice[i] * Fout_ice * deltat) / Var.M_ice
         Var.V_ice_distr[i]=Var.N_ice[i]*kv_ice*0.25*((((i+1)*deltal)**4)-((i*deltal)**4))/deltal
         atot_ice=atot_ice+Var.N_ice[i]*ka_ice*(deltal**2)*(i**2)
         
@@ -537,7 +542,7 @@ def CrystalSizeDistribution():
     Ng_ice=(G_ice*deltat*Var.N_ice[classes-2])/deltal
     Nd_ice=-(D_ice*deltat*Var.N_ice[classes-1])/deltal
       
-    Var.N_ice[classes-1]=Var.N_ice[classes-1]+Ng_ice+Nd_ice-(Var.N_ice[classes-1]*deltat*Fout_ice)/Var.M_ice
+    Var.N_ice[classes-1] += Ng_ice + Nd_ice - (Var.N_ice[classes-1] * deltat * Fout_ice) / Var.M_ice
     Var.V_ice_distr[classes-1]=Var.N_ice[classes-1]*kv_ice*0.25*(((classes*deltal)**4)-(((classes-1)*deltal)**4))/deltal
     atot_ice=atot_ice+Var.N_ice[classes-1]*ka_ice*(deltal**2)*((classes-1)**2)
     
