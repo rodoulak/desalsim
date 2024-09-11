@@ -1,7 +1,7 @@
 import math
 import numpy as np
-from desalsim.density_calc import density_calc
-from desalsim import constants 
+from .density_calc import density_calc
+from . import constants 
 import math
 
 #

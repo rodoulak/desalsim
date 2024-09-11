@@ -1,8 +1,8 @@
 import numpy as np
-from desalsim import scaleup
-from desalsim import constants 
+from . import scaleup
+from . import constants 
 import math
-from desalsim.density_calc import density_calc 
+from .density_calc import density_calc 
 
 #%% Calculations 
 """
