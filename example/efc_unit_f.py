@@ -848,7 +848,6 @@ print("Mout*res is "+str(Mout*res))
 print("M_compound1_cr*res is "+str(M_compound1_cr*res))
 
 M_efc_out=Var.M_liquid_tot.item()
-M_compound1_cr=M_compound1_cr*res+bal
+M_compound1_cr=M_compound1_cr*res
 M_ice=M_ice*res
-bal=Qf-M_ice -Var.M_liquid_tot.item() -M_compound1_cr
-print("bal is "+str(bal))
+
