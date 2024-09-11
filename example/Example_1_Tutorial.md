@@ -226,8 +226,7 @@ d_in = density_calc(25, sum(Cin_mfpfr)) / 1000
 Then the required input for MFPFR unit need to be added from unser. 
 
 First, the concentration of the alkaline solution (NaOH) and acid solution (HCl) are import. 
-> **Note:**
-> 
+> [!NOTE]
 > Note that different chemicals and concentrations can be used for the percicipation and the pH neutralization.
 
 ```python
@@ -337,18 +336,24 @@ Total effluent flow rate is 66280.95kg/hr
 ##### Calculate Energy consumption 
 First, create an instance of the inputpar class with the defined parameters. 
 ```python
+# Assumptions
+npump=0.8 #pump efficiency (units: -)
+dp=2 # pressure drop (units: bar)
     # Create an instance of the inputpar class with the defined parameters
 Epump_1, Epump_2=energycons.energycalc(mfpfr_dat.Qout_2, QNAOH, Qin_mfpfr, mfpfr_dat.QNaOH_1, mfpfr_dat.QNaOH_2_add, mfpfr_dat.QNaOH_2_st, dp, npump)
 ```
 Calculate the total pumping energy including the HCl stream
 ```python
+# Assumptions
+dp_HCl=0.3 # pressure drop HCl solution (units: bar)
+
     # Electricity consumption for pumping , KWh
 E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
 print("Total electricity energy consumption is "+str(round(E_el_mfpf,2))+ " KW")
 ```
-> **Note:**
+> [!NOTE]
+> Note that you can add a calculation for filtration unit and then sum the energy requirements.
 > 
-> Note that you can add a calculation for filtration unit and then sum the energy requirements. 
 Specific energy consumption can also be calculated: 
 ```python
     # Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
@@ -375,8 +380,7 @@ You need to follow similar steps for the other two processes.
 |                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
-> **Note:**
-> 
+> [!NOTE]
 > Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain. 
 In this treatment chain, Electrodialysis with bipolar membrane has two streams as feed for the salt channel. The two streams are mixed. For this the following calculations are required to calculate the new flow rate and concentration after the mixing. 
 ```python
@@ -508,8 +512,7 @@ for i in range(len(prd)):
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)
 ```
-> **Note:**
-> 
+> [!NOTE]
 > Note that a detailed description of the economic model and more economic indicators can be found in [Economic tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/Economic_Tutorial.md).  
 
 ### 4.2.3. Environmental indicators 
