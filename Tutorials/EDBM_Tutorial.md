@@ -55,7 +55,8 @@ C_a_in=[0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a))]
 # Temperature 
 T=20+273.15 #K
 ```
-Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Cin_edbm_. 
+> [!NOTE]
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Cin_edbm_. 
 
 You can calculate the density of the feed solution and the water quantity in inflow:
 ```python
