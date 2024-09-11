@@ -16,7 +16,7 @@ Each section guides you through setting up the simulation environment, running t
 
 **Figure 1**. Process flow diagram of example 1.
 <br>
-
+</div>
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
@@ -196,6 +196,11 @@ Power for pump (KW): 60.01
 E_el_nf (KW): 75.02  
 Specific Energy Consumption (KWh/m3 of permeate): 0.85
 
+##### Chemical consumption 
+```python
+QHCl_nf=0
+Qantsc_nf=0
+```
 
 ### 3.2.2.  Multi-plug flow reactor
 
@@ -400,48 +405,105 @@ After the simulation of the treatment chain, the performance of the process unit
 The following code can be used to summarise the most important results from each process unit. Note that more results can be added. 
 ```python
 class indic:
-    
-    def __init__(self, tech, Qout, Qin, Qprod_1, prod_1_name, Qprod_2, prod_2_name, E_el, E_th, Cin, Cout, chem1,chem2):
-        self.tech=tech
-        self.Qout=Qout
-        self.Qin=Qin
-        self.E_el=E_el
-        self.E_th=E_th
-        self.Cin=Cin
-        self.Cout=Cout
-        self.Qprod_1=Qprod_1
-        self.Qprod_2=Qprod_2
-        self.prod_1_name=prod_1_name
-        self.prod_2_name=prod_2_name
-        self.chem=chem1+chem2
+    """
+    A class to summarize the performance indicators of a given technology.
+
+    Attributes
+    ----------
+    tech : str
+        The name of the technology (e.g., "NF" for Nanofiltration).
+    Qout : float
+        The output flow rate (e.g., m³/h).
+    Qin : float
+        The input flow rate (e.g., m³/h).
+    Qprod_1 : float
+        The flow rate of the first product stream (e.g., m³/h).
+    prod_1_name : str
+        The name of the first product stream (e.g., "water").
+    Qprod_2 : float
+        The flow rate of the second product stream, if any (e.g., m³/h).
+    prod_2_name : str
+        The name of the second product stream, if any.
+    E_el : float
+        The electrical energy consumption (e.g., kWh).
+    E_th : float
+        The thermal energy consumption (e.g., kWh).
+    Cin : list
+        The concentration of components in the input stream.
+    Cout : list
+        The concentration of components in the output stream.
+    chem : float
+        The total chemical consumption (sum of chem1 and chem2).
+    """
+
+    def __init__(self, tech, Qout, Qin, Qprod_1, prod_1_name, Qprod_2, prod_2_name, E_el, E_th, Cin, Cout, chem1, chem2):
+        self.tech = tech
+        self.Qout = Qout
+        self.Qin = Qin
+        self.E_el = E_el
+        self.E_th = E_th
+        self.Cin = Cin
+        self.Cout = Cout
+        self.Qprod_1 = Qprod_1
+        self.Qprod_2 = Qprod_2
+        self.prod_1_name = prod_1_name
+        self.prod_2_name = prod_2_name
+        self.chem = chem1 + chem2
+
+    def techn_indi(self):
+        """
+        Calculate and return the technical indicators for the technology.
         
+        This method calculates the water recovery rate (if applicable) and
+        assigns it to the instance. It also handles cases where no water is produced.
         
-    def techn_indi(self):        
-        if self.prod_1_name=="water": 
-            self.Water_rr=self.Qprod_1/self.Qin*100 # %
-            self.Qwater=self.Qprod_1
-        elif self.prod_2_name=="water":
-            self.Water_rr=self.Qprod_2/self.Qin*100 # %
-            self.Qwater=self.Qprod_2
+        Returns
+        -------
+        None
+        """
+        if self.prod_1_name == "water":
+            self.Water_rr = self.Qprod_1 / self.Qin * 100  # Water recovery rate in %
+            self.Qwater = self.Qprod_1
+        elif self.prod_2_name == "water":
+            self.Water_rr = self.Qprod_2 / self.Qin * 100  # Water recovery rate in %
+            self.Qwater = self.Qprod_2
         else:
-            self.Qwater=0
-            self.Water_rr=0
-            print("no water production by " + self.tech)
+            self.Qwater = 0
+            self.Water_rr = 0
+            print("No water production by " + self.tech)
+
 ```
 Let's use Nanofiltration unit as example, here is how it can be used: 
 ```python
-tec1=indic("NF", Qconc, Qf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
+# Example of summarizing performance indicators for a Nanofiltration (NF) process
+
+# Create an instance of the 'indic' class to summarize the NF results
+tec1=indic("NF", Qconc, Qf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)
+
+# Generate the summary of performance indicators
 tec1.techn_indi()
 ```
 ##### Create lists with important results
 After collecting all the important results, they can summarise in lists: 
 ```python
-    # List results 
+    # List results
+
+# List of technology names
 tec_names=[tec1.tech,tec2.tech, tec3.tech,  tec4.tech]
+
+# List of electrical energy consumption for each technology (in kWh)
 E_el_all=[tec1.E_el,tec2.E_el, tec3.E_el, tec4.E_el]
+
+# List of thermal energy consumption for each technology (in kWh)
 E_th_all=[tec1.E_th,tec2.E_th, tec3.E_th,  tec4.E_th]
+
+# List of output concentrations for each technology
 Cout_all=[tec1.Cout,tec2.Cout, tec3.Cout,  tec4.Cout]
+
+# List of output flow rates for each technology (in l/h)
 Qout_all=[tec1.Qout, tec2.Qout, tec3.Qout,  tec4.Qout]
+
+# List of total chemical consumption for each technology
 Qchem_all=[tec1.chem,tec2.chem,tec3.chem, tec4.chem]
 ```
 ### 4.2. Formulate performance indicators
