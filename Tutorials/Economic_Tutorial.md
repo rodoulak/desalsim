@@ -30,7 +30,6 @@ First, import the required functions from `economic_f.py`.
 ```python
 from desalsim.economic_f import econom
 from desalsim.economic_f import revenue
-
 ```
 
 ### 2.2. Set constant values 
