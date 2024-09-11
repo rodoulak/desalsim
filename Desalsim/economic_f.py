@@ -1,5 +1,5 @@
 #costs calculations functions 
-from . import constants 
+from desalsim import constants 
 #%%
 #symbols:
 #hr-> hours

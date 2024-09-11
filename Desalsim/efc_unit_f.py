@@ -31,10 +31,10 @@ from scipy import interpolate
 import scipy.interpolate as interpolate
 from sklearn.linear_model import LinearRegression
 from collections import namedtuple
-from . import scaleup
-from .density_calc import density_calc 
+from desalsim import scaleup
+from desalsim.density_calc import density_calc 
 # import pitzer_model_3phases_w
-from . import constants 
+from desalsim import constants 
 #Set initial time to calculate the elapsed time of the calculations
 time0=time.time()
 MW_so4=32.064+4*15.999

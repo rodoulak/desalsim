@@ -1,8 +1,8 @@
 import math
-from . import scaleup
-from .density_calc import density_calc 
+from desalsim import scaleup
+from desalsim.density_calc import density_calc 
 import math
-from . import constants 
+from desalsim import constants 
 #%%
     #molecular weight
 MW_Na=constants.MW_Na
