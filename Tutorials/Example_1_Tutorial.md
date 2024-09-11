@@ -20,7 +20,7 @@ Each section guides you through setting up the simulation environment, running t
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
 ```
-pip install desalsim
+pip install DesalSim==1.0.1
 ```
 
 If you want to install the latest GitHub verstion:
@@ -44,19 +44,19 @@ For **Example 1** which consists of four technologies:
 - Electrodialysis With Bipolar Membranes (EDBM)
 their functions are imported:
 ```python
-import desalsim
+import Desalsim
 ```
 Then:  
 ```python
-from desalsim.nanofiltration_unit_f import OsmoticPressure
-from desalsim.nanofiltration_unit_f import NFMass
-from desalsim.nanofiltration_unit_f import NfEnergy
+from Desalsim.nanofiltration_unit_f import OsmoticPressure
+from Desalsim.nanofiltration_unit_f import NFMass
+from Desalsim.nanofiltration_unit_f import NfEnergy
 ```
 Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
-from desalsim.density_calc import density_calc
-import desalsim.constants
-import desalsim.scaleup
+from Desalsim.density_calc import density_calc
+import Desalsim.constants
+import Desalsim.scaleup
 ```
 
 ### 3.1.1. Define feed characteristics
@@ -66,11 +66,7 @@ You can initialize the feed solution by setting the flow rate, specifying the fo
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4']
 Ci_in = [12.33, 21.67, 0.45, 1.39, 0.45, 3.28]
 z_values = [1, -1, 1, 2, 2, -2]
-
-    # Feed flowrate
-Qsw = 3000 / 24 * d_in #m3/d
 ```
-Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Ci_in_
 
 You can calculate the density of the feed solution:
 ```python
@@ -80,6 +76,15 @@ T=20+273 #Operating temperature (units: K)
     # Feed flow density 
 d_in = density_calc(T-273, mg_in)  # kg/m3
 ```
+
+```python
+    # Feed flowrate
+Qsw = 3000 / 24 * d_in #kg/hr
+Qf = Qsw  # kg/hr
+```
+> **Note:**
+> 
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the `Ci_in`.
 
 ## 3.2. Use process unit model
 
@@ -115,7 +120,7 @@ def create_nfmass_objects(components, C_in, rjr_values, Wrec, Qf):
     return [NFMass(comp, Ci, rjr, Wrec, Qf) for comp, Ci, rjr in zip(components, C_in, rjr_values)]
 
     # Create NFMass objects for different components
-nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf_nf)
+nfmass_objects = create_nfmass_objects(components, Ci_in, rjr_values, Wrec, Qf)
 ```
 Assigned the results to output parameters 
 
@@ -154,7 +159,7 @@ P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
 ##### Calculate Energy Consumption
 The following objective is created for energy consumption. Assumptions for pressure drop and pump efficiency need to be made. 
 ```python
-nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf_nf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
+nf_energy=NfEnergy(P_osmo_c, P_osmo_f, P_osmo_p, dp=2, d_p, Qperm, Qf, d_in,n=0.8) # dp: pressure drop (units: bar) and n: pump efficiency (units: -)
 result=nf_energy.calculate_energy_consumption()
 E_el_nf = nf_energy.E_el_nf
 ```
@@ -198,7 +203,10 @@ d_in = density_calc(25, sum(Cin_mfpfr)) / 1000
 ##### Setting other input parameters
 Then the required input for MFPFR unit need to be added from unser. 
 
-First, the concentration of the alkaline solution (NaOH) and acid solution (HCl) are import. Note that different chemicals and concentrations can be used for the percicipation and the pH neutralization.
+First, the concentration of the alkaline solution (NaOH) and acid solution (HCl) are import. 
+> **Note:**
+> 
+> Note that different chemicals and concentrations can be used for the percicipation and the pH neutralization.
 
 ```python
     # Concentration of NaOH solution for step 1 and step 2 in MOL/L
@@ -279,7 +287,6 @@ NaOH flow rate is 21918.92 l/hr
 ##### Calculate amount of HCl for pH neutralization and the final outlet concentration from MF-PFR unit after pH neutralization
 ```python
     # Create an instance of the HCladdition class
-HCl_conc=1 # Concentration of HCl: 1M
 unit = HClAddition(Qout_2, Cout_all_m, MW_Cl, ph_2, HCl_conc)
 
     # Call the calculate_HCladdition method
@@ -317,7 +324,9 @@ Calculate the total pumping energy including the HCl stream
 E_el_mfpf=(Epump_1+Epump_2+(QHCl*dp_HCl)*1e5/3600/(1000*npump))/1000
 print("Total electricity energy consumption is "+str(round(E_el_mfpf,2))+ " KW")
 ```
-Note that you can add a calculation for filtration unit and then sum the energy requirements. 
+> **Note:**
+> 
+> Note that you can add a calculation for filtration unit and then sum the energy requirements. 
 Specific energy consumption can also be calculated: 
 ```python
     # Specific energy consumption per kg of Mg(OH)2, KWh/kg of Mg(OH)2
@@ -344,7 +353,9 @@ You need to follow similar steps for the other two processes.
 |                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
-_Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain._ 
+> **Note:**
+> 
+> Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain. 
 In this treatment chain, Electrodialysis with bipolar membrane has two streams as feed for the salt channel. The two streams are mixed. For this the following calculations are required to calculate the new flow rate and concentration after the mixing. 
 ```python
     # Feed flow rate L/h
@@ -393,7 +404,7 @@ class indic:
 ```
 Let's use Nanofiltration unit as example, here is how it can be used: 
 ```python
-tec1=indic("NF", Qconc, Qf_nf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
+tec1=indic("NF", Qconc, Qf, Qperm, "none", 0, "none", E_el_nf, 0, Ci_in, Cconc, QHCl_nf, Qantsc_nf)   
 tec1.techn_indi()
 ```
 ##### Create lists with important results
@@ -475,7 +486,9 @@ for i in range(len(prd)):
     reve_t = reve_t+rev_calc.rev_prd
     reve_list.append(rev_calc.rev_prd)
 ```
-**_Note that a detailed description of the economic model and more economic indicators can be found in ._** 
+> **Note:**
+> 
+> Note that a detailed description of the economic model and more economic indicators can be found in [Economic tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/Economic_Tutorial.md).  
 
 ### 4.2.3. Environmental indicators 
 A simple indicator to evaluate the environmental performance of the treatment chain is the **Carbon dioxide emissions**.  
