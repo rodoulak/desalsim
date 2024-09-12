@@ -61,8 +61,8 @@ from desalsim.mfpfr_unit_f import energycons
 Similarly for the other process units. Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
 from desalsim.density_calc import density_calc
-import desalsim.constants
-import desalsim.scaleup
+from desalsim import constants
+from desalsim import scaleup
 ```
 For example: 
 ```python
