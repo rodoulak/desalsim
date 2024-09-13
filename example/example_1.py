@@ -771,7 +771,7 @@ Mf_basic_sc=[constants.Mf_basic_sc[0],constants.Mf_basic_sc[7], constants.Mf_bas
 Mf_sce=[Qsw,   Qed_in, Qin_mfpfr, Q_in_edbm]
 for i in range(len(eq_c)):
     if Mf_basic_sc[i]!=Mf_sce[i]:
-        eq_c[i]=scaleup.scaleup_eq(eq_c[i],Mf_basic_sc[i],Mf_sce[i],tec_names[i])
+        eq_c[i]=scaleup.scaleup(eq_c[i],Mf_basic_sc[i],Mf_sce[i])
         
 #Cost calculation 
 for i in range(len(eq_c)):

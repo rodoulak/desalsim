@@ -469,7 +469,7 @@ Mf_sce=[Qsw, Qperm,Qf_tcr]
     # Calculation of the new equipment cost
 for i in range(len(eq_c)):
     if Mf_basic_sc[i]!=Mf_sce[i]:
-        eq_c[i]=scaleup.scaleup_eq(eq_c[i],Mf_basic_sc[i],Mf_sce[i],tec_names[i])
+        eq_c[i]=scaleup.scaleup(eq_c[i],Mf_basic_sc[i],Mf_sce[i])
         
 #Cost calculation 
 for i in range(len(eq_c)):
