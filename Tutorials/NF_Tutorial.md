@@ -33,7 +33,7 @@ from desalsim.nanofiltration_unit_f import NfEnergy
 Additionally, function for calculating density (`density_calc.py`) or constants (`comparison.py`) where user can add constant values like MW, prices etc, need to be imported. 
 ```python
 from desalsim.density_calc import density_calc
-import desalsim.constants
+from desalsim import constants
 ```
 ### 1.2. Define feed characteristics
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 
