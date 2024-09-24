@@ -105,7 +105,7 @@ Qf = Qsw  # kg/hr
 
 ### 3.2.1. Nanofiltration 
 
-To run simulation model for Nanofiltration unit, you need to implement the following steps. 
+To run simulation model for Nanofiltration unit, you need to implement the following steps (see also [NF Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/NF_Tutorial.md). 
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of Nanofiltration. 
 | Process                                   | Input                                       | Output                                                |
@@ -203,7 +203,7 @@ Qantsc_nf=0
 
 ### 3.2.2.  Multi-plug flow reactor
 
-To run simulation model for Multi-plug flow reactor (MFPFR) unit, you need to implement the following steps. 
+To run simulation model for Multi-plug flow reactor (MFPFR) unit, you need to implement the following steps (see also [MF=PFR Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/MF-PFR_Tutorial.md}. 
 
 **Table 2** gives an overview of the main inputs and outputs for each process unit of Multi-plug flow reactor. 
 | Process                                   | Input                                       | Output                                                |
@@ -385,7 +385,7 @@ You need to follow similar steps like Sections [3.2.1.](#321-Nanofiltration) and
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 > [!NOTE]
-> For Electrodialysis with bipolar membrane can find detailed steps in the [EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md). 
+> For Electrodialysis with bipolar membrane, you can find detailed steps in the [EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md). 
 
 > [!IMPORTANT]
 > Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain. 
