@@ -203,7 +203,7 @@ Qantsc_nf=0
 
 ### 3.2.2.  Multi-plug flow reactor
 
-To run simulation model for Multi-plug flow reactor (MFPFR) unit, you need to implement the following steps (see also [MF=PFR Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/MF-PFR_Tutorial.md)). 
+To run simulation model for Multi-plug flow reactor (MFPFR) unit, you need to implement the following steps (see also [MF-PFR Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/MF-PFR_Tutorial.md)). 
 
 **Table 2** gives an overview of the main inputs and outputs for each process unit of Multi-plug flow reactor. 
 | Process                                   | Input                                       | Output                                                |
@@ -372,7 +372,7 @@ Specific energy consumption per product is 2.88 KWh/kg product
 Specific energy consumption per brine intake is 1.49 KWh/m3 of feed 
 
 ### 3.2.3.  Other units
-You need to follow similar steps like Sections [3.2.1.](#321-Nanofiltration) and [3.2.2.](#322-Multi-plug-flow-reactor) for the other two processes. 
+You need to follow similar steps like Sections [3.2.1.](#321-nanofiltration) and [3.2.2.](#322-multi-plug-flow-reactor) for the other two processes. 
 **Table 3** gives an overview of the main inputs and outputs for each process unit of Electrodialysis with bipolar membranes and Electrodialysis. 
 | Process                                   | Input                                       | Output                                                |
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
