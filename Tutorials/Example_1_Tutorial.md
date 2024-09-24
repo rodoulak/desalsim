@@ -4,7 +4,7 @@
 Welcome to our comprehensive tutorial on running simulation models and evaluating the 
 performance of treatment chains for water purification processes. In this tutorial, 
 we provide step-by-step instructions on how to [create treatment chains](#31-create-treatment-chain), 
-[define feed characteristics](#define-feed-characteristics), [use process unit models](#use-process-unit-model), and [analyze the results obtained from the simulation](#results-evaluation), using **Example 1** as case study.
+[define feed characteristics](#311-define-feed-characteristics), [use process unit models](#32-use-process-unit-model), and [analyze the results obtained from the simulation](#4-results-evaluation), using **Example 1** as case study.
 Each section guides you through setting up the simulation environment, running the models, and interpreting the results. Additionally, we discuss technical, economic, and environmental indicators to evaluate the performance of the treatment chain. 
 
 ### Example description 
@@ -372,7 +372,7 @@ Specific energy consumption per product is 2.88 KWh/kg product
 Specific energy consumption per brine intake is 1.49 KWh/m3 of feed 
 
 ### 3.2.3.  Other units
-You need to follow similar steps like Sections [3.2.1.](#3.2.1._Nanofiltration) and [3.2.2.](#3.2.2._Multi-plug_flow_reactor) for the other two processes. 
+You need to follow similar steps like Sections [3.2.1.](#321-Nanofiltration) and [3.2.2.](#322-Multi-plug_flow_reactor) for the other two processes. 
 **Table 3** gives an overview of the main inputs and outputs for each process unit of Electrodialysis with bipolar membranes and Electrodialysis. 
 | Process                                   | Input                                       | Output                                                |
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
