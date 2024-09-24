@@ -5,7 +5,9 @@ ED  is a technique that uses ion exchange membranes and electricity to extract i
 
 
 In **desalsim** package, the ED unit is used to model the operation of a Electrodialysis technology. Upon simulation, it calculates the flow rate of the concentrate and dilute streams, their ion concentration, and the electricity requirements of the unit.
-The ED function consists of one class: [ElectrodialysisCalc](#use-electrodialysiscalc-class ) that constsis of six methods: `Ts_cp`, `w_cp`, `Ls_cpv`, `Lw_cp`, `p_osmo`, `dC` [see Section 2.3](#23-use-ts_cp-w_cp-ls_cpv-lw_cp-p_osmo-dc-methods).  
+The ED function consists of one class: [ElectrodialysisCalc](#2-use-electrodialysiscalc-class) that constsis of six methods: `Ts_cp`, `w_cp`, `Ls_cpv`, `Lw_cp`, `p_osmo`, `dC` [see Section 2.3](#23-use-ts-cp-w-cp-ls-cpv-lw-cp-p-osmo-dc-methods). 
+
+
 In this tutorial, we will focus on how to use the the class and their methods. 
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of Electrodialysis. 
@@ -322,9 +324,9 @@ print("Volume flowrate concentrate stream is "+str(round(Qc,2))+" l/hr")
 print("The total effluent concentration concentrate stream  is " + str(round(Sc[N-1],2))+"g/kg")
 print("-----------------------------------------")
 ```
-Mass flowrate concentrate stream is 78.5 kg/hr
-Volume flowrate concentrate stream is 67.74 l/hr
-The total effluent concentration concentrate stream  is 200.0g/kg
+Mass flowrate concentrate stream is 78.5 kg/hr  
+Volume flowrate concentrate stream is 67.74 l/hr  
+The total effluent concentration concentrate stream  is 200.0g/kg 
 
 ```python
 print("Mass flowrate of diluate stream is "+str(round(Md,2))+" kg/hr")
@@ -332,9 +334,9 @@ print("volume flowrate diluate stream is "+str(round(Qd,2))+" l/hr")
 print("The total effluent concentration dilute is " + str(round(Sd[N-1],2))+"g/kg")
 print("-----------------------------------------")
 ```
-Mass flowrate of diluate stream is 921.5 kg/hr
-volume flowrate diluate stream is 909.36 l/hr
-The total effluent concentration dilute is 20.0g/kg
+Mass flowrate of diluate stream is 921.5 kg/hr  
+volume flowrate diluate stream is 909.36 l/hr  
+The total effluent concentration dilute is 20.0g/kg  
 
 ```python
 #solid mass balance
@@ -345,8 +347,8 @@ error_perc=abs(bal)/(Qed_in*sum(Csw))*100
 print("Balance error percentage is "+str(round(error_perc,2))+"%")
 print("-----------------------------------------")
 ```
-Mass balance difference is 7.21
-Balance error percentage is 0.02%
+Mass balance difference is 7.21  
+Balance error percentage is 0.02%  
 
 ```python
 # Energy consumption 
@@ -355,6 +357,6 @@ print("Total energy consumption is "+str(round(Eel_t_ed,2))+"KW")
 print("Specific energy consumption of Electrodialysis (ED) is "+str(round(sec_ed,2))+"KW/m3 feed")
 
 ```
-Power required is 95.19KW
-Total energy consumption is 95.26KW
-Specific energy consumption of Electrodialysis (ED) is 98.23KW/m3 feed
+Power required is 95.19KW  
+Total energy consumption is 95.26KW  
+Specific energy consumption of Electrodialysis (ED) is 98.23KW/m3 feed  
