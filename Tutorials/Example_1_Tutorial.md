@@ -385,7 +385,8 @@ You need to follow similar steps like Sections [3.2.1.](#321-Nanofiltration) and
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 > [!NOTE]
-> For Electrodialysis with bipolar membrane, you can find detailed steps in the [EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md). 
+> For Electrodialysis with bipolar membrane, you can find detailed steps in the [EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md).
+> For Electrodialysis, you can find the detailed steps in the [ED_Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/ED_Tutorial.md). 
 
 > [!IMPORTANT]
 > Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain. 
