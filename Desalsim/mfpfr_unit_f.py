@@ -33,8 +33,10 @@ class MFPFRCALC:
         Conversion rate for Calcium percipitation in the second step    
     C_NaOH_1: float
         Concentration of NaOH solution for first step (mol/L)
-    Qin
-    QMg_in 
+    Qin: float
+        Volumetric flow rate of feed solution (in step 1) in L/h
+    QMg_in:
+        Molar flow rate of Mg in feed solution (in step 1) in mol/h
     QNaOH_1 : float 
         Volumetric flow rate of sodium hydroxide in step 1 in L/h
     M_MgOH2_1: float 
@@ -167,6 +169,33 @@ class MFPFRCALC:
        return self.QCa_in_2, self.QNaOH_2_st, self.COH_ph13, self.QNaOH_2_add, self.Qtot_out_2, self.M_CaOH2_2, self.M_MgOH2_2, self.magma_d_2, self.Qout_2, self.CNa_out_2, self.CCa_out_2, self.CCl_out_2, self.CK_out_2, self.CMg_out_2, self.CSO4_out_2,  self.ph_2
 
 class HClAddition:
+    """
+    A class used to calculate mass balances and concentration with the addition of acid solution for pH neutralization
+
+    Attributes
+    ----------
+    MW_cl : float
+        Molecular weight of Cl (g/mol)
+    Cout_mfpfr_m : float 
+        The ion concentration before the HCl addition in mol/L
+    HCl_conc: float
+        Molar concentration (mol/l)
+    ph_2 : float 
+        ph of solution after second step 
+    C_cl_out : float 
+        The outlet Cl- concentration afte HCl addition in mol/L
+    Qtot_out_2 : float 
+        Total outlet volumetric flow rate from 2nd step in L/h
+    Cout_mfpfr_g : float 
+        The outlet ion concentration after the HCl addition in g/L
+   
+      
+    Methods
+    -------
+    calculate_HCl_addition():
+        Calculates the flowrate of the added HCl solution and the outlet ion concentration after the HCl addition 
+    
+        """
     def __init__(self, Qout_2, Cout_all_m, MW_cl, ph_2, HCl_conc):
         self.Qout_2 = Qout_2
         self.Cout_all_m = Cout_all_m
@@ -199,6 +228,34 @@ class HClAddition:
 
 #%%Energy consumption 
 class energycons:
+    """
+    A class used to calculate the energy consumption used in the precipitation steps from pumping
+
+    Attributes
+    ----------
+    Qin: float
+        Volumetric flow rate of feed solution (in step 1) in L/h
+    QNaOH : float 
+        Total volumetric flow rate of sodium hydroxide in L/h     
+    QNaOH_1 : float 
+        Volumetric flow rate of sodium hydroxide in step 1 in L/h     
+    QNaOH_2_st : float 
+        The stoichiometric volumetric flow rate of sodium hydroxide for the second step L/hr
+    QNaOH_2_add : float
+        The added volumetric flow rate of sodium hydroxide needed to reach a pH = 13  L/h
+    Qtot : float 
+        Total outlet volumetric flow rate in L/h
+    dp: float
+        pressure drop in bar
+    npump: float
+        pump efficiency (units: -)
+      
+    Methods
+    -------
+    calculate_HCl_addition():
+        Calculates the flowrate of the added HCl solution and the outlet ion concentration after the HCl addition 
+    
+        """
     def energycalc(Qtot, QNaOH, Qin, QNaOH_1, QNaOH_2_add, QNaOH_2_st, dp, npump):
         Qtot=Qtot
         QNaOH=QNaOH

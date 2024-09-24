@@ -5,73 +5,74 @@ import math
 from desalsim.density_calc import density_calc 
 
 #%% Calculations 
-"""
-A class used to represent Mass Balance for Electrodialysis
 
-...
-
-Attributes
-----------
-    MWs : float
-        Molecular weight of NaCl (g/mol)
-    MWw : float
-        Molecular weight of water (g/mol)
-    R : float
-        Resistance of rinse stream (ohm)
-    Rp : float
-        Resistance of polarization (ohm)
-    A : float
-        Active area of cell-pair (m^2)
-    F : float
-        Faraday constant (C/mol)
-    T : float
-        Temperature in Kelvin
-    dp : float
-        Parameter dp
-    npump : float
-        Pump efficiency
-    rho_w : float
-        Density of water (kg/m^3)
-    D : float
-        Diffusion coefficient (m^2/s)
-    tcu : float
-        tcu parameter
-    veloc : float
-        Velocity (m^2/s)
-    h : float
-        Height (mm)
-    Sh : float
-        Sh parameter
-    Mem_eff : float
-        Membrane efficiency
-    Ncp : integer
-        Number of cell-pairs
-    Qed_in : float
-        Inlet flow rate (l/h)
-    Qed_in_c : float
-        Concentrate inlet flow rate (l/h)
-    Qed_in_d : float
-        Dilute inlet flow rate (l/h)
-
-
-Methods
--------
-    Ts_cp(S): 
-        Transport number for salt in concentrate compartment
-    Tw_cp(Sc, Sd): 
-        Transport number for water in concentrate compartment
-    Ls_cp(Sc, Sd): 
-        Permeability for salt in concentrate compartment
-    Lw_cp(S): 
-        Permeability for water in concentrate compartment
-    p_osmo(S): 
-        Osmotic pressure in concentrate compartment
-    p_osmo2(S): 
-        Alternative osmotic pressure calculation
-    dC(Ts_cp): 
-        Change in concentration
-"""
 class ElectrodialysisCalc:
+    """
+    A class used to represent Mass Balance for Electrodialysis
+
+    ...
+
+    Attributes
+    ----------
+        MWs : float
+            Molecular weight of NaCl (g/mol)
+        MWw : float
+            Molecular weight of water (g/mol)
+        R : float
+            Resistance of rinse stream (ohm)
+        Rp : float
+            Resistance of polarization (ohm)
+        A : float
+            Active area of cell-pair (m^2)
+        F : float
+            Faraday constant (C/mol)
+        T : float
+            Temperature in Kelvin
+        dp : float
+            Parameter dp
+        npump : float
+            Pump efficiency
+        rho_w : float
+            Density of water (kg/m^3)
+        D : float
+            Diffusion coefficient (m^2/s)
+        tcu : float
+            tcu parameter
+        veloc : float
+            Velocity (m^2/s)
+        h : float
+            Height (mm)
+        Sh : float
+            Sh parameter
+        Mem_eff : float
+            Membrane efficiency
+        Ncp : integer
+            Number of cell-pairs
+        Qed_in : float
+            Inlet flow rate (l/h)
+        Qed_in_c : float
+            Concentrate inlet flow rate (l/h)
+        Qed_in_d : float
+            Dilute inlet flow rate (l/h)
+
+
+    Methods
+    -------
+        Ts_cp(S): 
+            Transport number for salt in concentrate compartment
+        Tw_cp(Sc, Sd): 
+            Transport number for water in concentrate compartment
+        Ls_cp(Sc, Sd): 
+            Permeability for salt in concentrate compartment
+        Lw_cp(S): 
+            Permeability for water in concentrate compartment
+        p_osmo(S): 
+            Osmotic pressure in concentrate compartment
+        p_osmo2(S): 
+            Alternative osmotic pressure calculation
+        dC(Ts_cp): 
+            Change in concentration
+    """
     def __init__(self):
         pass
 

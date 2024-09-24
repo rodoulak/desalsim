@@ -17,6 +17,17 @@ from desalsim import constants
 
 #%%constants
 class econom:
+    """
+    Calculate the capital investment and operating costs for each process unit. 
+    
+    Methods
+    -------
+    capex_calc: 
+        Calculate the capital expenditure (CAPEX) of the unit.
+    opex_calc: 
+        Calculate the capital expenditure (OPEX) of the unit.
+    """
+    
     def __init__(self, eq_c, el_conc, s_conc, chem1_conc, chem1_pr,chem2_conc, chem2_pr, cw_conc, wat_conc):
         """
         Initialize an instance of the economic costs.
@@ -175,6 +186,10 @@ class revenue:
     Args:
         prd_name (str): name of product 
         rev_prd (float): reveneues from product i in euro  
+    Methods
+    -------
+    rev: 
+        Calculates the revenues from selling products  of the unit
     """
     def __init__(self, prd, prd_name):
         self.prd=prd
