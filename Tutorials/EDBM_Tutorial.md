@@ -4,7 +4,7 @@ EDBM is a membrane-based technology that allows the production of acidic and alk
 ![edbm](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/2580e05b-73f2-4fa4-8d52-71762088fc17)
 
 
-In **desalsim** package, the EDBM unit is used to model the operation of a Electrodialysis with Bipolar membranestechnology. Upon simulation,  it calculates the flow rate of the acid, base and salt solutions, their ion concentration, and the electricity requirements of the unit.
+In **desalsim** package, the EDBM unit is used to model the operation of a Electrodialysis with Bipolar membranes technology. Upon simulation,  it calculates the flow rate of the acid, base and salt solutions, their ion concentration, and the electricity requirements of the unit.
 The EDBM function consists of one class: [EDBMCalc](#use-edbmcalc-class) that constsis.  
 In this tutorial, we will focus on how to use the the class and their methods. 
 
