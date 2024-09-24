@@ -67,7 +67,7 @@ d_s=d_in
 Mw_in=Q_in_edbm/d_in 
 ```
 ### 1.3. Set operating assumptions  
-You need to set operating assumptionssuch as the electrical current density.   
+You need to set operating assumptions such as the electrical current density.   
 ```python
 # Assumptions:
 # The electrical current desnity
