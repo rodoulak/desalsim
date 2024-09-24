@@ -38,8 +38,6 @@ class ElectrodialysisCalc:
             Diffusion coefficient (m^2/s)
         tcu : float
             tcu parameter
-        veloc : float
-            Velocity (m^2/s)
         h : float
             Height (mm)
         Sh : float
