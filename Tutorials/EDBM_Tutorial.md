@@ -4,8 +4,8 @@ EDBM is a membrane-based technology that allows the production of acidic and alk
 ![edbm](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/2580e05b-73f2-4fa4-8d52-71762088fc17)
 
 
-In **desalsim** package, the EDBM unit is used to model the operation of a Electrodialysis with Bipolar membranestechnology. Upon simulation,  it calculates the flow rate of the acid, base and salt solutions, their ion concentration, and the electricity requirements of the unit.
-The EDBM function consists of one class: [EDBMCalc](#use-edbmcalc-class) that constsis.  
+In **desalsim** package, the EDBM unit is used to model the operation of a Electrodialysis with Bipolar membranes technology. Upon simulation,  it calculates the flow rate of the acid, base and salt solutions, their ion concentration, and the electricity requirements of the unit.
+The EDBM function consists of one class: [EDBMCalc](#2-use-edbmcalc-class) that constsis of five methods: [flowrate](#23-use-flowrate-method),[in_mass_flow_rates](#24-use-in_mass_flow_rates-method), [acid_channel](#25-use-acid-channel-method), [base_channel](#26-use-base-channel-method), [salt_channel](#27-use-salt-channel-method).  
 In this tutorial, we will focus on how to use the the class and their methods. 
 
 **Table 1** gives an overview of the main inputs and outputs for each process unit of Electrodialysis with Bipolar membranes. 
@@ -67,7 +67,7 @@ d_s=d_in
 Mw_in=Q_in_edbm/d_in 
 ```
 ### 1.3. Set operating assumptions  
-You need to set operating assumptionssuch as the electrical current density.   
+You need to set operating assumptions such as the electrical current density.   
 ```python
 # Assumptions:
 # The electrical current desnity

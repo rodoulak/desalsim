@@ -1,22 +1,23 @@
-# Tutotrial: Electrodialysis with Bipolar membranes (EDBM) unit
+# Tutotrial: Electrodialysis (ED) unit
 
-EDBM is a membrane-based technology that allows the production of acidic and alkaline solutions by applying an electric potential to the electrodes. In this work, EDBM aims to convert NaCl molecules of a brine solution to NaOH and HCl solutions. 
-![edbm](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/2580e05b-73f2-4fa4-8d52-71762088fc17)
+ED  is a technique that uses ion exchange membranes and electricity to extract ionic compounds from aqueous solutions, with an electrical field serving as the driving force for solute separation. In this work, ED aims to purify NF permeate. 
+![ed](https://github.com/user-attachments/assets/386c055d-9935-41fa-b15c-e790fc169f9a)
 
 
-In **desalsim** package, the EDBM unit is used to model the operation of a Electrodialysis with Bipolar membranestechnology. Upon simulation,  it calculates the flow rate of the acid, base and salt solutions, their ion concentration, and the electricity requirements of the unit.
-The EDBM function consists of one class: [EDBMCalc](#use-edbmcalc-class) that constsis.  
+In **desalsim** package, the ED unit is used to model the operation of a Electrodialysis technology. Upon simulation, it calculates the flow rate of the concentrate and dilute streams, their ion concentration, and the electricity requirements of the unit.
+The ED function consists of one class: [ElectrodialysisCalc](#2-use-electrodialysiscalc-class) that constsis of six methods: `Ts_cp`, `w_cp`, `Ls_cpv`, `Lw_cp`, `p_osmo`, `dC` [see Section 2.3](#23-use-ts-cp-w-cp-ls-cpv-lw-cp-p-osmo-dc-methods). 
+
+
 In this tutorial, we will focus on how to use the the class and their methods. 
 
-**Table 1** gives an overview of the main inputs and outputs for each process unit of Electrodialysis with Bipolar membranes. 
+**Table 1** gives an overview of the main inputs and outputs for each process unit of Electrodialysis. 
 | Process                                   | Input                                       | Output                                                |
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
-| Electrodialysis with bipolar membranes| Feed flow rate [m3/h]                        | Flow rate of acid [m3/h] and composition [g/L]             |
-|                                        | Ion concentration [g/L]                      | Flow rate of base [m3/h] and composition [g/L]             |
-|                                        | Electric density                            | Flow rate of salt [m3/h] and composition [g/L]             |
-|                                        |                                            | Electricity requirements [kWhel]                          |
+| Electrodialysis (ED)                         | Feed flow rate [m³/h]                       | Flow rate of diluted stream [m³/h] and composition [g/L]|
+|                                           | Ion concentration [g/L]                     | Flow rate of concentrate stream [m³/h] and composition [g/L]        |
+|                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
-The mathematical description of Electrodialysis with Bipolar membranestechnology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf), see Section A.6. 
+The mathematical description of Electrodialysis  is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf), see Section A.8. 
 
 ## 1. Getting started 
 ### 1.1. Import class
@@ -25,7 +26,7 @@ import desalsim
 ```
 Then import the class:  
 ```python
-from desalsim.edbm_unit_f import EDBMCalc
+from desalsim.ed_unit_f import ElectrodialysisCalc
 ```
 Additionally, function for calculating density (`density_calc.py`) or constants ('comparison.py') where user can add constant values like MW, prices etc, need to be imported.
 ```python
@@ -37,45 +38,62 @@ from desalsim import scaleup
 You can initialize the feed solution by setting the flow rate, specifying the focus components and their concentration. 
 ```python
 # Input conditions
-ph_s=4.71 #pH salt channel (units: -)
-ph_b=7#pH base channel (units: -)
-ph_a=7#pH acid channel (units: -)
+Sc_i = 43.39  # Salinity at concentrate inlet (g/kg)
+Sd_i=Sc_i # Salinity at diluate inlet (g/kg)
 
   # Feed concentration
 components = ['Na', 'Cl', 'K', 'Mg', 'Ca', 'SO4', 'HCO3', 'H', 'OH']
-Cin_edbm=[13.44, 20.725, 1.146, 0, 0, 0.18, 0, 10**(-ph_s), 3.01551E-11]
+Csw= [17.17, 25.47, 0.57, 0.04, 0.03, 0.10]
 
 #Feed flow rate L/h
-Q_in_edbm=47000
-
-# Feed concentration for base and acid channels 
-C_b_in=[0,0,0,0,0,0,0,10**(-ph_b), 10**(-(14-ph_b))]
-C_a_in=[0,0,0,0,0,0,0,10**(-ph_a), 10**(-(14-ph_a))]
+Qed_in=1000
 
 # Temperature 
 T=20+273.15 #K
 ```
 > [!NOTE]
-> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Cin_edbm_. 
+> Note that if you want to add more components, you need to update the components list and include the concentration of the new component in the _Csw_. 
 
 You can calculate the density of the feed solution and the water quantity in inflow:
 ```python
-d_in=density_calc(25,sum(Cin_edbm))/1000
-d_s=d_in
+d_in_ed=(density_calc(T-273, Sc_i)/1000)
+Qed_in=1000/d_in_ed
 
-#Calculate water quantity in inflow 
-Mw_in=Q_in_edbm/d_in 
+# Calculate the flowrates for dilute and concentrate streams 
+Qed_in_c=Qed_in/17/Ncp
+Qed_in_d=Qed_in*16/17/Ncp
 ```
+> [!NOTE]
+> In this case we assumed that the concentrate stream is the 1/17 of the total feed flow rate and the dilute stream is the 16/17 of the total feed flow rate.
+
 ### 1.3. Set operating assumptions  
-You need to set operating assumptionssuch as the electrical current density.   
+You need to set operating assumptions such as the electrical current density.   
 ```python
 # Assumptions:
 # The electrical current desnity
-I_d=400  # Am2
-#Set number of triplets 
-N_trip=50*47 # Number of triplets based on the inlet flow rate
-#Set membrane area based on the feed flow rate, m2 
-A=0.4 #range: 0.1-1
+Ij=400 #Am2
+# Set Number of computational cells per cell-pair
+N = 50
+# Number of identical parallel cell-pairs
+Ncp=1
+# Set active area of cell-pair (m^2)
+A = 1.1
+# Set Membrane efficiency
+Mem_eff=0.64
+# Set applied voltage (V)
+Vcp = 8
+# Set Voltage across the electrodes (V)
+Vel=2.1
+
+# Effective cell-pair area (m^2)
+Acp =scaleup.scaleup(24, 1000, Qed_in) 
+Acp_tot=Acp
+```
+
+You need to set the salinity at dilute outlet concentrate outlet in g/kg. 
+```python
+Sc_o = 200  # Salinity at concentrate outlet (g/kg)
+Sd_o=20 # Salinity at doluate outlet (g/kg)
 ```
 
 Finally, you need to set assumptions related to pumping like pressure drop (_dp_) and pump efficiency (_npump_). 
@@ -84,231 +102,261 @@ npump=0.8 #pump efficiency (units: -)
 dp=1 #pressure drop (units: bar)
 ```
 
-### 1.4. Set Mmebrane characteristics 
-You need to set Mmebrane characteristics 
-```python
-#Membrane characteristics
-Cm_bp_H= 0.0000001 #mol/l 
-Cm_bp_OH= 0.0000001 #mol/l 
-```
-### 1.5. Set constants 
+### 1.4. Set constants 
 You need to set constant parameters: 
 ```python
-F=96485.3 #Coulombs/mol
-R_const=8.314462618 #kg⋅m2⋅s−2⋅K−1⋅mol−1
-# R_int=0.28 #ohm cm2
-R_int=45 #ohm cm2
-z=1
+R = 0.002  # Resistance of rinse stream (ohm)
+Rp = 0.015  # Resistance of polarization (ohm)
+A = 1.1  # Active area of cell-pair (m^2)
+F = 96485.3329  # Faraday constant (C/mol)
+rho_w=1000 # water desnity kg/m3
+
+D=1.61e-9 #Diffusion coefficient (m^2/s)
+tcu=0.5
+veloc=8.9e-7 #m2/s
+h=0.5 #mm
+Sh=18
 ```
-After setting all the required inputs, then you can create the functions' objectives. 
 
-## 2. Use EDBMCalc class   
-EDBMCalc is a class used to represent mass and energy balance for EDBM Unit. In particular, it calculateshe flowrate in each channel, the outlet concentration in each channel, the external Voltage and power needed. 
-EDBMCalc takes as input the feed flow rate (_Qin_), the membrane area (_A_), the electrical current desnity (_I_d_), the Number of triplets based on the inlet flow rate (_N_), the initial concentrations of various ions in the salt channel (_Ci_s_in_), base channel (_Ci_b_in_), and acid channel (_Ci_a_in_) and the feed temperature (_T_).  
-### 2.1. Overview 
-The following attributes are available within the EDBMCalc class:  
-- `CNa_in`, `CCl_in`, `CK_in`, `CMg_in`, `CCa_in`, `CSO4_in`: Initial concentrations of various ions (g/l).
-- `CNa_out`, `CCl_out`, `CK_out`, `CMg_out`, `CCa_out`, `CSO4_out`: Outlet concentrations of various ions (g/l).
-- `Ci_s_in`: Initial concentrations of various ions in the salt channel (mol/l).
-- `Ci_a_in`: Initial concentrations of various ions in the acid channel (mol/l).
-- `Ci_b_in`: Initial concentrations of various ions in the base channel (mol/l).
-- `EMF`: Electromotive force (V).
-- `KW_s_in`: Inlet ionic water product in the salt channel.
-- `KW_a_in`: Inlet ionic water product in the acid channel.
-- `KW_b_in`: Inlet ionic water product in the base channel.
-- `M_h2o_a_in`: Initial mass flow rate of water in the acid channel (kg/h).
-- `M_h2o_b_in`: Initial mass flow rate of water in the base channel (kg/h).
-- `M_h2o_s_in`: Initial mass flow rate of water in the salt channel (kg/h).
-- `N_trip`: Number of triplets of a channel.
-- `P`: Gross power needed (W).
-- `PM`: Molecular weight.
-- `Q`: Flow rate (l/h).
-- `V_ext`: Voltage needed (V).
-
-
-The EDBMCalc class provides the following methods:
+### 1.5. Initializations
+First, you need to initialize the parameters:
 ```python
- # Calculates the flowrate in each channel 
-flowrate()
-# Calculates the inlet mass flow rates of each ion, kg/h
- in_mass_flow_rates(ph_s)
-# Performs mass balance calculations for Acid channel 
-acid_channel()
-# Performs mass balance calculations for Base channel
-base_channel()
-# Performs mass balance calculations for Salt channel 
-salt_channel(Cm_bp_H, Cm_bp_OH)
+# Initializations
+Sc = np.zeros(N)
+Sd = np.zeros(N)
+Ns_c = np.zeros(N)
+Ns_d = np.zeros(N)
+Nw_c = np.zeros(N)
+Nw_d = np.zeros(N)
+Js = np.zeros(N)
+Jw = np.zeros(N)
+Mw_in_d_l=np.zeros(N)
+Ms_d=np.zeros(N)
+Mw_d=np.zeros(N)
+M_d=np.zeros(N)
+M_c=np.zeros(N)
+Q_c=np.zeros(N)
+Q_d=np.zeros(N)
+```
+Then set the initial values for the concentrate stream:
+```python
+# Set initial values salt stream 
+Sc[0] = Sc_i
+Ns_c[0]=Qed_in_c*d_in_ed*Sc[0]/MWs #mol/hr
+Ms_in_c=Qed_in_c*d_in_ed*Sc_i/1000 #kg salr/hr
+Mw_in_c=Qed_in_c*d_in_ed-Ms_in_c #kg water/hr
+Nw_c[0]=Mw_in_c*1000/MWw #mol/hr
+M_c[0]=Mw_in_c+Ms_in_c
+Q_c[0]=Qed_in_c
+```
+```python
+# Set initial values diluate stream 
+Csw= [17.17, 25.47, 0.57, 0.04, 0.03, 0.10]
+Sd[0] = Sc_i #g/kg 
+Ns_d[0]=Qed_in_d*d_in_ed*Sd[0]/(MWs) #mol/s
+Ms_in_d=Qed_in_d*d_in_ed*Sd[0]/1000 #kg salr/hr
+Mw_in_d=Qed_in_d*d_in_ed-Ms_in_d #kg water/hr
+Nw_d[0]=Mw_in_d*1000/MWw #mol/hr
+Mw_in_d_l[0]=Mw_in_d
+Ms_d[0]=Ms_in_d
+Mw_d[0]=Mw_in_d
+M_d[0]=Mw_in_d+Ms_in_d
+Q_d[0]=Qed_in_d
 ```
 
-### 2.2. Create EDBMCalc objects
-EDBMCalc takes as input the feed flow rate (_Qin_), the membrane area (_A_), the electrical current desnity (_I_d_), the Number of triplets based on the inlet flow rate (_N_), 
-the initial concentrations of various ions in the salt channel (_Ci_s_in_), base channel (_Ci_b_in_), and acid channel (_Ci_a_in_) and the feed temperature (_T_).  
+Finally, initialize the total cell-pair area
+```python
+# Initialize the Acp_tot array
+Acp_tot_j=Acp_tot/N
+```
+After setting all the required inputs and initialize the values, then you can create the functions' objectives. 
+
+## 2. Use ElectrodialysisCalc class   
+`ElectrodialysisCalc` is a class used to represent mass and energy balance for ED Unit. In particular, it calculateshe flowrate in each channel, the outlet concentration in each channel, the external Voltage and power needed. 
+
+### 2.1. Overview 
+The following attributes are available within the `ElectrodialysisCalc` class:  
+- MWs :Molecular weight of NaCl (g/mol)
+- MWw : Molecular weight of water (g/mol)
+- R :Resistance of rinse stream (ohm)
+- Rp : Resistance of polarization (ohm)
+- A : Active area of cell-pair (m^2)
+- F : Faraday constant (C/mol)
+- T : Temperature in Kelvin
+- dp : Parameter dp
+- npump : Pump efficiency
+- rho_w : Density of water (kg/m^3)
+- D : Diffusion coefficient (m^2/s)
+- tcu: ntcu parameter
+- h : Height (mm)
+- Sh : Sh parameter
+- Mem_eff : Membrane efficiency
+- Ncp : Number of cell-pairs
+- Qed_in :  Inlet flow rate (l/h)
+- Qed_in_c : Concentrate inlet flow rate (l/h)
+- Qed_in_d : Dilute inlet flow rate (l/h)
+
+
+The ElectrodialysisCalc class provides the following methods:
+```python
+ # Calculates the transport number for salt in concentrate compartment"
+Ts_cp(S)
+# Calculates the transport number for water in concentrate compartment"
+w_cp(Sc,Sd)
+# Permeability for salt in concentrate compartment"
+Ls_cp(Sc, Sd)
+# Permeability for water in concentrate compartment
+Lw_cp(S)
+# calculation for Osmotic pressure in concentrate compartment
+p_osmo(S, T, MWs)
+# Calculate the change in concentration
+dC(Ts_cp, tcu, D, Ij,  h, Sh )
+```
+
+### 2.2. Create ElectrodialysisCalc objects
+ElectrodialysisCalc has no inputs.  
  
 ```python
-#Create an instance of the EDBMCalc class with the defined parameters
-edbm_dat=EDBMCalc(Q_in_edbm, A, I_d, N_trip, Cin_edbm, C_b_in, C_a_in, T )
+#Create an instance of the ElectrodialysisCalc class 
+ed_em = ElectrodialysisCalc()
 ```
 
-### 2.3. Use 'flowrate' method 
-This method calculates the flowrate in each channel (_Q1_s_in_, _Q1_a_in_,_Q1_b_in_). 
-```python
-edbm_dat.flowrate()
-```
-It doesn't take additional inputs. 
-
-### 2.4. Use 'in_mass_flow_rates' method 
-This method calculates the inlet mass flow rates. In particular, it calculates the inlet mass flow rates of each ion in the three channels (_M_s_in_, _M_a_in_,_M_b_in_),the mass of water in the initial streams in the three channels (_M_h2o_s_in_, _M_h2o_a_in_,_M_h2o_b_in_). 
-Additionally, it calculate inlet ionic water product in each channel (_KW_s_in_, _KW_a_in_,_KW_b_in_).
+### 2.3. Use `Ts_cp`, `w_cp`, `Ls_cpv`, `Lw_cp`, `p_osmo`, `dC`  methods 
+The ED system is modeled by adapting a model developed by [Nayar et al](https://www.sciencedirect.com/science/article/pii/S0011916418312761), keeping both the con- centrate and diluate channels fully continuous, with the salinities of both channels varying along the length of the ED stack. The following code is used to simulate the ED unit using the `Ts_cp`, `w_cp`, `Ls_cpv`, `Lw_cp`, `p_osmo`, `dC`   methods. 
 
 ```python
-edbm_dat.in_mass_flow_rates(ph_s)
-```
-It takes the initial pH in the salt channel as input. The results are used in the following calculations.  
+# Iterate over cells
+for j in range(1, N):
+    #Calculate salinity change 
+    concentration_diff = Sc[j - 1] - Sd[j - 1]
+    Sc[j] = Sc[j - 1] + (Sc_o - Sc_i) / (N - 1)
+    Sd[j] = Sd[j - 1] + (Sd_o - Sd_i) / (N - 1)
+    
+    #Calculate net salt flux 
+    Js[j] = (ElectrodialysisCalc.Ts_cp(Sd[j - 1]) * Ij / F - 
+             (ElectrodialysisCalc.Ls_cp(Sc[j - 1], Sd[j - 1])) * concentration_diff)
+    #calculate net water flux 
+    Jw[j] = (ElectrodialysisCalc.Tw_cp(Sc[j - 1], Sd[j - 1]) * Ij / F +
+             ElectrodialysisCalc.Lw_cp(Sc[j - 1]) * (ElectrodialysisCalc.p_osmo(Sc[j - 1], T, MWs) - 
+                                                      ElectrodialysisCalc.p_osmo(Sd[j - 1], T, MWs)))
+    
+    #Calculate he total concentrate and dilute molar flow rates
+    Ns_c[j] = Ns_c[j - 1] + Acp_tot_j * Js[j]
+    Ns_d[j] = Ns_d[j - 1] - Acp_tot_j * Js[j]
 
-### 2.5. Use 'acid_channel' method 
-It calculates the mass balance calculations for Acid channel. In particular, it calculates the outlet mass flow rate for all ionic species in channel (_M_a_out_) and water (_M_h2o_a_out_), the total outlet mass flow rate (_M_a_out_t_),
-volumetric outlet flow rate (_Q1_a_out_) and the outlet concentration of single ions in channel (_Ci_a_out_). 
-```python
-edbm_dat.acid_channel()
+    Nw_c[j] = Nw_c[j - 1] + Acp_tot_j * Jw[j]
+    Nw_d[j] = Nw_d[j - 1] - Acp_tot_j * Jw[j]
+
+    # Update the flow rates of the concentrate and dilute streams
+    Q_c[j] = Nw_c[j] * MWw / (rho_w * (1 - Sc[j] / 1000))
+    Q_d[j] = Nw_d[j] * MWw / (rho_w * (1 - Sd[j] / 1000))
+
 ```
-It doesn't take additional inputs. 
-### 2.5.1. Assigned the results to output parameters 
+
+ 
+### 2.3.1. Assigned the results to output parameters 
 You can assigned the results to output parameters: 
 ```python
-Ca_out=edbm_dat.Ci_a_out
-Ca_out=edbm_dat.Ci_a_out[0:6]
-Ca_out_g=[Ca_out[0]*MW_Na, Ca_out[1]*MW_Cl, Ca_out[2]*MW_K, Ca_out[3]*MW_Mg, Ca_out[4]*MW_Ca, Ca_out[5]*MW_SO4]
+Cc_na_f=Sc[N-1]/MWs*constants.MW_Na
+Cc_cl_f=Sc[N-1]/MWs*constants.MW_cl
+Sc_out=[Cc_na_f, Cc_cl_f]
 
-    #Mass flow rate 
-M_a_out=edbm_dat.M_a_out_t*N_trip
-
-    #Volumetric flow rate 
-Q_a_out=edbm_dat.Q1_a_out*N_trip
-
-    #Conversion to solid 
-M_HCl_out=Q_a_out*constants.MW_HCl/1000 #kg/hr
 ```
 
-### 2.6. Use 'base_channel' method 
-It calculates the mass balance calculations for Base channel. In particular, it calculates the outlet mass flow rate for all ionic species in channel (_M_b_out_) and water (_M_h2o_b_out_), the total outlet mass flow rate (_M_b_out_t_),
-volumetric outlet flow rate (_Q1_b_out_) and the outlet concentration of single ions in channel (_Ci_b_out_). 
+### 2.4. Calculate the concentrate stream flow ate 
+
 ```python
-edbm_dat.base_channel()
+#Calculate the concnetrate stream flow rate 
+Mc=(Ns_c[N-1]*MWs/1000+Nw_c[N-1]*MWw/1000) #(kg/hr)
+
+dc_out=density_calc(T-273, Sc[N-1])/1000 #(kg/l)
+Qc=Mc/dc_out #concnetrate stream volume flow rate (l/hr)
+
+i=2
+for i in range(2,len(Csw)):
+    Sc_out.append(Csw[i]*Qed_in_c/Qc) #The total effluent concentration concentrate stream
 ```
-It doesn't take additional inputs. 
-### 2.6.1. Assigned the results to output parameters 
-You can assigned the results to output parameters: 
+### 2.5. Calculate the dilute stream flow ate 
+
 ```python
-"Base channel "
-    #Concentration in base channel 
-Cb_out=edbm_dat.Ci_b_out[0:6]
-Cb_out_g=[Cb_out[0]*MW_Na, Cb_out[1]*MW_Cl, Cb_out[2]*MW_K, Cb_out[3]*MW_Mg, Cb_out[4]*MW_Ca, Cb_out[5]*MW_SO4]
+#Calculations for diluate stream 
+Md=(Ns_d[N-1]*MWs/1000+Nw_d[N-1]*MWw/1000) #mass flow rate (kg/hr)
 
-     #Mass flow rate
-M_b_out=edbm_dat.M_b_out_t*N_trip
 
-     #Volumetric flow rate 
-Q_b_out=edbm_dat.Q1_b_out*N_trip
+Sd_f=Sd[N-1]
+Cd_na_f=Sd_f/MWs*constants.MW_Na
+Cd_cl_f=Sd_f/MWs*constants.MW_cl
+dd_out=density_calc(T-273, Sd[N-1])/1000 #density of diluate stream
+Qd=Md/dd_out #diluate stream volume flow rate (l/hr)
 
-    #Conversion to solid 
-M_NaOH_out=Q_b_out*edbm_dat.Ci_b_out[0]*constants.MW_NaOH/1000 #kg/hr 
 
+Sd_out=[Cd_na_f, Cd_cl_f]
+# The total effluent concentration dilute
+for i in range(2,len(Csw)):
+    Sd_out.append(Csw[i]*Qed_in/Qd)
 ```
 
-### 2.7. Use 'salt_channel' method 
-It calculates the mass balance calculations for Salt channel and the Voltage (_V_ext_) and Power (_P_) needed. In particular, it calculates the outlet mass flow rate for all ionic species in channel (_M_s_out_) and water (_M_h2o_s_out_), the total outlet mass flow rate (_M_s_out_t_),
-volumetric outlet flow rate (_Q1_s_out_) and the outlet concentration of single ions in channel (_Ci_s_out_). 
-```python
-edbm_dat.salt_channel(Cm_bp_H, Cm_bp_OH)
-```
-It takes additional inputs Cm_bp_H, Cm_bp_OH, membrane characteristics. 
 
-### 2.7.1. Assigned the results to output parameters 
-You can assigned the results to output parameters: 
-```python
-"Salt channel "
-    #Concentration in salt channel 
-Cbrine_out_t=sum(edbm_dat.Ci_s_out)
-Cbrine_out=edbm_dat.Ci_s_out #mol/l
-Cbrine_out_g=[Cbrine_out[0]*MW_Na, Cbrine_out[1]*MW_Cl, Cbrine_out[2]*MW_K, Cbrine_out[3]*MW_Mg, Cbrine_out[4]*MW_Ca, Cbrine_out[5]*MW_SO4] #g/l
-
-     #Mass flow rate
-M_s_out=edbm_dat.M_s_out_t*N_trip
-
-    #Volumetric flow rate 
-Q_s_out=edbm_dat.Q1_s_out*N_trip
-```
-### 2.8. Calculate energy consumption 
-You can calculate the total energy requirements for the EDBM unit. For this, you can use the voltage needed (_V_ext_) and the energy for pumping (_Ppump_). 
+### 2.6. Calculate energy consumption 
+You can calculate the total energy requirements for the ED unit. For this, you can use the voltage applied across an ED cell-pair (_Vcp_), voltage across the electrodes (_Vel_) and the energy for pumping (_Ppump_ed_). 
 
 ```python
 # Energy consumption 
-V_ext=edbm_dat.V_ext #xternal
+#power required 
+Ws = 0
+for j in range(N):
+     Ws += Ij * Acp_tot_j * (Ncp * Vcp + Vel)
+print("Power required is "+str(round(Ws/1000,2))+"KW")
 
-# Calculate energy consumption for pumping 
-Ppump=(edbm_dat.Q1_s_in*N_trip*dp+edbm_dat.Q1_a_in*N_trip*dp+edbm_dat.Q1_b_in*N_trip*dp)/1000/3600*1e5/npump #units: W -> l to m3 so /1000; bar to J 1e5N/m2*1J/m ; hr to 3660s
+#Calculate energy consumption for pumping 
+Ppump_ed=(Qed_in_d*1+Qed_in_c*1+Qc*2+Qd*1)/1000/3600*1e5/npump
+Eel_t_ed=Ws/1000+Ppump_ed/1000
 
-#Total energy consumption 
-E_el_Edbm=V_ext*I_d*A/1000+Ppump/1000
-```
-Additionally, the current efficiency (_CE_) can be calculated. In this work, ideal phenomena are assumed so it is expected to be close to 100%.
-```python
-#Calculate current efficiency 
-Cb_in=[0]
-CE=(Q_b_out)*(Cb_out[0]-Cb_in[0])*F/(3600*N_trip*I_d*A)*100 #%
-```
-Finally, the specific energy consumption (kWh/kg of NaOH) can be calculated: 
-```python
-# Specific energy consumption (kWh/kg of NaOH)
-SEC=(V_ext*I_d*A)/(Q_b_out*(edbm_dat.Ci_b_out[0]-edbm_dat.Ci_b_in[0])*constants.MW_NaOH)
+# Specific enrgy consumption
+sec_ed=Eel_t_ed/(Qed_in/1000)
 ```
 
-### 2.9. Print results 
+### 2.7. Print results 
 You can print results from the calculations 
 ```python
-"Salt channel "
-print("Salt channel: Mass flow rate out is "+str(round(M_s_out,2))+"kg/hr")
-print("Salt channel: Volumetric flow rate out is "+str(round(Q_s_out,2))+"l/hr")
-print("Na concentration:"+str(round(Cbrine_out[0],2))+"M and "+str(round(Cbrine_out_g[0],2))+"g/l")
-print("Cl concentration:"+str(round(Cbrine_out[1],2))+"M and "+str(round(Cbrine_out_g[1],2))+"g/l")
+print("Mass flowrate concentrate stream is "+str(round(Mc,2))+ " kg/hr")
+print("Volume flowrate concentrate stream is "+str(round(Qc,2))+" l/hr")
+print("The total effluent concentration concentrate stream  is " + str(round(Sc[N-1],2))+"g/kg")
 print("-----------------------------------------")
 ```
-Salt channel: Mass flow rate out is 74395.17kg/hr  
-Salt channel: Volumetric flow rate out is 46487.68l/hr  
-Na concentration:0.29M and 6.65g/l  
-Cl concentration:0.29M and 10.26g/l  
+Mass flowrate concentrate stream is 78.5 kg/hr  
+Volume flowrate concentrate stream is 67.74 l/hr  
+The total effluent concentration concentrate stream  is 200.0g/kg 
 
 ```python
-"Base channel "
-print("Base channel: Mass flow rate out is "+str(round(M_b_out,2))+"kg/hr")
-print("Base channel: Volumetric flow rate out is "+str(round(Q_b_out,2))+"l/hr")
-print("Na concentration "+str(round(Cb_out[0],2))+"M and "+str(round(Cb_out_g[0],2))+"g/l")
+print("Mass flowrate of diluate stream is "+str(round(Md,2))+" kg/hr")
+print("volume flowrate diluate stream is "+str(round(Qd,2))+" l/hr")
+print("The total effluent concentration dilute is " + str(round(Sd[N-1],2))+"g/kg")
 print("-----------------------------------------")
 ```
-Base channel: Mass flow rate out is 35245.92kg/hr  
-Base channel: Volumetric flow rate out is 34954.86l/hr  
-Na concentration 0.4M and 9.23g/l  
+Mass flowrate of diluate stream is 921.5 kg/hr  
+volume flowrate diluate stream is 909.36 l/hr  
+The total effluent concentration dilute is 20.0g/kg  
 
 ```python
-"Acid channel" 
-print("Acid channel: Mass flow rate out is "+str(round(M_a_out,2))+"kg/hr")
-print("Acid channel: Volumetric flow rate out is "+str(round(Q_a_out,2))+"l/hr")
-print("Cl concentration "+str(round(Ca_out[1],2))+"M and "+str(round(Ca_out_g[1],2))+"g/l")
+#solid mass balance
+bal=Qed_in-Md-Mc
+bal=(Qed_in*sum(Csw) -Md*(sum(Sd_out))-Mc*Sc_o)/1000
+print("Mass balance difference is "+str(round(bal,2)))
+error_perc=abs(bal)/(Qed_in*sum(Csw))*100
+print("Balance error percentage is "+str(round(error_perc,2))+"%")
 print("-----------------------------------------")
 ```
-Acid channel: Mass flow rate out is 34943.55kg/hr  
-Acid channel: Volumetric flow rate out is 34943.55l/hr  
-Cl concentration 0.4M and 14.23g/l  
+Mass balance difference is 7.21  
+Balance error percentage is 0.02%  
 
 ```python
 # Energy consumption 
-print("Current efficiency is "+str(round(CE,2))+"%")
-print("-----------------------------------------")
-print("Total electrical consumption for EDBM is " + str(round(E_el_Edbm,2))+ " KW")
-print("Specific energy consumption is "+str(round(SEC,2))+"kwh/kg NaOH")
+print("Power required is "+str(round(Ws/1000,2))+"KW")
+print("Total energy consumption is "+str(round(Eel_t_ed,2))+"KW")
+print("Specific energy consumption of Electrodialysis (ED) is "+str(round(sec_ed,2))+"KW/m3 feed")
+
 ```
-Current efficiency is 100.0%  
-
-Total electrical consumption for EDBM is 942.6 KW  
-Specific energy consumption is 1.67kwh/kg NaOH  
-
+Power required is 95.19KW  
+Total energy consumption is 95.26KW  
+Specific energy consumption of Electrodialysis (ED) is 98.23KW/m3 feed  

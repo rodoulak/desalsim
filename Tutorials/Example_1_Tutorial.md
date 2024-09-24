@@ -201,9 +201,9 @@ QHCl_nf=0
 Qantsc_nf=0
 ```
 
-### 3.2.2.  Multi-plug flow reactor
+### 3.2.2.  Multi plug flow reactor
 
-To run simulation model for Multi-plug flow reactor (MFPFR) unit, you need to implement the following steps (see also [MF=PFR Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/MF-PFR_Tutorial.md)). 
+To run simulation model for Multi-plug flow reactor (MFPFR) unit, you need to implement the following steps (see also [MF-PFR Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/MF-PFR_Tutorial.md)). 
 
 **Table 2** gives an overview of the main inputs and outputs for each process unit of Multi-plug flow reactor. 
 | Process                                   | Input                                       | Output                                                |
@@ -372,7 +372,7 @@ Specific energy consumption per product is 2.88 KWh/kg product
 Specific energy consumption per brine intake is 1.49 KWh/m3 of feed 
 
 ### 3.2.3.  Other units
-You need to follow similar steps like Sections [3.2.1.](#321-Nanofiltration) and [3.2.2.](#322-Multi-plug_flow_reactor) for the other two processes. 
+You need to follow similar steps like Sections [3.2.1.](#321-nanofiltration) and [3.2.2.](#322-multi-plug-flow-reactor) for the other two processes. 
 **Table 3** gives an overview of the main inputs and outputs for each process unit of Electrodialysis with bipolar membranes and Electrodialysis. 
 | Process                                   | Input                                       | Output                                                |
 |-------------------------------------------|---------------------------------------------|-------------------------------------------------------|
@@ -385,14 +385,16 @@ You need to follow similar steps like Sections [3.2.1.](#321-Nanofiltration) and
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 > [!NOTE]
-> For Electrodialysis with bipolar membrane, you can find detailed steps in the [EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md). 
+> This tutorial provides detailed steps for integrating Nanofiltration (NF) and MF-PFR. For the remaining technologies (EDBM and ED), we demonstrate how to calculate the flow rate and concentration of mixed streams, with detailed steps for these technologies available in their respective tutorials.
 
 > [!IMPORTANT]
 > Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment chain. 
 In this treatment chain, Electrodialysis with bipolar membrane has two streams as feed for the salt channel. The two streams are mixed. For this the following calculations are required to calculate the new flow rate and concentration after the mixing. 
 ```python
     # Feed flow rate L/h
-Q_in_edbm=M_mfpfr_out+Mc # Where M_mfpfr_out is the effluent from MF-PFR and Mc the effluent from ED
+Q_in_edbm = M_mfpfr_out + Mc  # Where M_mfpfr_out is the effluent from MF-PFR, and Mc is the effluent from ED
+# Mc is calculated in the ED tutorial, refer to [ED Tutorial Link] for detailed steps on calculating Mc.
+
 
     # Feed concentration g/L
 Cin_edbm=sum(Cout_mfpfr_g)*M_mfpfr_out/Q_in_edbm+Sc_o*Mc/Q_in_edbm # Where Cout_mfpfr_g is the effluent from MF-PFR and Sc_o the effluent from ED
@@ -400,6 +402,8 @@ C_in_mix=[]
 for i in range(len(Cconc)):
     C_in_mix.append(Cout_mfpfr_g[i]*M_mfpfr_out/Q_in_edbm+Sc_out[i]*Mc/Q_in_edbm)
 ```
+> [!IMPORTANT]
+> For complete steps on simulating EDBM and ED technologies, refer to their respective tutorials ([EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md), [ED_Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/ED_Tutorial.md). This tutorial primarily focuses on demonstrating how to integrate the technologies into a treatment chain and calculate mixed stream flow rates and concentrations.
 
 ## 4. Results evaluation 
 After the simulation of the treatment chain, the performance of the process units needs to be evaluated individually and overall as a system. 
