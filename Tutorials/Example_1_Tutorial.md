@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 ## 3. Running the Simulation models
 
-### 3.1. Create treatment chain 
+### 3.1. Create Treatment Chain 
 To create the treatment chain, the required units have to be imported. 
 For **Example 1** which consists of four technologies:
 - Nanofiltration (NF),
