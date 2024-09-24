@@ -3,8 +3,8 @@
 ## 1. Introduction
 Welcome to our comprehensive tutorial on running simulation models and evaluating the 
 performance of treatment chains for water purification processes. In this tutorial, 
-we provide step-by-step instructions on how to [create treatment chains](#create-treatment-chain), 
-[define feed characteristics](#define-feed-characteristics), [use process unit models](#use-process-unit-model), and [analyze the results obtained from the simulation](#results-evaluation ), using **Example 1** as case study.
+we provide step-by-step instructions on how to [create treatment chains](###create-treatment-chain), 
+[define feed characteristics](#define-feed-characteristics), [use process unit models](#use-process-unit-model), and [analyze the results obtained from the simulation](#results-evaluation), using **Example 1** as case study.
 Each section guides you through setting up the simulation environment, running the models, and interpreting the results. Additionally, we discuss technical, economic, and environmental indicators to evaluate the performance of the treatment chain. 
 
 ### Example description 
