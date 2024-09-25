@@ -393,7 +393,7 @@ In this treatment chain, Electrodialysis with bipolar membrane has two streams a
 ```python
     # Feed flow rate L/h
 Q_in_edbm = M_mfpfr_out + Mc  # Where M_mfpfr_out is the effluent from MF-PFR, and Mc is the effluent from ED
-# Mc is calculated in the ED tutorial, refer to [ED Tutorial Link] for detailed steps on calculating Mc.
+# Mc is calculated in the ED tutorial, refer to ED Tutorial for detailed steps on calculating Mc (see https://github.com/rodoulak/desalsim/blob/main/Tutorials/ED_Tutorial.md)
 
 
     # Feed concentration g/L
