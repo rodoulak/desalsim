@@ -14,7 +14,7 @@ In this tutorial, we will focus on how to use the the class and their methods.
 | Electrodialysis with bipolar membranes| Feed flow rate [m3/h]                        | Flow rate of acid [m3/h] and composition [g/L]             |
 |                                        | Ion concentration [g/L]                      | Flow rate of base [m3/h] and composition [g/L]             |
 |                                        | Current Density [A/m2]                             | Flow rate of salt [m3/h] and composition [g/L]             |
-|                                        |                                            | Electricity requirements [kWhel]                          |
+|                                        | Number of triplets and Membrane area and other characteristics                                           | Electricity requirements [kWhel]                          |
 
 The mathematical description of Electrodialysis with Bipolar membranestechnology is given in [Mathematical description](https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/tree/main/paper/Mathematical_description.pdf), see Section A.6. 
 
