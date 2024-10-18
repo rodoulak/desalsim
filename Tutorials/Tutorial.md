@@ -81,11 +81,11 @@ The mathematical description of each technology is given in  [Mathematical descr
 |                                        |                                            | Electricity requirements [kWhel]                          |
 | Electrodialysis with bipolar membranes| Feed flow rate [m3/h]                        | Flow rate of acid [m3/h] and composition [g/L]             |
 |                                        | Ion concentration [g/L]                      | Flow rate of base [m3/h] and composition [g/L]             |
-|                                        | Electric density                            | Flow rate of salt [m3/h] and composition [g/L]             |
+|                                        | Current Density [A/m2]                            | Flow rate of salt [m3/h] and composition [g/L]             |
 |                                        |                                            | Electricity requirements [kWhel]                          |
 | Electrodialysis                        | Feed flow rate [m3/h]                        | Flow rate of diluted stream [m3/h] and composition [g/L]   |
 |                                        | Ion concentration [g/L]                      | Flow rate of concentrate stream [m3/h] and composition [g/L]|
-|                                        | Electric density                            | Electricity requirements [kWhel]                          |
+|                                        | Current Density [A/m2]                            | Electricity requirements [kWhel]                          |
 
 
 ### 5. Economic models 
