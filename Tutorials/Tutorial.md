@@ -134,7 +134,6 @@ import example_2 as sc2
 ```
 Import required functions: 
 ```python
-import numpy as np
 import pandas as pd
 import numpy as np 
 ```
