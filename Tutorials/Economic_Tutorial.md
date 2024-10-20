@@ -147,7 +147,9 @@ The CAPEX consists of fixed-capital investment and working capital, and the form
 | Indirect costs: 15% of direct cost                   | 
 | Working capital: 20% of total investment cost  | 
 
-The assumptions in **Table 2** are set. Note that they can change for different case studies. 
+> [!NOTE]
+> Note that the assumptions listed in **Table 2** can be modified to suit different case studies.
+
 ```python
     # Set assumptions for Capital investment cost 
 inst_percent=0.25 # % of purchased equipment cost
@@ -232,6 +234,9 @@ The calculation of chemicals and water costs is similar to the energy cost, mult
 | Patents and royalties: 3% of annual OPEX                          |
 | Fixed charges: 5% of annual OPEX                                  |
 | Plant overhead costs: 5% of annual OPEX                           |
+
+> [!NOTE]
+> Note that the assumptions listed in **Table 3** can be modified to suit different case studies.>
 
 ```python
    # Set assumptions for Operating cost (OPEX)
