@@ -4,7 +4,7 @@ This tutorial provides a comprehensive overview and guide to utilizing a simulat
 **2. Usage:** Instructions on how to use the simulation models, including input parameters and result interpretation.  
 **3. Technical Process Models:** Detailed descriptions of each technology model, including input-output relationships and simulation steps.  
 **4. Economic Models:** Explanation of economic models for evaluating operating and investment costs.  
-**5. Treatment Chains Comparison:** Guidance on comparing different treatment chains using provided tools.  
+**5. Treatment trains Comparison:** Guidance on comparing different treatment trains using provided tools.  
 
 ## 2. Installation 
 The easiest way is through pip, in command-line interface:   
@@ -27,13 +27,13 @@ Each simulation model serves as a standalone tool for analyzing the performance 
 
 The simulation results, including salt concentration profiles, ion fluxes, energy consumption, chemical consumption, and operational costs, will be generated based on the specified inputs and displayed in the console output or saved to output files for further analysis.
 
-However, simulation models of more than one technology can be combined to simulate and evaluate the performance of a treatment chain (desalination and brine treatment system). In this case, the output flow rates and stream concentrate are the input data for the next technology. 
+However, simulation models of more than one technology can be combined to simulate and evaluate the performance of a treatment train (desalination and brine treatment system). In this case, the output flow rates and stream concentrate are the input data for the next technology. 
 
-Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example 1](example_1.py) and [Example 2](example_2.py)). These examples simulate and evaluate two different treatment chains, showcasing the integration of multiple technologies. The economic evaluation of the treatment chain is given in [Example 1](example_1.py) and in the [Economic Tutorial](Economic_Tutorial.md). 
+Additionally, two example files are provided to demonstrate the usage of the simulation suite (see [Example 1](example_1.py) and [Example 2](example_2.py)). These examples simulate and evaluate two different treatment trains, showcasing the integration of multiple technologies. The economic evaluation of the treatment train is given in [Example 1](example_1.py) and in the [Economic Tutorial](Economic_Tutorial.md). 
 Furthermore, a [comparison file](comparison.py) is included, where the results of the two examples are compared in terms of various parameters. Users can extend this comparison by adding more indicators as needed.
 
 **<u>Followed steps:</u>**<br>
-Step 1: Import required fucntions for process units in the treatment chain.<br>
+Step 1: Import required fucntions for process units in the treatment train.<br>
 Step 2: Set input data like feed flow rate, ion concentration, relevant ions for the feed solution.<br>
 Step 3: Set input parameters for each process unit as shown in **Table 1** and for economic model as shown in **Table 2** and **Table 3**.<br>
 Step 4: Call function of each process unit, creat objects for each calculation.<br>
@@ -121,8 +121,8 @@ For the economic analysis of a full-scale desalination plant, the equipment cost
 |                                   | Plant overhead costs: 5% of annual OPEX                           |
 
 
-### 6. Treatment chains comparison 
-In comparison file, results from different treatment chains are summarised. Indicators are formulated to compare the treatment chains. 
+### 6. Treatment trains comparison 
+In comparison file, results from different treatment trains are summarised. Indicators are formulated to compare the treatment trains. 
 
 #### Import results
 First, import the results from the two examples.
