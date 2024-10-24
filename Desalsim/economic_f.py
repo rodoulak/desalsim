@@ -18,7 +18,29 @@ from desalsim import constants
 #%%constants
 class econom:
     """
-    Calculate the capital investment and operating costs for each process unit. 
+    A class used to ψalculate the capital investment and operating costs for each process unit. 
+    
+    Attributes
+    ----------
+    
+    eq_c: float
+         Cost of equipment in euros.
+    el_conc: float
+         Electricity consumption in kWh/year.
+    s_conc: float
+        Steam consumption in kWh/year.
+    chem1_conc: float 
+        Concentration of chemical 1 in solution (e.g., 1M).
+    chem1_pr: float 
+        Price of chemical 1 per unit (e.g., euro/L).
+    chem2_conc: float  
+        Concentration of chemical 2 in solution (e.g., 1M).
+    chem2_pr: float
+        Price of chemical 2 per unit (e.g., euro/L).
+    cw_conc: float  
+        Cooling water consumption in kg/year.
+    wat_conc: float 
+        Water consumption in kg/year.
     
     Methods
     -------

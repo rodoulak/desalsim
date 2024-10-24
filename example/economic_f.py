@@ -18,6 +18,38 @@ from desalsim import constants
 
 #%%constants
 class econom:
+    """
+    A class used to ψalculate the capital investment and operating costs for each process unit. 
+    
+    Attributes
+    ----------
+    
+    eq_c: float
+         Cost of equipment in euros.
+    el_conc: float
+         Electricity consumption in kWh/year.
+    s_conc: float
+        Steam consumption in kWh/year.
+    chem1_conc: float 
+        Concentration of chemical 1 in solution (e.g., 1M).
+    chem1_pr: float 
+        Price of chemical 1 per unit (e.g., euro/L).
+    chem2_conc: float  
+        Concentration of chemical 2 in solution (e.g., 1M).
+    chem2_pr: float
+        Price of chemical 2 per unit (e.g., euro/L).
+    cw_conc: float  
+        Cooling water consumption in kg/year.
+    wat_conc: float 
+        Water consumption in kg/year.
+    
+    Methods
+    -------
+    capex_calc: 
+        Calculate the capital expenditure (CAPEX) of the unit.
+    opex_calc: 
+        Calculate the capital expenditure (OPEX) of the unit.
+    """
     def __init__(self, eq_c, el_conc, s_conc, chem1_conc, chem1_pr,chem2_conc, chem2_pr, cw_conc, wat_conc):
         """
         Initialize an instance of the economic costs.
