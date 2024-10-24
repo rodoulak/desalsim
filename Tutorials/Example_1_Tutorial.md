@@ -385,7 +385,7 @@ You need to follow similar steps like Sections [3.2.1.](#321-nanofiltration) and
 |                                           | Current density [A/m²]                      | Electricity requirements [kWhel]                     |
 
 > [!NOTE]
-> This tutorial provides detailed steps for integrating Nanofiltration (NF) and MF-PFR. For the remaining technologies (EDBM and ED), we demonstrate how to calculate the flow rate and concentration of mixed streams, with detailed steps for these technologies available in their respective tutorials.
+> This tutorial provides detailed steps for integrating Nanofiltration (NF) and MF-PFR. For the remaining technologies (**EDBM** and **ED**), **this tutorial focuses on demonstrating** how to calculate the flow rate and concentration of mixed streams. Full steps for simulating EDBM and ED, including detailed calculations such as `Mc`, can be found in their respective tutorials.
 
 > [!IMPORTANT]
 > Note that the feed flow rate and concentration of the units are the effluent flow rate and ions concentration of the unit before in the treatment train. 
@@ -403,7 +403,7 @@ for i in range(len(Cconc)):
     C_in_mix.append(Cout_mfpfr_g[i]*M_mfpfr_out/Q_in_edbm+Sc_out[i]*Mc/Q_in_edbm)
 ```
 > [!IMPORTANT]
-> For complete steps on simulating EDBM and ED technologies, refer to their respective tutorials ([EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md), [ED_Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/ED_Tutorial.md). This tutorial primarily focuses on demonstrating how to integrate the technologies into a treatment train and calculate mixed stream flow rates and concentrations.
+> For complete steps on simulating EDBM and ED technologies, refer to their respective tutorials (**[EDBM Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/EDBM_Tutorial.md), [ED_Tutorial](https://github.com/rodoulak/desalsim/blob/main/Tutorials/ED_Tutorial.md)**). This tutorial primarily focuses on demonstrating how to integrate the technologies into a treatment train and calculate mixed stream flow rates and concentrations.
 
 ## 4. Results evaluation 
 After the simulation of the treatment train, the performance of the process units needs to be evaluated individually and overall as a system. 
