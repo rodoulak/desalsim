@@ -4,6 +4,10 @@ dist/
 *.egg-info/
 *.py[cod]
 *$py.class
+# Ignore compiled Python files and folders in example directory
+example/__pycache__/
+example/dist/
+example/*.egg-info/
 
 # C extensions
 *.so
