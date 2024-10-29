@@ -127,9 +127,9 @@ print("Concentrate stream total concentration is "+str(round(sum(Cconc),2))+"g/l
 print("-----------------------------------------")
 
 # Calculate Osmotic Pressure
-P_osmo_f = OsmoticPressure(Ci_in, z_values, T).calculate_osmotic_pressure()
-P_osmo_p = OsmoticPressure(Cperm, z_values, T).calculate_osmotic_pressure()
-P_osmo_c = OsmoticPressure(Cconc, z_values, T).calculate_osmotic_pressure()
+P_osmo_f = OsmoticPressure(Ci_in, MW_values).calculate_osmotic_pressure()
+P_osmo_p = OsmoticPressure(Cperm, MW_values).calculate_osmotic_pressure()
+P_osmo_c = OsmoticPressure(Cconc, MW_values).calculate_osmotic_pressure()
 
 d_p=density_calc(T-273, sum(Cperm))
 
