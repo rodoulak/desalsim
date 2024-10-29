@@ -128,25 +128,28 @@ Concentrate stream flow rate is 38560.54kg/hr
 Concentrate stream total concentration is 70.73g/l
 
 ## 3. Use OsmoticPressure class 
-OsmoticPressure is a class used to represent the calculation of osmotic pressure for Nanofiltration Unit. For the calculation of the energy consumption, first the Osmotic pressure for the three streams (feed, concentrate, permeate) need to be calculated. For this calculation, you need to use the ion concentration of the stream (_Ci_in_, _Cperm_, _Cconc_) the ionelectric charge (_z_values_), and the stream temperature (_T_). The class _returns the Osmotic pressure_ of the solution.   
+OsmoticPressure is a class used to represent the calculation of osmotic pressure for Nanofiltration Unit. For the calculation of the energy consumption, first the Osmotic pressure for the three streams (feed, concentrate, permeate) need to be calculated. For this calculation, you need to use the ion concentration of the stream (_Ci_in_, _Cperm_, _Cconc_) and the Ions molar mass (_MW_values_). The class _returns the Osmotic pressure_ of the solution.   
 ### 3.1. Oveview
 The following attributes are available within the OsmoticPressure class:  
--  `C1, C2 C3, C4, C5, C6 `: (float) Concentration of ions in the solution (mol/L).
--  `z1, z2,z3, z4, z5, z6`: (int) Charge of ions in the solution.
+-  `Ci_in `: (float) Concentration of ions in the solution (mol/L).
+-  `MW_values: (float) ons molar mass in g/mol.
 
 The OsmoticPressure class provides the following method:
 ```python
-osmotic_pressure_calculation()
+calculate_osmotic_pressure()
 ```
-This method calculates the osmotic pressure of a solution.
+This method calculates the osmotic pressure of a solution based on the Gibbs equation: 
+
+$\pi = -\left( \frac{RT}{V} \right) \ln(a_w)$
+
 
 ### 3.2. Create OsmoticPressure objectives and calculate Osmotic Pressure
 
 ```python
     # Calculate Osmotic Pressure for the three streams 
-P_osmo_f = OsmoticPressure(Ci_in, z_values, T).osmotic_pressure_calculation()
-P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
-P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
+P_osmo_f = OsmoticPressure(Ci_in, MW_values).calculate_osmotic_pressure()
+P_osmo_p = OsmoticPressure(Cperm, MW_values).calculate_osmotic_pressure()
+P_osmo_c = OsmoticPressure(Cconc, MW_values).calculate_osmotic_pressure()
 ```
 ## 4. Use NfEnergy class
 NfEnergy is a class used to represent the calculation of energy consumption and the specific energy consumption for Nanofiltration Unit. For this calculation, the Osmotic pressure for the three streams (feed, concentrate, permeate) is used. In addition, the NfEnergy takes as input the expected pressure drop in each stream (_dp_, d_p_, d_in_) and the pump efficiency (_n_). The class _returns the Applied pressure, power for applied pressure, the total energy consumption_ and the _specific energy consumption per m<sup>3</sup> permeate_ and _m<sup>3</sup> feed_.
@@ -185,10 +188,10 @@ You can print results from energy calculations. The specific energy consumption 
 for key, value in result.items():
         print(f"{key}: {value}")
 ```
-Applied pressure (Bar): 24.45  
-Power for pump (KW): 60.01  
-E_el_nf (KW): 75.02  
-Specific Energy Consumption (KWh/m3 of permeate): 0.85
+Applied pressure (Bar): 21.16  
+Power for pump (KW): 51.93 
+E_el_nf (KW): 64.92  
+Specific Energy Consumption (KWh/m3 of permeate): 0.73
 
 ## References 
 
