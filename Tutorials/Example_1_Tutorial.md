@@ -164,12 +164,13 @@ Concentrate stream flow rate is 38560.54kg/hr
 Concentrate stream total concentration is 70.73g/l
 
 ##### Calculate Osmotic Pressure
-For the calculation of the energy consumption, first the Osmotic pressure for the three streams (feed, concentrate, permeate) need to be calculated. For this calculation, you need to use the ion concentration of the stream (_Ci_in_, _Cperm_, _Cconc_) the ionelectric charge (_z_values_), and the stream temperature (_T_).
+For the calculation of the energy consumption, first the Osmotic pressure for the three streams (feed, concentrate, permeate) need to be calculated. For this calculation, you need to use the ion concentration of the stream (_Ci_in_, _Cperm_, _Cconc_) and the Ions molar mass (_MW_values_). The class _returns the Osmotic pressure_ of the solution.  
 ```python
     # Calculate Osmotic Pressure
-P_osmo_f = OsmoticPressure(Ci_in, z_values, T).osmotic_pressure_calculation()
-P_osmo_p = OsmoticPressure(Cperm, z_values, T).osmotic_pressure_calculation()
-P_osmo_c = OsmoticPressure(Cconc, z_values, T).osmotic_pressure_calculation()
+P_osmo_f = OsmoticPressure(Ci_in, MW_values).calculate_osmotic_pressure()
+P_osmo_p = OsmoticPressure(Cperm, MW_values).calculate_osmotic_pressure()
+P_osmo_c = OsmoticPressure(Cconc, MW_values).calculate_osmotic_pressure()
+
 ```
 
 ##### Calculate Energy Consumption
@@ -190,10 +191,10 @@ for key, value in result.items():
         print(f"{key}: {value}")
 ```
 
-Applied pressure (Bar): 24.45  
-Power for pump (KW): 60.01  
-E_el_nf (KW): 75.02  
-Specific Energy Consumption (KWh/m3 of permeate): 0.85
+Applied pressure (Bar): 21.16  
+Power for pump (KW): 51.93  
+E_el_nf (KW): 64.92  
+Specific Energy Consumption (KWh/m3 of permeate): 0.73
 
 ##### Chemical consumption 
 ```python

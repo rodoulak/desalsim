@@ -105,7 +105,7 @@ The mathematical description of economic model is given also in [Mathematical de
 | Assumptions on CAPEX and OPEX calculations |                                          |
 
 
-For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 30000 m<sup>3</sup>/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function `scaleup.py`. 
+For the economic analysis of a full-scale desalination plant, the equipment costs of pilot-scale units are scaled-up to a capacity of 3000 m<sup>3</sup>/d. The equipment (material) costs of the full-scale plant are derived from the cost of the same equipment in the pilot plant with known capacity using function `scaleup.py`. 
 
 
 **Table 3** gives an overview of the main assumptions made to calculate the CAPEX and OPEX. 
@@ -172,8 +172,9 @@ plt.legend()
 plt.savefig('electricVSthermal.png')
 plt.show()
 ```
+
 <figure>
-  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/640b2dde-d5c6-439d-a44d-fc0e73dcf342" alt="Image" style="width:600px;">
+  <img src="https://github.com/user-attachments/assets/ed5dfc3e-a1c0-4246-a39a-5b3c9fa9ffaa" alt="Image" style="width:600px;">
 </figure>
 
 #### Operating costs (OPEX)
@@ -200,7 +201,7 @@ plt.show()
 ```
 
 <figure>
-  <img src="https://github.com/rodoulak/Desalination-and-Brine-Treatment-Simulation-/assets/150446818/71c0fa99-49f8-4b69-916a-48cdaa6d303e" alt="Image" style="width:600px;">
+  <img src="https://github.com/user-attachments/assets/5a445d6d-5f6e-479c-ac5c-6daa01f562f0" alt="Image" style="width:600px;">
 </figure>
 
 
