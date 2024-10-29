@@ -272,7 +272,7 @@ mg_in = sum(Ci_in)
 d_in = density_calc(T-273, mg_in)  # kg/m3
 
 #Feed flowrate
-Qsw = 1000#3000 / 24 * d_in #m3/d
+Qsw = 3000 / 24 * d_in #m3/d
 Qf = Qsw  # kg/hr
 
 #Asuumptions  
