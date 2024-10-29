@@ -67,47 +67,103 @@ class NFMass:
 #%% osmotic pressure 
 class OsmoticPressure:
     """
-        Calculate osmotic pressure for a solution.
+        Calculate osmotic pressure for a solution using Gibbs equation based on water activity.
 
          Attributes
          ----------
-            C1, C2 C3, C4, C5, C6 : float
+            Ci_in : float
                 Concentration of ions in the solution (mol/L).
-            z1, z2,z3, z4, z5, z6 : int
-                Charge of ions in the solution.
+            MW_values : float
+                Ions molar mass in g/mol.
         Methods
         -------    
-        osmotic_pressure_calculation():
+        calculate_molalities():
+            Calculate molality of each component
+        calculate_moles_of_water():
+            Calculate moles of water
+        calculate_total_moles_of_solute():
+            Calculate the total moles of solute
+        calculate_osmotic_pressure():
             Calculates the osmotic pressure of a solution.
+            
         Returns
         ------- 
-            p_osmo : float
+            osmotic_pressure_bar : float
                 Osmotic pressure of a solution (bar). 
     """
-    def __init__(self, C_values, z_values, T):
-        self.Ci = C_values
-        self.z = z_values
-        self.T = T
-        self.sum_Ci=sum(self.Ci)
+    def __init__(self, Ci_in, MW_values, T=298):
+        """
+        Initialize the calculator with concentrations and temperature.
+        
+        Parameters:
+        - Ci_in (list): Concentrations of each component in g/L.
+        - T (float): Temperature in Kelvin. Default is 298 K.
+        """
+        self.Ci_in = Ci_in  # Concentrations in g/L
+        self.T = T  # Temperature in Kelvin
+        self.R = 0.0821  # Ideal gas constant in L·atm/(mol·K)
+        self.V = 0.018015  # Molar volume of water in L/mol
+        self.M_w = 0.018015  # Molar mass of water in kg/mol
+        self.molar_masses = MW_values   # Molar masses in g/mol for Na, Cl, K, Mg, Ca, SO4
 
-    def osmotic_pressure_calculation(self):
-            """
-            Calculates the osmotic pressure of a solution.
-            """
-            mi=[self.Ci[0]*1000/(MW_Na*1000*((1e+6-self.sum_Ci*1000)/1e+6)), self.Ci[1]*1000/(MW_Cl*1000*((1e+6-self.sum_Ci*1000)/1e+6)), self.Ci[2]*1000/(MW_K*1000*((1e+6-self.sum_Ci*1000)/1e+6)), self.Ci[3]*1000/(MW_Mg*1000*((1e+6-self.sum_Ci*1000)/1e+6)), self.Ci[4]*1000/(MW_Ca*1000*((1e+6-self.sum_Ci*1000)/1e+6)), self.Ci[5]*1000/(MW_SO4*1000*((1e+6-self.sum_Ci*1000)/1e+6))]
-            self.mizi_2=[]
-            for i in range(6) :
-                self.mizi_2.append(mi[i]*self.z[i]**2)
-            SI = sum(self.mizi_2) / 2
-            B = -348.662 / self.T + 6.72817 - 0.971307 * math.log(self.T)
-            C = 40.5016 / self.T - 0.721404 + 0.103915 * math.log(self.T)
-            D = 5321 / self.T + 233.76 - 0.9297 * self.T + 0.001417 * self.T ** 2 - 0.0000008292 * self.T ** 3
-            S = 1.17202 * (sum(self.mizi_2) / sum(self.Ci)) * 0.9982 ** 0.5 * (23375.556 / (D * self.T)) ** 1.5
-            fi=1-S/(3.375*SI)*((1+1.5*SI**0.5)-2*math.log(1+1.5*SI**0.5)-1/(1+1.5*SI**0.5))+B*sum(mi)/2+C*(sum(mi)/2)**2
+    def calculate_molalities(self):
+        """
+        Convert the concentration from g/L to mol/kg of water (assuming solution density ~ 1 kg/L).
+        
+        Returns:
+        - molalities (list): Molality of each component in mol/kg.
+        """
+        molalities = [Ci / mol_mass for Ci, mol_mass in zip(self.Ci_in, self.molar_masses)]
+        return molalities
 
-            #Calculate Osmotic pressure and convert units from psi to bar            
-            p_osmo= 1.205 * fi * self.T * sum(mi)/ 14.3 
-            return p_osmo
+    def calculate_moles_of_water(self):
+        """
+        Calculate moles of water (assuming 1 kg of water).
+        
+        Returns:
+        - moles_of_water (float): Moles of water.
+        """
+        return 1 / self.M_w
+
+    def calculate_total_moles_of_solute(self, molalities):
+        """
+        Calculate the total moles of solute.
+        
+        Parameters:
+        - molalities (list): Molalities of each component.
+        
+        Returns:
+        - total_moles_of_solute (float): Total moles of solute.
+        """
+        return sum(molalities)
+
+    def calculate_mole_fraction_of_water(self, molalities):
+        """
+        Calculate the mole fraction of water.
+        
+        Parameters:
+        - molalities (list): Molalities of each component.
+        
+        Returns:
+        - X_water (float): Mole fraction of water.
+        """
+        moles_of_water = self.calculate_moles_of_water()
+        total_moles_of_solute = self.calculate_total_moles_of_solute(molalities)
+        return moles_of_water / (moles_of_water + total_moles_of_solute)
+
+    def calculate_osmotic_pressure(self):
+        """
+        Calculate the osmotic pressure using the Gibbs equation.
+        
+        Returns:
+        - osmotic_pressure_bar (float): Osmotic pressure in bar.
+        """
+        molalities = self.calculate_molalities()
+        X_water = self.calculate_mole_fraction_of_water(molalities)
+        a_w = X_water  # Approximating water activity as mole fraction of water
+        osmotic_pressure = -(self.R * self.T / self.V) * math.log(a_w)  # Osmotic pressure in atm
+        osmotic_pressure_bar = osmotic_pressure * 1.01325  # Convert atm to bar
+        return osmotic_pressure_bar
             
 #%%Energy consumption 
 class NfEnergy:   
