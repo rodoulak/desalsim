@@ -1,3 +1,9 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14499653.svg)](https://doi.org/10.5281/zenodo.14499653)
+[![Version](https://img.shields.io/pypi/v/desalsim.svg)](https://pypi.org/project/desalsim/)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://pypi.org/project/desalsim/)
+[![License](https://img.shields.io/github/license/rodoulak/desalsim)](LICENSE)
+
+
 # DesalSim: Desalination and Brine Treatment simulation model
 
  
