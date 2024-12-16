@@ -44,7 +44,7 @@ affiliations:
     index: 4
   - name: Water & Energy Intelligence BV, the Netherlands
     index: 5
-  - name: Department of Engineering Systems and Services, Delft University of Technology, Jaffalaan 5, 2628 BX Delft, The Netherlands
+  - name: Technology Policy & Management faculty, Delft University of Technology, Jaffalaan 5, 2628 BX Delft, The Netherlands
     index: 6
     
 bibliography: paper.bib
